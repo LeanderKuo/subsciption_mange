@@ -1,5 +1,60 @@
 import { supabase } from "./supabaseClient";
 
+export interface BrandfetchSuggestion {
+  id: string;
+  brandId: string;
+  name: string;
+  domain: string;
+  iconUrl?: string;
+  claimed?: boolean;
+  verified?: boolean;
+}
+
+// 檢查 Brandfetch 是否已配置
+export const isBrandfetchConfigured = (): boolean => {
+  return true; // Supabase Edge Function 總是可用
+};
+
+// 搜尋品牌（用於自動完成）
+export const searchBrandfetch = async (
+  query: string,
+  limit: number = 5,
+  signal?: AbortSignal
+): Promise<BrandfetchSuggestion[]> => {
+  try {
+    if (!query || query.trim().length === 0) {
+      return [];
+    }
+
+    const { data, error } = await supabase.functions.invoke("brand-search", {
+      body: { query: query.trim() },
+    });
+
+    if (error) {
+      console.error("Error invoking brand-search function:", error);
+      throw error;
+    }
+
+    const results = data?.results || [];
+    return results.slice(0, limit).map((result: any) => ({
+      id: result.brandId || result.domain,
+      brandId: result.brandId,
+      name: result.name,
+      domain: result.domain,
+      iconUrl: result.icon,
+      claimed: result.claimed,
+      verified: result.verified,
+    }));
+  } catch (error) {
+    if (signal?.aborted) {
+      throw new Error("AbortError");
+    }
+    console.error("Failed to search brands:", error);
+    throw error;
+  }
+};
+
+// 取得品牌圖標
 export const fetchBrandIcon = async (brand: string): Promise<string | null> => {
   try {
     const { data, error } = await supabase.functions.invoke("brandfetch-api", {
