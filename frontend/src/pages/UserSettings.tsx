@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../services/supabaseClient';
 import { UserProfile, UserProfileInput } from '../types/subscription';
 import { ArrowBack, Person } from '@mui/icons-material';
 

@@ -30,7 +30,7 @@ import {
 } from "../services/supabaseService";
 import { useToast } from "../hooks/use-toast";
 import { Subscription, SubscriptionInput } from "../types/subscription";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../services/supabaseClient";
 
 const IndexPage = () => {
   const queryClient = useQueryClient();
