@@ -20,7 +20,6 @@ import {
   Typography,
 } from '@mui/material';
 import type { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
-import type { SelectChangeEvent } from '@mui/material/Select';
 import EditIcon from '@mui/icons-material/Edit';
 import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
 import {
@@ -250,9 +249,7 @@ export const EditSubscriptionDialog = ({
     });
   };
 
-  const handlePresetCycleChange = (
-    event: SelectChangeEvent<unknown>
-  ) => {
+  const handlePresetCycleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value as PresetBillingCycle;
     applyCycleUpdate((prev) => ({
       ...prev,
@@ -272,7 +269,7 @@ export const EditSubscriptionDialog = ({
     }));
   };
 
-  const handleCustomUnitChange = (event: SelectChangeEvent<unknown>) => {
+  const handleCustomUnitChange = (event: ChangeEvent<HTMLInputElement>) => {
     const unit = event.target.value as CycleUnit;
     applyCycleUpdate((prev) => {
       const amount = Number(prev.customValue) || 1;

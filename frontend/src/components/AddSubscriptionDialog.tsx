@@ -20,7 +20,6 @@ import {
   Typography,
 } from '@mui/material';
 import type { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
-import type { SelectChangeEvent } from '@mui/material/Select';
 import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
 import {
   SubscriptionInput,
@@ -233,9 +232,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
     });
   };
 
-  const handlePresetCycleChange = (
-    event: SelectChangeEvent<unknown>
-  ) => {
+  const handlePresetCycleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value as PresetBillingCycle;
     applyCycleUpdate((prev) => ({
       ...prev,
@@ -255,7 +252,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
     }));
   };
 
-  const handleCustomUnitChange = (event: SelectChangeEvent<unknown>) => {
+  const handleCustomUnitChange = (event: ChangeEvent<HTMLInputElement>) => {
     const unit = event.target.value as CycleUnit;
     applyCycleUpdate((prev) => {
       const amount = Number(prev.customValue) || 1;
