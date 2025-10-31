@@ -12,15 +12,44 @@ import ErrorBoundary from './components/ErrorBoundary';
 
 const queryClient = new QueryClient();
 
+// Uber-style theme: Black and White with high contrast
 const theme = createTheme({
   palette: {
-    primary: { main: "#6d4eff" },
-    secondary: { main: "#a78bfa" },
-    background: { default: "#f7f7fb" },
+    primary: { main: "#000000" },
+    secondary: { main: "#ffffff" },
+    background: { default: "#ffffff", paper: "#f9f9f9" },
+    text: { primary: "#000000", secondary: "#666666" },
   },
   typography: {
     fontFamily:
       '"Inter", "Noto Sans TC", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeightBold: 700,
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          borderRadius: "8px",
+          fontWeight: 600,
+        },
+        contained: {
+          backgroundColor: "#000",
+          color: "#fff",
+          "&:hover": {
+            backgroundColor: "#333",
+          },
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px",
+          border: "1px solid #e0e0e0",
+        },
+      },
+    },
   },
 });
 
@@ -57,10 +86,10 @@ const App = () => {
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
-            backgroundColor: '#f7f7fb',
+            backgroundColor: '#fff',
           }}
         >
-          <CircularProgress size={60} />
+          <CircularProgress size={60} sx={{ color: '#000' }} />
         </Box>
       </ThemeProvider>
     );
