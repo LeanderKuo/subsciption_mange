@@ -122,11 +122,11 @@ const Landing = () => {
 
   const headerRight = (
     <Stack direction="row" spacing={2} alignItems="center">
-      <LanguageSwitcher value={locale} onChange={setLocale} variant="light" />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
       <Button
         variant="text"
         onClick={() => setAuthDialogOpen(true)}
-        sx={{ color: '#000', fontWeight: 600 }}
+        sx={{ color: '#fff', fontWeight: 600 }}
       >
         {t('landing.nav.signIn')}
       </Button>
@@ -134,12 +134,12 @@ const Landing = () => {
         variant="contained"
         onClick={() => setAuthDialogOpen(true)}
         sx={{
-          backgroundColor: '#000',
-          color: '#fff',
+          backgroundColor: '#fff',
+          color: '#000',
           borderRadius: '999px',
           fontWeight: 700,
           px: 4,
-          '&:hover': { backgroundColor: '#333' },
+          '&:hover': { backgroundColor: '#e5e5e5' },
         }}
       >
         {t('landing.nav.join')}
@@ -156,7 +156,7 @@ const Landing = () => {
         flexDirection: 'column',
       }}
     >
-      <SiteHeader navLinks={navLinks} rightSlot={headerRight} variant="light" />
+      <SiteHeader navLinks={navLinks} rightSlot={headerRight} variant="dark" />
 
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Box
