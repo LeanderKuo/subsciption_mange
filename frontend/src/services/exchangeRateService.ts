@@ -27,7 +27,7 @@ export const getExchangeRate = async (
   }
 };
 
-// Fallback rates if API fails
+// Fallback rates if API fails (approximate rates to TWD)
 const getDefaultRate = (currency: string): number => {
   const defaultRates: Record<string, number> = {
     TWD: 1,
@@ -35,6 +35,7 @@ const getDefaultRate = (currency: string): number => {
     EUR: 34.5,
     JPY: 0.21,
     GBP: 39.8,
+    CNY: 4.4,
   };
 
   return defaultRates[currency] || 1;

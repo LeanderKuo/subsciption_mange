@@ -289,8 +289,12 @@ export const EditSubscriptionDialog = ({
                 fullWidth
                 required
               >
-                <MenuItem value="TWD">TWD</MenuItem>
-                <MenuItem value="USD">USD</MenuItem>
+                <MenuItem value="TWD">TWD - 新台幣</MenuItem>
+                <MenuItem value="USD">USD - 美元</MenuItem>
+                <MenuItem value="EUR">EUR - 歐元</MenuItem>
+                <MenuItem value="JPY">JPY - 日圓</MenuItem>
+                <MenuItem value="GBP">GBP - 英鎊</MenuItem>
+                <MenuItem value="CNY">CNY - 人民幣</MenuItem>
               </TextField>
             </Stack>
             <Stack direction="row" spacing={2}>

@@ -51,28 +51,6 @@ const IndexPage = () => {
     fetchUser();
   }, []);
 
-  // Fetch exchange rates for all currencies used in subscriptions
-  useEffect(() => {
-    const fetchExchangeRates = async () => {
-      if (subscriptions.length === 0) return;
-
-      const currencies = Array.from(new Set(subscriptions.map(sub => sub.currency)));
-      const rates: Record<string, number> = {};
-
-      for (const currency of currencies) {
-        if (currency === 'TWD') {
-          rates[currency] = 1;
-        } else {
-          rates[currency] = await getExchangeRate(currency);
-        }
-      }
-
-      setExchangeRates(rates);
-    };
-
-    fetchExchangeRates();
-  }, [subscriptions]);
-
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -114,6 +92,28 @@ const IndexPage = () => {
     queryKey: ["subscriptions"],
     queryFn: fetchSubscriptions,
   });
+
+  // Fetch exchange rates for all currencies used in subscriptions
+  useEffect(() => {
+    const fetchExchangeRates = async () => {
+      if (subscriptions.length === 0) return;
+
+      const currencies = Array.from(new Set(subscriptions.map(sub => sub.currency)));
+      const rates: Record<string, number> = {};
+
+      for (const currency of currencies) {
+        if (currency === 'TWD') {
+          rates[currency] = 1;
+        } else {
+          rates[currency] = await getExchangeRate(currency);
+        }
+      }
+
+      setExchangeRates(rates);
+    };
+
+    fetchExchangeRates();
+  }, [subscriptions]);
 
   const createMutation = useMutation({
     mutationFn: createSubscription,
