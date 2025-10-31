@@ -89,8 +89,7 @@ const Landing = () => {
   };
 
   useEffect(() => {
-    document.title =
-      "submange - Track every subscription, manage price changes, and calculate your costs automatically.";
+    document.title = 'submange - Manage every subscription with clarity';
   }, []);
 
   return (
