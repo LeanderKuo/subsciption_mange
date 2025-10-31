@@ -20,6 +20,7 @@ import {
   signInWithApple,
 } from "../services/supabaseService";
 import { useToast } from "../hooks/use-toast";
+import { useLocale } from "../i18n/LocaleProvider";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -60,6 +61,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const { t } = useLocale();
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -76,7 +78,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
 
   const handleSignIn = async () => {
     if (!email || !password) {
-      setError("請填寫所有欄位");
+      setError(t("auth.validation.fillAll"));
       return;
     }
 
@@ -86,13 +88,13 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     try {
       await signIn(email, password);
       toast({
-        title: "登入成功",
-        description: "歡迎回來！",
+        title: t("auth.signIn.successTitle"),
+        description: t("auth.signIn.successDescription"),
       });
       onAuthSuccess();
       handleClose();
     } catch (err: any) {
-      setError(err.message || "登入失敗");
+      setError(err.message || t("auth.signIn.error"));
     } finally {
       setIsLoading(false);
     }
@@ -100,17 +102,17 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
 
   const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
-      setError("請填寫所有欄位");
+      setError(t("auth.validation.fillAll"));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("密碼確認不匹配");
+      setError(t("auth.validation.passwordMismatch"));
       return;
     }
 
     if (password.length < 6) {
-      setError("密碼至少需要6個字符");
+      setError(t("auth.validation.passwordLength"));
       return;
     }
 
@@ -120,12 +122,12 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     try {
       await signUp(email, password);
       toast({
-        title: "註冊成功",
-        description: "請檢查您的郵件以確認帳號",
+        title: t("auth.signUp.successTitle"),
+        description: t("auth.signUp.successDescription"),
       });
-      setTabValue(0); // 切換到登入頁籤
+      setTabValue(0); // Switch back to sign-in tab
     } catch (err: any) {
-      setError(err.message || "註冊失敗");
+      setError(err.message || t("auth.signUp.error"));
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +137,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>
         <Typography variant="h5" component="div" fontWeight={600}>
-          訂閱管理平台
+          {t("auth.dialog.title")}
         </Typography>
       </DialogTitle>
 
@@ -145,8 +147,8 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
             value={tabValue}
             onChange={handleTabChange}
             aria-label="auth tabs">
-            <Tab label="登入" />
-            <Tab label="註冊" />
+            <Tab label={t("auth.tabs.signIn")} />
+            <Tab label={t("auth.tabs.signUp")} />
           </Tabs>
         </Box>
 
@@ -163,7 +165,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
               required
               fullWidth
               id="email-signin"
-              label="電子郵件"
+              label={t("auth.fields.email")}
               name="email"
               autoComplete="email"
               autoFocus
@@ -176,7 +178,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
               required
               fullWidth
               name="password"
-              label="密碼"
+              label={t("auth.fields.password")}
               type="password"
               id="password-signin"
               autoComplete="current-password"
@@ -193,7 +195,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
               required
               fullWidth
               id="email-signup"
-              label="電子郵件"
+              label={t("auth.fields.email")}
               name="email"
               autoComplete="email"
               value={email}
@@ -205,20 +207,20 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
               required
               fullWidth
               name="password"
-              label="密碼"
+              label={t("auth.fields.password")}
               type="password"
               id="password-signup"
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              helperText="至少6個字符"
+              helperText={t("auth.validation.passwordLength")}
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="confirmPassword"
-              label="確認密碼"
+              label={t("auth.fields.confirmPassword")}
               type="password"
               id="confirm-password-signup"
               value={confirmPassword}
@@ -231,7 +233,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
 
         <Box sx={{ textAlign: "center", mb: 2 }}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            或使用以下方式繼續
+            {t("auth.oauth.orContinue")}
           </Typography>
           <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
             <Button
@@ -240,11 +242,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                 try {
                   await signInWithGoogle();
                   toast({
-                    title: "重新導向中",
-                    description: "正在前往 Google 登入...",
+                    title: t("auth.oauth.redirectingTitle"),
+                    description: t("auth.oauth.redirectingGoogle"),
                   });
                 } catch (err: any) {
-                  setError(err.message || "Google 登入失敗");
+                  setError(err.message || t("auth.oauth.googleError"));
                 }
               }}
               sx={{
@@ -256,7 +258,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                   borderColor: "#4285f4",
                 },
               }}>
-              Google
+              {t("auth.actions.google")}
             </Button>
             <Button
               variant="outlined"
@@ -264,11 +266,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                 try {
                   await signInWithApple();
                   toast({
-                    title: "重新導向中",
-                    description: "正在前往 Apple 登入...",
+                    title: t("auth.oauth.redirectingTitle"),
+                    description: t("auth.oauth.redirectingApple"),
                   });
                 } catch (err: any) {
-                  setError(err.message || "Apple 登入失敗");
+                  setError(err.message || t("auth.oauth.appleError"));
                 }
               }}
               sx={{
@@ -280,7 +282,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                   borderColor: "#000000",
                 },
               }}>
-              Apple
+              {t("auth.actions.apple")}
             </Button>
           </Box>
         </Box>
@@ -288,21 +290,21 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
 
       <DialogActions sx={{ px: 3, pb: 3 }}>
         <Button onClick={handleClose} color="inherit">
-          取消
+          {t("auth.actions.cancel")}
         </Button>
         {tabValue === 0 ? (
           <Button
             onClick={handleSignIn}
             variant="contained"
             disabled={isLoading}>
-            {isLoading ? "登入中..." : "登入"}
+            {isLoading ? t("auth.actions.signInLoading") : t("auth.actions.signIn")}
           </Button>
         ) : (
           <Button
             onClick={handleSignUp}
             variant="contained"
             disabled={isLoading}>
-            {isLoading ? "註冊中..." : "註冊"}
+            {isLoading ? t("auth.actions.signUpLoading") : t("auth.actions.signUp")}
           </Button>
         )}
       </DialogActions>

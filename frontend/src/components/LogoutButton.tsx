@@ -10,6 +10,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut, getCurrentUser } from "../services/supabaseService";
 import { useToast } from "../hooks/use-toast";
+import { useLocale } from "../i18n/LocaleProvider";
 
 interface LogoutButtonProps {
   onLogout: () => void;
@@ -20,6 +21,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useLocale();
   const open = Boolean(anchorEl);
 
   React.useEffect(() => {
@@ -41,14 +43,14 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
     try {
       await signOut();
       toast({
-        title: "登出成功",
-        description: "感謝使用訂閱管理平台",
+        title: t("header.logoutSuccess"),
+        description: t("header.logoutSuccessDescription"),
       });
       onLogout();
     } catch (error: any) {
       toast({
-        title: "登出失敗",
-        description: error.message || "請稍後再試一次。",
+        title: t("header.logoutFailure"),
+        description: error.message || t("notifications.genericError"),
         variant: "destructive",
       });
     } finally {
@@ -71,7 +73,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
             backgroundColor: "rgba(255, 255, 255, 0.08)",
           },
         }}>
-        {user?.email || "用戶"}
+        {user?.email || t("auth.user.fallback")}
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -83,7 +85,9 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
           <ListItemIcon>
             <LogoutIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>{isLoading ? "登出中..." : "登出"}</ListItemText>
+          <ListItemText>
+            {isLoading ? t("auth.actions.signOutLoading") : t("header.menu.logout")}
+          </ListItemText>
         </MenuItem>
       </Menu>
     </>

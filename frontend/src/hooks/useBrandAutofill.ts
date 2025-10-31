@@ -4,6 +4,7 @@ import {
   isBrandfetchConfigured,
   searchBrandfetch,
 } from '../services/brandfetchService';
+import { useLocale } from '../i18n/LocaleProvider';
 
 export interface BrandAutofillResult extends BrandfetchSuggestion {
   query: string;
@@ -27,6 +28,7 @@ export const useBrandAutofill = (brandValue: string): BrandAutofillState => {
   const lastResolvedRef = useRef<string>('');
   const timeoutRef = useRef<number | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const { t } = useLocale();
 
   const reset = useCallback(() => {
     lastResolvedRef.current = '';
@@ -66,7 +68,7 @@ export const useBrandAutofill = (brandValue: string): BrandAutofillState => {
           if (!results || results.length === 0) {
             lastResolvedRef.current = trimmed;
             setSuggestions([]);
-            setError('找不到相關品牌');
+            setError(t('brandAutofill.error.noResults'));
             return;
           }
 
@@ -86,7 +88,7 @@ export const useBrandAutofill = (brandValue: string): BrandAutofillState => {
             if ((err as Error & { code?: number }).code === 403) {
               const detail = (err as Error & { detail?: string }).detail;
               console.warn('Brandfetch clientId rejected the request (403).', detail);
-              setError(detail ?? 'Brandfetch clientId 無效或權限不足');
+              setError(detail ?? t('brandAutofill.error.invalidClient'));
               lastResolvedRef.current = trimmed;
               setSuggestions([]);
               return;
@@ -94,14 +96,14 @@ export const useBrandAutofill = (brandValue: string): BrandAutofillState => {
             if ((err as Error & { code?: number }).code === 401) {
               const detail = (err as Error & { detail?: string }).detail;
               console.warn('Brandfetch rejected the request (401).', detail);
-              setError(detail ?? 'Brandfetch 驗證失敗');
+              setError(detail ?? t('brandAutofill.error.authFailed'));
               lastResolvedRef.current = trimmed;
               setSuggestions([]);
               return;
             }
           }
           console.error('Brand suggestions lookup failed', err);
-          setError('品牌搜尋發生錯誤');
+          setError(t('brandAutofill.error.generic'));
           lastResolvedRef.current = trimmed;
           setSuggestions([]);
         })
@@ -119,7 +121,7 @@ export const useBrandAutofill = (brandValue: string): BrandAutofillState => {
       }
       controller.abort();
     };
-  }, [brandValue, enabled, reset]);
+  }, [brandValue, enabled, reset, t]);
 
   useEffect(
     () => () => {

@@ -43,11 +43,8 @@ import { useToast } from "../hooks/use-toast";
 import { Subscription, SubscriptionInput, SubscriptionCategoryInput, SubscriptionCategory } from "../types/subscription";
 import { supabase } from "../services/supabaseClient";
 import { getExchangeRate } from "../services/exchangeRateService";
-
-const UNCATEGORIZED_DISPLAY = {
-  name: '未分類',
-  color: '#9CA3AF',
-} as const;
+import { useLocale } from "../i18n/LocaleProvider";
+import type { Locale } from "../i18n/translations";
 
 const IndexPage = () => {
   const queryClient = useQueryClient();
@@ -62,6 +59,7 @@ const IndexPage = () => {
   const [draggedSubscriptionId, setDraggedSubscriptionId] = useState<number | null>(null);
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
   const menuOpen = Boolean(anchorEl);
+  const { t, locale, setLocale } = useLocale();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -101,18 +99,18 @@ const IndexPage = () => {
   const handleLogout = async () => {
     try {
       await signOut();
-      toast({
-        title: "已登出",
-        description: "您已成功登出",
-      });
-      // 使用較短的延遲後重新載入，讓 toast 有時間顯示
+          toast({
+            title: t("header.logoutSuccess"),
+            description: t("header.logoutSuccessDescription"),
+          });
+      // Use a short delay before reload so the toast is visible
       setTimeout(() => {
         window.location.href = "/";
       }, 500);
     } catch (error) {
       toast({
-        title: "登出失敗",
-        description: "請稍後再試",
+        title: t("header.logoutFailure"),
+        description: t("header.logoutFailureDescription"),
         variant: "destructive",
       });
     }
@@ -131,6 +129,14 @@ const IndexPage = () => {
     queryKey: ["categories"],
     queryFn: fetchCategories,
   });
+
+  const uncategorizedDisplay = useMemo(
+    () => ({
+      name: t("categories.uncategorized"),
+      color: "#9CA3AF" as const,
+    }),
+    [t]
+  );
 
   // Fetch exchange rates for all currencies used in subscriptions
   useEffect(() => {
@@ -152,7 +158,6 @@ const IndexPage = () => {
         }
       }
 
-      console.log('All exchange rates loaded:', rates);
       setExchangeRates(rates);
     };
 
@@ -164,14 +169,14 @@ const IndexPage = () => {
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
       toast({
-        title: "新增成功",
-        description: `已新增 ${result.name} 訂閱`,
+        title: t("notifications.create.successTitle"),
+        description: t("notifications.create.successDescription", { name: result.name }),
       });
     },
     onError: () => {
       toast({
-        title: "新增失敗",
-        description: "請稍後再試一次。",
+        title: t("notifications.create.errorTitle"),
+        description: t("notifications.genericError"),
         variant: "destructive",
       });
     },
@@ -182,14 +187,14 @@ const IndexPage = () => {
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
       toast({
-        title: "更新成功",
-        description: `已更新 ${result.name} 訂閱`,
+        title: t("notifications.update.successTitle"),
+        description: t("notifications.update.successDescription", { name: result.name }),
       });
     },
     onError: () => {
       toast({
-        title: "更新失敗",
-        description: "請稍後再試一次。",
+        title: t("notifications.update.errorTitle"),
+        description: t("notifications.genericError"),
         variant: "destructive",
       });
     },
@@ -200,14 +205,14 @@ const IndexPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
       toast({
-        title: "刪除成功",
-        description: "訂閱已刪除。",
+        title: t("notifications.delete.successTitle"),
+        description: t("notifications.delete.successDescription"),
       });
     },
     onError: () => {
       toast({
-        title: "刪除失敗",
-        description: "請稍後再試一次。",
+        title: t("notifications.delete.errorTitle"),
+        description: t("notifications.genericError"),
         variant: "destructive",
       });
     },
@@ -219,8 +224,8 @@ const IndexPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast({
-        title: "新增成功",
-        description: "類型已新增。",
+        title: t('category.notifications.createTitle'),
+        description: t('category.notifications.createSuccess'),
       });
     },
   });
@@ -231,8 +236,8 @@ const IndexPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast({
-        title: "更新成功",
-        description: "類型已更新。",
+        title: t('category.notifications.updateTitle'),
+        description: t('category.notifications.updateSuccess'),
       });
     },
   });
@@ -243,8 +248,8 @@ const IndexPage = () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
       toast({
-        title: "刪除成功",
-        description: "類型已刪除。",
+        title: t('category.notifications.deleteTitle'),
+        description: t('category.notifications.deleteSuccess'),
       });
     },
   });
@@ -342,7 +347,7 @@ const IndexPage = () => {
         };
       }
     }
-    return UNCATEGORIZED_DISPLAY;
+    return uncategorizedDisplay;
   };
 
   const groupedSubscriptions = useMemo(() => {
@@ -377,14 +382,14 @@ const IndexPage = () => {
     const uncategorizedItems = nameSorted.filter((sub) => !sub.categoryId);
     groups.push({
       key: 'category-uncategorized',
-      title: UNCATEGORIZED_DISPLAY.name,
-      color: UNCATEGORIZED_DISPLAY.color,
+      title: uncategorizedDisplay.name,
+      color: uncategorizedDisplay.color,
       categoryId: null,
       subscriptions: uncategorizedItems,
     });
 
     return groups;
-  }, [categories, sortBy, sortedSubscriptions]);
+  }, [categories, sortBy, sortedSubscriptions, uncategorizedDisplay]);
 
   const handleDragStart = (subscriptionId: number) => {
     setDraggedSubscriptionId(subscriptionId);
@@ -439,20 +444,50 @@ const IndexPage = () => {
             justifyContent="space-between">
             <div>
               <Typography variant="h4" fontWeight={700} sx={{ color: "#fff" }}>
-                訂閱管理平台
+                {t("header.title")}
               </Typography>
               <Typography
                 variant="body2"
                 sx={{ mt: 1, color: "#ccc" }}>
-                輕鬆管理你的所有訂閱服務
+                {t("header.subtitle")}
               </Typography>
             </div>
             <Stack direction="row" spacing={2} alignItems="center">
-              <AddSubscriptionDialog
-                onAdd={handleAdd}
-                disabled={createMutation.isPending}
-                categories={categories}
-              />
+              <FormControl
+                size="small"
+                sx={{
+                  minWidth: 160,
+                  '& .MuiInputBase-root': {
+                    color: '#fff',
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#fff',
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#fff',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    color: '#fff',
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#fff',
+                  },
+                }}
+              >
+                <InputLabel id="locale-select-label">{t("header.language.label")}</InputLabel>
+                <Select
+                  labelId="locale-select-label"
+                  value={locale}
+                  label={t("header.language.label")}
+                  onChange={(event) => setLocale(event.target.value as Locale)}
+                  sx={{
+                    backgroundColor: 'rgba(255,255,255,0.04)',
+                  }}
+                >
+                  <MenuItem value="en">{t("header.language.en")}</MenuItem>
+                  <MenuItem value="zh-TW">{t("header.language.zh-TW")}</MenuItem>
+                </Select>
+              </FormControl>
               <IconButton
                 onClick={handleMenuOpen}
                 sx={{
@@ -496,15 +531,15 @@ const IndexPage = () => {
               >
                 <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #e0e0e0' }}>
                   <Typography variant="body2" sx={{ color: '#666', fontSize: '0.75rem' }}>
-                    登入為
+                    {t("header.loggedInAs")}
                   </Typography>
                   <Typography variant="body2" fontWeight={600} sx={{ color: '#000' }}>
                     {userEmail}
                   </Typography>
                 </Box>
-                <MenuItem onClick={handleGoToSettings}>個人設定</MenuItem>
+                <MenuItem onClick={handleGoToSettings}>{t("header.menu.settings")}</MenuItem>
                 <MenuItem onClick={handleLogout} sx={{ color: '#d32f2f' }}>
-                  登出
+                  {t("header.menu.logout")}
                 </MenuItem>
               </Menu>
             </Stack>
@@ -520,10 +555,10 @@ const IndexPage = () => {
         ) : isError ? (
           <Box textAlign="center" py={8}>
             <Typography variant="h6" gutterBottom>
-              無法載入資料
+              {t('error.loadData')}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              請確認後端服務是否啟動，或稍後再試。
+              {t('error.loadDataHint')}
             </Typography>
           </Box>
         ) : (
@@ -531,26 +566,26 @@ const IndexPage = () => {
             <Grid container spacing={2} sx={{ mb: 4 }}>
               <Grid item xs={12} md={4}>
                 <StatsCard
-                  title="總月費"
+                  title={t("dashboard.totalMonthly")}
                   value={`${userDefaultCurrency} ${Math.round(totalMonthly)}`}
                   icon={<AttachMoneyIcon color="primary" />}
-                  description={`${subscriptions.length} 個服務`}
+                  description={t("dashboard.totalSubscriptions", { count: subscriptions.length })}
                 />
               </Grid>
               <Grid item xs={12} md={4}>
                 <StatsCard
-                  title="使用中"
+                  title={t("dashboard.active")}
                   value={activeSubscriptions}
                   icon={<CalendarMonthIcon color="secondary" />}
-                  description="個訂閱服務"
+                  description={t("dashboard.activeDescription")}
                 />
               </Grid>
               <Grid item xs={12} md={4}>
                 <StatsCard
-                  title="年度預估"
+                  title={t("dashboard.annualEstimate")}
                   value={`${userDefaultCurrency} ${Math.round(totalMonthly * 12)}`}
                   icon={<TrendingUpIcon color="secondary" />}
-                  description="預估花費"
+                  description={t("dashboard.annualEstimateDescription")}
                 />
               </Grid>
             </Grid>
@@ -562,7 +597,7 @@ const IndexPage = () => {
               mb={3}
               flexWrap="wrap"
               gap={2}>
-              <Typography variant="h6">所有訂閱</Typography>
+              <Typography variant="h6">{t("dashboard.allSubscriptions")}</Typography>
               <Stack direction="row" spacing={2} alignItems="center">
                 <Button
                   startIcon={<CategoryIcon />}
@@ -574,13 +609,13 @@ const IndexPage = () => {
                     '&:hover': { borderColor: '#333', backgroundColor: '#f5f5f5' },
                   }}
                 >
-                  管理類型
+                  {t("header.manageCategories")}
                 </Button>
                 <FormControl size="small" sx={{ minWidth: 150 }}>
-                  <InputLabel>排序</InputLabel>
+                  <InputLabel>{t("header.sort")}</InputLabel>
                   <Select
                     value={sortBy}
-                    label="排序"
+                    label={t("header.sort")}
                     onChange={(e) => setSortBy(e.target.value as 'endDate' | 'price' | 'name')}
                     sx={{
                       borderColor: '#000',
@@ -589,9 +624,9 @@ const IndexPage = () => {
                       },
                     }}
                   >
-                    <MenuItem value="endDate">到期日期</MenuItem>
-                    <MenuItem value="price">月費價格</MenuItem>
-                    <MenuItem value="name">服務名稱</MenuItem>
+                    <MenuItem value="endDate">{t("header.sort.endDate")}</MenuItem>
+                    <MenuItem value="price">{t("header.sort.price")}</MenuItem>
+                    <MenuItem value="name">{t("header.sort.name")}</MenuItem>
                   </Select>
                 </FormControl>
                 <AddSubscriptionDialog
@@ -615,13 +650,13 @@ const IndexPage = () => {
                   sx={{ fontSize: 48, color: "text.secondary" }}
                 />
                 <Typography variant="h6" sx={{ mt: 2 }}>
-                  尚未新增任何訂閱
+                  {t("dashboard.empty.title")}
                 </Typography>
                 <Typography
                   variant="body2"
                   color="text.secondary"
                   sx={{ mt: 1 }}>
-                  點擊「新增訂閱」開始管理你的訂閱服務
+                  {t("dashboard.empty.description")}
                 </Typography>
               </Box>
             ) : sortBy === 'name' ? (
@@ -669,7 +704,7 @@ const IndexPage = () => {
                           fontSize: 14,
                         }}
                       >
-                        拖曳訂閱至此分類
+                        {t("categories.dropHint")}
                       </Box>
                     ) : (
                       <Grid container spacing={2}>

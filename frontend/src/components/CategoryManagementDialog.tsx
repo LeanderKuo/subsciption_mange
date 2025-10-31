@@ -17,6 +17,7 @@ import {
 import { Add, Delete, Edit, Category as CategoryIcon } from '@mui/icons-material';
 import { useState } from 'react';
 import { SubscriptionCategory, SubscriptionCategoryInput } from '../types/subscription';
+import { useLocale } from '../i18n/LocaleProvider';
 
 interface CategoryManagementDialogProps {
   open: boolean;
@@ -42,6 +43,7 @@ export const CategoryManagementDialog = ({
     description: '',
     color: '#000000',
   });
+  const { t } = useLocale();
 
   const predefinedColors = [
     '#000000', // Black
@@ -94,7 +96,7 @@ export const CategoryManagementDialog = ({
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('確定要刪除此類型嗎？相關訂閱的類型將被移除。')) {
+    if (window.confirm(t('categoryDialog.deleteConfirm'))) {
       try {
         await onDeleteCategory(id);
       } catch (error) {
@@ -119,7 +121,7 @@ export const CategoryManagementDialog = ({
       <DialogTitle sx={{ borderBottom: '2px solid #e0e0e0', fontWeight: 700 }}>
         <Stack direction="row" alignItems="center" spacing={1}>
           <CategoryIcon />
-          <span>管理訂閱類型</span>
+          <span>{t('categoryDialog.title')}</span>
         </Stack>
       </DialogTitle>
 
@@ -137,7 +139,7 @@ export const CategoryManagementDialog = ({
             >
               <Stack spacing={2}>
                 <TextField
-                  label="類型名稱"
+                  label={t('categoryDialog.fields.name')}
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   required
@@ -146,7 +148,7 @@ export const CategoryManagementDialog = ({
                 />
 
                 <TextField
-                  label="描述（選填）"
+                  label={t('categoryDialog.fields.description')}
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   fullWidth
@@ -157,7 +159,7 @@ export const CategoryManagementDialog = ({
                 <Stack spacing={1.5}>
                   <Box>
                     <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                      選擇顏色
+                      {t('categoryDialog.fields.color')}
                     </Typography>
                     <Stack direction="row" spacing={1} flexWrap="wrap">
                       {predefinedColors.map((color) => (
@@ -181,7 +183,7 @@ export const CategoryManagementDialog = ({
                   </Box>
                   <Stack direction="row" spacing={2} alignItems="center">
                     <TextField
-                      label="自訂顏色"
+                      label={t('categoryDialog.fields.customColor')}
                       type="color"
                       value={form.color}
                       onChange={(event) => setForm({ ...form, color: event.target.value })}
@@ -189,14 +191,14 @@ export const CategoryManagementDialog = ({
                       InputLabelProps={{ shrink: true }}
                     />
                     <Typography variant="body2" color="text.secondary">
-                      當前顏色：{form.color.toUpperCase()}
+                      {t('categoryDialog.currentColor', { color: form.color.toUpperCase() })}
                     </Typography>
                   </Stack>
                 </Stack>
 
                 <Stack direction="row" spacing={1} justifyContent="flex-end">
                   <Button onClick={handleCancel} variant="outlined">
-                    取消
+                    {t('categoryDialog.cancel')}
                   </Button>
                   <Button
                     onClick={handleSave}
@@ -207,7 +209,7 @@ export const CategoryManagementDialog = ({
                       '&:hover': { backgroundColor: '#333' },
                     }}
                   >
-                    {editingId ? '更新' : '新增'}
+                    {editingId ? t('categoryDialog.update') : t('categoryDialog.add')}
                   </Button>
                 </Stack>
               </Stack>
@@ -218,7 +220,7 @@ export const CategoryManagementDialog = ({
           {categories.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <Typography variant="body2" color="text.secondary">
-                尚未建立任何類型
+                {t('categoryDialog.empty')}
               </Typography>
             </Box>
           ) : (
@@ -287,12 +289,12 @@ export const CategoryManagementDialog = ({
               '&:hover': { backgroundColor: '#333' },
             }}
           >
-            新增類型
+            {t('categoryDialog.add')}
           </Button>
         )}
         <Box sx={{ flex: 1 }} />
         <Button onClick={onClose} variant="outlined">
-          關閉
+          {t('categoryDialog.cancel')}
         </Button>
       </DialogActions>
     </Dialog>

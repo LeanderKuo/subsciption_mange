@@ -16,9 +16,13 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../services/supabaseClient';
 import { UserProfile, UserProfileInput } from '../types/subscription';
 import { ArrowBack, Person } from '@mui/icons-material';
+import { useLocale } from '../i18n/LocaleProvider';
+import { useToast } from '../hooks/use-toast';
 
 export const UserSettings = () => {
   const navigate = useNavigate();
+  const { t } = useLocale();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -96,14 +100,14 @@ export const UserSettings = () => {
         }
       } catch (err) {
         console.error('Failed to fetch profile:', err);
-        setError(err instanceof Error ? err.message : '載入個人資料失敗');
+        setError(err instanceof Error ? err.message : t('settings.loadingError'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [navigate]);
+  }, [navigate, t]);
 
   const handleSave = async () => {
     try {
@@ -113,7 +117,7 @@ export const UserSettings = () => {
 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        throw new Error('未登入');
+        throw new Error(t('auth.error.notAuthenticated'));
       }
 
       const updateData: UserProfileInput = {
@@ -136,18 +140,31 @@ export const UserSettings = () => {
         throw updateError;
       }
 
-      setSuccess('個人資料已更新');
+      setSuccess(t('settings.updateSuccess'));
     } catch (err) {
       console.error('Failed to update profile:', err);
-      setError(err instanceof Error ? err.message : '更新個人資料失敗');
+      setError(err instanceof Error ? err.message : t('settings.updateError'));
     } finally {
       setSaving(false);
     }
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate('/');
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: t('header.logoutSuccess'),
+        description: t('header.logoutSuccessDescription'),
+      });
+      navigate('/');
+    } catch (err) {
+      console.error('Failed to sign out:', err);
+      toast({
+        title: t('header.logoutFailure'),
+        description: t('header.logoutFailureDescription'),
+        variant: 'destructive',
+      });
+    }
   };
 
   if (loading) {
@@ -185,11 +202,11 @@ export const UserSettings = () => {
               onClick={() => navigate('/dashboard')}
               sx={{ color: '#fff' }}
             >
-              返回
+              {t('settings.back')}
             </Button>
             <Person sx={{ color: '#fff' }} />
             <Typography variant="h5" fontWeight={700} sx={{ color: '#fff' }}>
-              個人設定
+              {t('settings.title')}
             </Typography>
           </Stack>
         </Container>
@@ -204,7 +221,7 @@ export const UserSettings = () => {
           <CardContent sx={{ p: 4 }}>
             <Stack spacing={3}>
               <Typography variant="h6" fontWeight={700} sx={{ color: '#000' }}>
-                基本資料
+                {t('settings.section.basic')}
               </Typography>
 
               {error && (
@@ -220,36 +237,36 @@ export const UserSettings = () => {
               )}
 
               <TextField
-                label="Email"
+                label={t('settings.email')}
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 fullWidth
-                helperText="用於接收訂閱通知"
+                helperText={t('settings.email.helper')}
               />
 
               <TextField
-                label="暱稱"
+                label={t('settings.nickname')}
                 value={form.nickname}
                 onChange={(e) => setForm({ ...form, nickname: e.target.value })}
                 fullWidth
-                helperText="顯示在個人資料中"
+                helperText={t('settings.nickname.helper')}
               />
 
               <TextField
-                label="預設幣別"
+                label={t('settings.defaultCurrency')}
                 select
                 value={form.defaultCurrency}
                 onChange={(e) => setForm({ ...form, defaultCurrency: e.target.value })}
                 fullWidth
                 required
-                helperText="新增訂閱時的預設貨幣"
+                helperText={t('settings.defaultCurrency.helper')}
               >
-                <MenuItem value="TWD">TWD - 新台幣</MenuItem>
-                <MenuItem value="USD">USD - 美元</MenuItem>
-                <MenuItem value="EUR">EUR - 歐元</MenuItem>
-                <MenuItem value="JPY">JPY - 日圓</MenuItem>
-                <MenuItem value="GBP">GBP - 英鎊</MenuItem>
+                <MenuItem value="TWD">{t('currency.TWD')}</MenuItem>
+                <MenuItem value="USD">{t('currency.USD')}</MenuItem>
+                <MenuItem value="EUR">{t('currency.EUR')}</MenuItem>
+                <MenuItem value="JPY">{t('currency.JPY')}</MenuItem>
+                <MenuItem value="GBP">{t('currency.GBP')}</MenuItem>
               </TextField>
 
               <Stack direction="row" spacing={2} justifyContent="flex-end">
@@ -265,7 +282,7 @@ export const UserSettings = () => {
                     },
                   }}
                 >
-                  取消
+                  {t('settings.cancel')}
                 </Button>
                 <Button
                   variant="contained"
@@ -279,7 +296,7 @@ export const UserSettings = () => {
                     },
                   }}
                 >
-                  {saving ? '儲存中...' : '儲存變更'}
+                  {saving ? t('settings.saving') : t('settings.save')}
                 </Button>
               </Stack>
             </Stack>
@@ -294,7 +311,7 @@ export const UserSettings = () => {
           <CardContent sx={{ p: 4 }}>
             <Stack spacing={3}>
               <Typography variant="h6" fontWeight={700} sx={{ color: '#000' }}>
-                帳號管理
+                {t('settings.section.account')}
               </Typography>
 
               <Box>
@@ -311,7 +328,7 @@ export const UserSettings = () => {
                     },
                   }}
                 >
-                  登出
+                  {t('settings.signOut')}
                 </Button>
               </Box>
             </Stack>

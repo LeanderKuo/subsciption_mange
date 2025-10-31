@@ -10,12 +10,12 @@ export interface BrandfetchSuggestion {
   verified?: boolean;
 }
 
-// 檢查 Brandfetch 是否已配置
+// Check whether Brandfetch integration is available
 export const isBrandfetchConfigured = (): boolean => {
-  return true; // Supabase Edge Function 總是可用
+  return true; // Supabase Edge Function is always available
 };
 
-// 搜尋品牌（用於自動完成）
+// Search for brands (used by autocomplete)
 export const searchBrandfetch = async (
   query: string,
   limit: number = 5,
@@ -54,7 +54,7 @@ export const searchBrandfetch = async (
   }
 };
 
-// 取得品牌圖標
+// Fetch brand icon for a given brand
 export const fetchBrandIcon = async (brand: string): Promise<string | null> => {
   try {
     const { data, error } = await supabase.functions.invoke("brandfetch-api", {

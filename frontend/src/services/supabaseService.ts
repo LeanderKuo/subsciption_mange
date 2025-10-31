@@ -1,9 +1,8 @@
 import { supabase } from "./supabaseClient";
 import { Subscription, SubscriptionInput } from "../types/subscription";
 
-// 使用 Supabase 替換原有的 API 調用
-// 注意：這裡假設你的 Supabase 表名為 'subscriptions'
-// 你需要根據你的實際表結構調整字段名
+// Supabase-based data access helpers
+// Assumes the table name is 'subscriptions'; adjust field names as needed.
 
 const mapFromSupabase = (record: any): Subscription => ({
   id: record.id,
@@ -101,7 +100,7 @@ export const deleteSubscription = async (id: number): Promise<void> => {
   if (error) throw error;
 };
 
-// 認證相關的函數
+// Authentication helpers
 export const signUp = async (email: string, password: string) => {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -123,7 +122,7 @@ export const signIn = async (email: string, password: string) => {
   return data;
 };
 
-// OAuth 登入函數
+// OAuth helpers
 export const signInWithGoogle = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -151,7 +150,7 @@ export const signOut = async () => {
   if (error) throw error;
 };
 
-// 獲取當前用戶
+// Returns the current authenticated user
 export const getCurrentUser = async () => {
   const {
     data: { user },

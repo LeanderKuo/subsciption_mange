@@ -1,8 +1,10 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useLocale } from '../i18n/LocaleProvider';
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
+  const { t } = useLocale();
 
   return (
     <Container maxWidth="sm" sx={{ py: 12 }}>
@@ -11,13 +13,13 @@ const NotFoundPage = () => {
           404
         </Typography>
         <Typography variant="h5" sx={{ mt: 2 }}>
-          找不到頁面
+          {t('notFound.title')}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1, mb: 4 }}>
-          抱歉，您通往的頁面不存在或已被移除。
+          {t('notFound.description')}
         </Typography>
         <Button variant="contained" onClick={() => navigate('/')}>
-          回到首頁
+          {t('notFound.back')}
         </Button>
       </Box>
     </Container>

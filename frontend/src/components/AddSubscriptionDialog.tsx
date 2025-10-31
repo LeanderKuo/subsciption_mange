@@ -22,6 +22,7 @@ import {
   getDefaultCycle,
 } from '../utils/subscriptionDates';
 import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill';
+import { useLocale } from '../i18n/LocaleProvider';
 
 interface AddSubscriptionDialogProps {
   onAdd: (payload: SubscriptionInput) => Promise<void> | void;
@@ -65,6 +66,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
   const autoFilledIconRef = useRef<string | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
+  const { t } = useLocale();
 
   const handleBrandInputChange = (
     _event: SyntheticEvent<Element, Event>,
@@ -180,14 +182,14 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
   return (
     <>
       <Button variant="contained" onClick={handleOpen} disabled={disabled}>
-        新增訂閱
+        {t('addSubscription.openButton')}
       </Button>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>新增訂閱服務</DialogTitle>
+        <DialogTitle>{t('addSubscription.title')}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
-              label="服務名稱"
+              label={t('addSubscription.fields.name')}
               value={form.name}
               onChange={handleChange('name')}
               fullWidth
@@ -209,7 +211,11 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
                   : option.name ?? option.domain ?? option.query
               }
               isOptionEqualToValue={(option, value) => option.id === value.id}
-              noOptionsText={form.brand.trim() ? '找不到相關品牌' : '請輸入品牌名稱'}
+              noOptionsText={
+                form.brand.trim()
+                  ? t('addSubscription.brand.noResults')
+                  : t('addSubscription.brand.placeholder')
+              }
               renderOption={(props, option) => {
                 const { key, ...optionProps } = props;
                 const displayName = option.name ?? option.domain ?? option.query;
@@ -242,13 +248,13 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="品牌"
+                  label={t('addSubscription.fields.brand')}
                   required
                   error={Boolean(brandAutofill.error)}
                   helperText={
                     brandAutofill.enabled
                       ? brandAutofill.error ??
-                        (brandAutofill.isLoading ? '搜尋品牌中…' : undefined)
+                        (brandAutofill.isLoading ? t('addSubscription.brand.searching') : undefined)
                       : undefined
                   }
                 />
@@ -256,7 +262,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
             />
             <Stack direction="row" spacing={2}>
               <TextField
-                label="價格"
+                label={t('addSubscription.fields.price')}
                 type="number"
                 value={form.price}
                 onChange={handleChange('price')}
@@ -264,24 +270,24 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
                 required
               />
               <TextField
-                label="貨幣"
+                label={t('addSubscription.fields.currency')}
                 select
                 value={form.currency}
                 onChange={handleChange('currency')}
                 fullWidth
                 required
               >
-                <MenuItem value="TWD">TWD - 新台幣</MenuItem>
-                <MenuItem value="USD">USD - 美元</MenuItem>
-                <MenuItem value="EUR">EUR - 歐元</MenuItem>
-                <MenuItem value="JPY">JPY - 日圓</MenuItem>
-                <MenuItem value="GBP">GBP - 英鎊</MenuItem>
-                <MenuItem value="CNY">CNY - 人民幣</MenuItem>
+                <MenuItem value="TWD">{t('currency.TWD')}</MenuItem>
+                <MenuItem value="USD">{t('currency.USD')}</MenuItem>
+                <MenuItem value="EUR">{t('currency.EUR')}</MenuItem>
+                <MenuItem value="JPY">{t('currency.JPY')}</MenuItem>
+                <MenuItem value="GBP">{t('currency.GBP')}</MenuItem>
+                <MenuItem value="CNY">{t('currency.CNY')}</MenuItem>
               </TextField>
             </Stack>
             <Stack direction="row" spacing={2}>
               <TextField
-                label="開始日期"
+                label={t('addSubscription.fields.startDate')}
                 type="date"
                 value={form.startDate}
                 onChange={handleChange('startDate')}
@@ -290,7 +296,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
                 required
               />
               <TextField
-                label="結束日期"
+                label={t('addSubscription.fields.endDate')}
                 type="date"
                 value={form.endDate}
                 onChange={handleChange('endDate')}
@@ -300,32 +306,32 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
               />
             </Stack>
             <TextField
-              label="計算周期"
+              label={t('addSubscription.fields.billingCycle')}
               select
               value={form.cycle}
               onChange={handleChange('cycle')}
               fullWidth
               required
             >
-              <MenuItem value="30days">30天</MenuItem>
-              <MenuItem value="6months">6個月</MenuItem>
-              <MenuItem value="1year">1年</MenuItem>
+              <MenuItem value="30days">{t('billingCycle.30days')}</MenuItem>
+              <MenuItem value="6months">{t('billingCycle.6months')}</MenuItem>
+              <MenuItem value="1year">{t('billingCycle.1year')}</MenuItem>
             </TextField>
             <TextField
-              label="Icon URL（選填）"
+              label={t('addSubscription.fields.iconUrl')}
               value={form.iconUrl}
               onChange={handleChange('iconUrl')}
               fullWidth
               placeholder="https://"
             />
             <TextField
-              label="訂閱類型（選填）"
+              label={t('addSubscription.fields.category')}
               select
               value={form.categoryId ?? ''}
               onChange={(e) => setForm({ ...form, categoryId: e.target.value ? Number(e.target.value) : null })}
               fullWidth
             >
-              <MenuItem value="">無類型</MenuItem>
+              <MenuItem value="">{t('addSubscription.fields.category.none')}</MenuItem>
               {categories.map((category) => (
                 <MenuItem key={category.id} value={category.id}>
                   <Stack direction="row" alignItems="center" spacing={1}>
@@ -352,14 +358,14 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
                   sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
                 />
               }
-              label="自動續訂"
+              label={t('addSubscription.fields.autoRenew')}
             />
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>取消</Button>
+          <Button onClick={handleClose}>{t('addSubscription.cancel')}</Button>
           <Button variant="contained" onClick={handleSubmit}>
-            新增
+            {t('addSubscription.submit')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,0 +1,506 @@
+export type Locale = 'en' | 'zh-TW';
+
+type TranslationMap = Record<Locale, Record<string, string>>;
+
+export const translations: TranslationMap = {
+  en: {
+    /**
+     * Common
+     */
+    'common.confirm': 'Confirm',
+    'common.cancel': 'Cancel',
+    'common.delete': 'Delete',
+    'common.edit': 'Edit',
+    'common.loading': 'Loading…',
+    'common.unknownError': 'Something went wrong. Please try again.',
+
+    /**
+     * Header / Navigation
+     */
+    'header.title': 'Subscription Manager',
+    'header.subtitle': 'Manage every subscription with clarity',
+    'header.language.label': 'Language',
+    'header.language.en': 'English',
+    'header.language.zh-TW': '繁體中文',
+    'header.addSubscription': 'Add Subscription',
+    'header.manageCategories': 'Manage categories',
+    'header.sort': 'Sort',
+    'header.sort.endDate': 'End date',
+    'header.sort.price': 'Monthly cost',
+    'header.sort.name': 'Service name',
+    'header.logout': 'Sign out',
+    'header.loggedInAs': 'Signed in as',
+    'header.menu.settings': 'Personal settings',
+    'header.menu.logout': 'Sign out',
+    'header.logoutSuccess': 'Signed out',
+    'header.logoutSuccessDescription': 'You have successfully signed out.',
+    'header.logoutFailure': 'Sign out failed',
+    'header.logoutFailureDescription': 'Please try again later.',
+
+    /**
+     * Dashboard Cards
+     */
+    'dashboard.totalMonthly': 'Total monthly',
+    'dashboard.totalSubscriptions': '{count} services',
+    'dashboard.active': 'Active',
+    'dashboard.activeDescription': 'Subscriptions in use',
+    'dashboard.annualEstimate': 'Annual forecast',
+    'dashboard.annualEstimateDescription': 'Projected spending',
+    'dashboard.allSubscriptions': 'All subscriptions',
+
+    /**
+     * Empty state
+     */
+    'dashboard.empty.title': 'No subscriptions yet',
+    'dashboard.empty.description': 'Click “Add subscription” to get started.',
+
+    /**
+     * Categories
+     */
+    'categories.uncategorized': 'Uncategorized',
+    'categories.dropHint': 'Drop subscriptions here',
+
+    /**
+     * Notifications
+     */
+    'notifications.genericError': 'Please try again.',
+    'notifications.create.successTitle': 'Subscription added',
+    'notifications.create.successDescription': '{name} has been added.',
+    'notifications.create.errorTitle': 'Add failed',
+    'notifications.update.successTitle': 'Subscription updated',
+    'notifications.update.successDescription': '{name} has been updated.',
+    'notifications.update.errorTitle': 'Update failed',
+    'notifications.delete.successTitle': 'Subscription deleted',
+    'notifications.delete.successDescription': 'The subscription has been removed.',
+    'notifications.delete.errorTitle': 'Delete failed',
+
+    'category.notifications.createTitle': 'Category added',
+    'category.notifications.createSuccess': 'Category added',
+    'category.notifications.updateTitle': 'Category updated',
+    'category.notifications.updateSuccess': 'Category updated',
+    'category.notifications.deleteTitle': 'Category deleted',
+    'category.notifications.deleteSuccess': 'Category removed.',
+
+    /**
+     * Add Subscription Dialog
+     */
+    'addSubscription.openButton': 'Add subscription',
+    'addSubscription.title': 'Add subscription',
+    'addSubscription.fields.name': 'Service name',
+    'addSubscription.fields.brand': 'Brand',
+    'addSubscription.fields.price': 'Price',
+    'addSubscription.fields.currency': 'Currency',
+    'addSubscription.fields.startDate': 'Start date',
+    'addSubscription.fields.endDate': 'End date',
+    'addSubscription.fields.billingCycle': 'Billing cycle',
+    'addSubscription.fields.iconUrl': 'Icon URL (optional)',
+    'addSubscription.fields.category': 'Subscription category (optional)',
+    'addSubscription.fields.category.none': 'No category',
+    'addSubscription.fields.autoRenew': 'Auto renew',
+    'addSubscription.submit': 'Add',
+    'addSubscription.cancel': 'Cancel',
+    'addSubscription.brand.searching': 'Searching…',
+    'addSubscription.brand.noResults': 'No related brands found',
+    'addSubscription.brand.placeholder': 'Enter brand name',
+
+    /**
+     * Edit Subscription Dialog
+     */
+    'editSubscription.openButton': 'Edit',
+    'editSubscription.title': 'Edit subscription',
+    'editSubscription.submit': 'Update',
+    'editSubscription.recordPriceChange': 'Record price change',
+    'editSubscription.priceEffectiveDate': 'Price effective date',
+    'editSubscription.priceChangeHint': 'Set the effective date for the new price',
+    'editSubscription.priceChangePreview':
+      'Changed from {oldPrice} to {newPrice}',
+
+    /**
+     * Billing cycles
+     */
+    'billingCycle.30days': '30 days',
+    'billingCycle.6months': '6 months',
+    'billingCycle.1year': '1 year',
+
+    /**
+     * Currency labels
+     */
+    'currency.TWD': 'TWD – New Taiwan Dollar',
+    'currency.USD': 'USD – US Dollar',
+    'currency.EUR': 'EUR – Euro',
+    'currency.JPY': 'JPY – Japanese Yen',
+    'currency.GBP': 'GBP – British Pound',
+    'currency.CNY': 'CNY – Chinese Yuan',
+
+    /**
+     * Category Management Dialog
+     */
+    'categoryDialog.title': 'Manage subscription categories',
+    'categoryDialog.empty': 'No categories yet',
+    'categoryDialog.add': 'Add category',
+    'categoryDialog.update': 'Update',
+    'categoryDialog.cancel': 'Cancel',
+    'categoryDialog.deleteConfirm':
+      'Are you sure you want to delete this category? Linked subscriptions will lose their category.',
+    'categoryDialog.fields.name': 'Category name',
+    'categoryDialog.fields.description': 'Description (optional)',
+    'categoryDialog.fields.color': 'Choose a color',
+    'categoryDialog.fields.customColor': 'Custom color',
+    'categoryDialog.currentColor': 'Current: {color}',
+
+    /**
+     * Subscription card
+     */
+    'subscriptionCard.status.expired': 'Expired',
+    'subscriptionCard.status.expiringSoon': 'Expiring soon',
+    'subscriptionCard.status.active': 'Active',
+
+    /**
+     * User settings
+     */
+    'settings.title': 'Profile settings',
+    'settings.back': 'Back',
+    'settings.section.basic': 'Basic information',
+    'settings.section.account': 'Account management',
+    'settings.email': 'Email',
+    'settings.email.helper': 'Used for subscription notifications',
+    'settings.nickname': 'Nickname',
+    'settings.nickname.helper': 'Shown in your profile',
+    'settings.defaultCurrency': 'Default currency',
+    'settings.defaultCurrency.helper': 'Default currency when adding subscriptions',
+    'settings.defaultLanguage': 'Preferred language',
+    'settings.defaultLanguage.helper': 'Language used throughout the app',
+    'settings.save': 'Save changes',
+    'settings.saving': 'Saving…',
+    'settings.cancel': 'Cancel',
+    'settings.signOut': 'Sign out',
+    'settings.loadingError': 'Failed to load profile.',
+    'settings.updateSuccess': 'Profile updated',
+    'settings.updateError': 'Failed to update profile.',
+    'settings.loading': 'Loading profile…',
+
+    'auth.error.notAuthenticated': 'Not signed in',
+
+    /**
+     * Landing page
+     */
+    'landing.hero.title.line1': 'Take control of your',
+    'landing.hero.title.line2': 'subscription spending',
+    'landing.hero.subtitle':
+      'Track every subscription, manage price changes, and calculate your costs automatically.',
+    'landing.hero.cta': 'Get started',
+    'landing.pricing.free': 'Free',
+    'landing.pricing.freeDescription': 'Full feature set, free forever',
+    'landing.pricing.features.unlimited': 'Unlimited subscription tracking',
+    'landing.pricing.features.priceChange': 'Price change management',
+    'landing.pricing.features.autoRenew': 'Auto renew tracking',
+    'landing.pricing.features.multiCurrency': 'Multi-currency support',
+    'landing.features.title': 'Why choose us',
+    'landing.features.track.title': 'Smart expense tracking',
+    'landing.features.track.description':
+      'Automatically calculate monthly and yearly spending to stay on top of every subscription.',
+    'landing.features.price.title': 'Price change management',
+    'landing.features.price.description':
+      'Track subscription price changes and set effective dates for accurate totals.',
+    'landing.features.renew.title': 'Auto-renew management',
+    'landing.features.renew.description':
+      'Flag auto-renewing subscriptions so you never miss a renewal date.',
+    'landing.features.security.title': 'Secure by design',
+    'landing.features.security.description':
+      'Enterprise-grade security powered by Supabase with encrypted storage.',
+    'landing.faq.title': 'Frequently asked questions',
+    'landing.faq.free.question': 'Is this service free?',
+    'landing.faq.free.answer': 'Yes! We offer a completely free subscription manager.',
+    'landing.faq.security.question': 'Is my data safe?',
+    'landing.faq.security.answer': 'Absolutely. Supabase provides encrypted storage for all data.',
+    'landing.faq.supported.question': 'Which services are supported?',
+    'landing.faq.supported.answer': 'All types, including streaming, software, and gym memberships.',
+    'landing.faq.price.question': 'Can I track price changes?',
+    'landing.faq.price.answer': 'Yes. Set effective dates for new prices and we will compute totals automatically.',
+    'landing.faq.devices.question': 'Does it work across devices?',
+    'landing.faq.devices.answer': 'Yes. Sign in on any device and your data syncs instantly.',
+    'landing.cta.title': 'Start managing your subscriptions',
+    'landing.cta.description':
+      'Sign up now to use every feature for free. No credit card. No commitment.',
+    'landing.cta.button': 'Start now',
+    'landing.footer': '© 2025 Subscription Manager. All rights reserved.',
+
+    /**
+     * Not Found
+     */
+    'notFound.title': 'Page not found',
+    'notFound.description':
+      'Sorry, the page you are looking for does not exist or has been moved.',
+    'notFound.back': 'Back to home',
+
+    /**
+     * Brand autofill
+     */
+    'brandAutofill.error.noResults': 'No related brands found',
+    'brandAutofill.error.invalidClient':
+      'Brandfetch client ID is invalid or lacks permission.',
+    'brandAutofill.error.authFailed': 'Brandfetch authentication failed.',
+    'brandAutofill.error.generic': 'An error occurred while searching for brands.',
+
+    'auth.dialog.title': 'Subscription Manager',
+    'auth.tabs.signIn': 'Sign in',
+    'auth.tabs.signUp': 'Sign up',
+    'auth.fields.email': 'Email',
+    'auth.fields.password': 'Password',
+    'auth.fields.confirmPassword': 'Confirm password',
+    'auth.validation.fillAll': 'Please fill out all fields.',
+    'auth.validation.passwordMismatch': 'Passwords do not match.',
+    'auth.validation.passwordLength': 'Password must be at least 6 characters.',
+    'auth.signIn.successTitle': 'Signed in',
+    'auth.signIn.successDescription': 'Welcome back!',
+    'auth.signIn.error': 'Sign in failed.',
+    'auth.signUp.successTitle': 'Account created',
+    'auth.signUp.successDescription': 'Check your email to confirm your account.',
+    'auth.signUp.error': 'Sign up failed.',
+    'auth.oauth.orContinue': 'Or continue with',
+    'auth.oauth.redirectingTitle': 'Redirecting',
+    'auth.oauth.redirectingGoogle': 'Taking you to Google sign in…',
+    'auth.oauth.redirectingApple': 'Taking you to Apple sign in…',
+    'auth.oauth.googleError': 'Google sign in failed.',
+    'auth.oauth.appleError': 'Apple sign in failed.',
+    'auth.actions.cancel': 'Cancel',
+    'auth.actions.signIn': 'Sign in',
+    'auth.actions.signInLoading': 'Signing in…',
+    'auth.actions.signUp': 'Sign up',
+    'auth.actions.signUpLoading': 'Signing up…',
+    'auth.actions.google': 'Google',
+    'auth.actions.apple': 'Apple',
+    'auth.actions.signOutLoading': 'Signing out…',
+    'auth.user.fallback': 'User',
+
+    /**
+     * Misc
+     */
+    'error.loadData': 'Unable to load data',
+    'error.loadDataHint': 'Please check the backend service or try again later.',
+    'errorBoundary.title': 'Something went wrong',
+    'errorBoundary.subtitle': 'An unexpected error occurred. Please try refreshing the page.',
+    'errorBoundary.backHome': 'Back to home',
+  },
+  'zh-TW': {
+    'common.confirm': '確認',
+    'common.cancel': '取消',
+    'common.delete': '刪除',
+    'common.edit': '編輯',
+    'common.loading': '載入中…',
+    'common.unknownError': '發生錯誤，請稍後再試。',
+
+    'header.title': '訂閱管理平台',
+    'header.subtitle': '輕鬆管理你的所有訂閱服務',
+    'header.language.en': 'English',
+    'header.language.zh-TW': '繁體中文',
+    'header.addSubscription': '新增訂閱',
+    'header.manageCategories': '管理類型',
+    'header.sort': '排序',
+    'header.sort.endDate': '到期日期',
+    'header.sort.price': '月費價格',
+    'header.sort.name': '服務名稱',
+    'header.logout': '登出',
+    'header.loggedInAs': '登入為',
+    'header.menu.settings': '個人設定',
+    'header.menu.logout': '登出',
+    'header.logoutSuccess': '已登出',
+    'header.logoutSuccessDescription': '您已成功登出',
+    'header.logoutFailure': '登出失敗',
+    'header.logoutFailureDescription': '請稍後再試',
+
+    'dashboard.totalMonthly': '總月費',
+    'dashboard.totalSubscriptions': '{count} 個服務',
+    'dashboard.active': '使用中',
+    'dashboard.activeDescription': '個訂閱服務',
+    'dashboard.annualEstimate': '年度預估',
+    'dashboard.annualEstimateDescription': '預估花費',
+    'dashboard.allSubscriptions': '所有訂閱',
+
+    'dashboard.empty.title': '尚未新增任何訂閱',
+    'dashboard.empty.description': '點擊「新增訂閱」開始管理你的訂閱服務',
+
+    'categories.uncategorized': '未分類',
+    'categories.dropHint': '拖曳訂閱至此分類',
+
+    'notifications.genericError': '請稍後再試一次。',
+    'notifications.create.successTitle': '新增成功',
+    'notifications.create.successDescription': '已新增 {name} 訂閱',
+    'notifications.create.errorTitle': '新增失敗',
+    'notifications.update.successTitle': '更新成功',
+    'notifications.update.successDescription': '已更新 {name} 訂閱',
+    'notifications.update.errorTitle': '更新失敗',
+    'notifications.delete.successTitle': '刪除成功',
+    'notifications.delete.successDescription': '訂閱已刪除。',
+    'notifications.delete.errorTitle': '刪除失敗',
+
+    'category.notifications.createTitle': '新增成功',
+    'category.notifications.createSuccess': '類型已新增。',
+    'category.notifications.updateTitle': '更新成功',
+    'category.notifications.updateSuccess': '類型已更新。',
+    'category.notifications.deleteTitle': '刪除成功',
+    'category.notifications.deleteSuccess': '類型已刪除。',
+
+    'addSubscription.openButton': '新增訂閱',
+    'addSubscription.title': '新增訂閱服務',
+    'addSubscription.fields.name': '服務名稱',
+    'addSubscription.fields.brand': '品牌',
+    'addSubscription.fields.price': '價格',
+    'addSubscription.fields.currency': '貨幣',
+    'addSubscription.fields.startDate': '開始日期',
+    'addSubscription.fields.endDate': '結束日期',
+    'addSubscription.fields.billingCycle': '計算周期',
+    'addSubscription.fields.iconUrl': 'Icon URL（選填）',
+    'addSubscription.fields.category': '訂閱類型（選填）',
+    'addSubscription.fields.category.none': '無類型',
+    'addSubscription.fields.autoRenew': '自動續訂',
+    'addSubscription.submit': '新增',
+    'addSubscription.cancel': '取消',
+    'addSubscription.brand.searching': '搜尋品牌中…',
+    'addSubscription.brand.noResults': '找不到相關品牌',
+    'addSubscription.brand.placeholder': '請輸入品牌名稱',
+
+    'editSubscription.openButton': '編輯',
+    'editSubscription.title': '編輯訂閱服務',
+    'editSubscription.submit': '更新',
+    'editSubscription.recordPriceChange': '記錄價格變動',
+    'editSubscription.priceEffectiveDate': '價格生效日期',
+    'editSubscription.priceChangeHint': '設定價格變動的生效日期',
+    'editSubscription.priceChangePreview':
+      '從 {oldPrice} 變更為 {newPrice}',
+
+    'billingCycle.30days': '30天',
+    'billingCycle.6months': '6個月',
+    'billingCycle.1year': '1年',
+
+    'currency.TWD': 'TWD - 新台幣',
+    'currency.USD': 'USD - 美元',
+    'currency.EUR': 'EUR - 歐元',
+    'currency.JPY': 'JPY - 日圓',
+    'currency.GBP': 'GBP - 英鎊',
+    'currency.CNY': 'CNY - 人民幣',
+
+    'categoryDialog.title': '管理訂閱類型',
+    'categoryDialog.empty': '尚未建立任何類型',
+    'categoryDialog.add': '新增類型',
+    'categoryDialog.update': '更新',
+    'categoryDialog.cancel': '取消',
+    'categoryDialog.deleteConfirm':
+      '確定要刪除此類型嗎？相關訂閱的類型將被移除。',
+    'categoryDialog.fields.name': '類型名稱',
+    'categoryDialog.fields.description': '描述（選填）',
+    'categoryDialog.fields.color': '選擇顏色',
+    'categoryDialog.fields.customColor': '自訂顏色',
+    'categoryDialog.currentColor': '當前顏色：{color}',
+
+    'subscriptionCard.status.expired': '逾期',
+    'subscriptionCard.status.expiringSoon': '即將到期',
+    'subscriptionCard.status.active': '使用中',
+
+    'settings.title': '個人設定',
+    'settings.back': '返回',
+    'settings.section.basic': '基本資料',
+    'settings.section.account': '帳號管理',
+    'settings.email': 'Email',
+    'settings.email.helper': '用於接收訂閱通知',
+    'settings.nickname': '暱稱',
+    'settings.nickname.helper': '顯示在個人資料中',
+    'settings.defaultCurrency': '預設幣別',
+    'settings.defaultCurrency.helper': '新增訂閱時的預設貨幣',
+    'settings.defaultLanguage': '偏好語言',
+    'settings.defaultLanguage.helper': '系統顯示的語言',
+    'settings.save': '儲存變更',
+    'settings.saving': '儲存中…',
+    'settings.cancel': '取消',
+    'settings.signOut': '登出',
+    'settings.loadingError': '載入個人資料失敗。',
+    'settings.updateSuccess': '個人資料已更新',
+    'settings.updateError': '更新個人資料失敗。',
+    'settings.loading': '載入個人資料中…',
+
+    'auth.error.notAuthenticated': '未登入',
+
+    'landing.hero.title.line1': '掌控你的',
+    'landing.hero.title.line2': '訂閱支出',
+    'landing.hero.subtitle':
+      '追蹤所有訂閱服務，管理價格變動，自動計算總花費。',
+    'landing.hero.cta': '立即開始使用',
+    'landing.pricing.free': '免費',
+    'landing.pricing.freeDescription': '完整功能，永久免費',
+    'landing.pricing.features.unlimited': '✓ 無限訂閱追蹤',
+    'landing.pricing.features.priceChange': '✓ 價格變動管理',
+    'landing.pricing.features.autoRenew': '✓ 自動續訂標記',
+    'landing.pricing.features.multiCurrency': '✓ 多幣別支援',
+    'landing.features.title': '功能特色',
+    'landing.features.track.title': '智能費用追蹤',
+    'landing.features.track.description': '自動計算月費、年費，一目了然掌握訂閱開支。',
+    'landing.features.price.title': '價格變動管理',
+    'landing.features.price.description': '追蹤訂閱價格變化，設定生效日期，精準計算總花費。',
+    'landing.features.renew.title': '自動續訂管理',
+    'landing.features.renew.description': '標記自動續訂項目，永遠不會錯過續訂日期。',
+    'landing.features.security.title': '安全可靠',
+    'landing.features.security.description': '基於 Supabase 的企業級安全保障，資料加密存儲。',
+    'landing.faq.title': '常見問題',
+    'landing.faq.free.question': '這個服務是免費的嗎？',
+    'landing.faq.free.answer': '是的！我們提供完全免費的訂閱管理服務。',
+    'landing.faq.security.question': '我的資料安全嗎？',
+    'landing.faq.security.answer': '絕對安全！資料皆經加密並由 Supabase 托管。',
+    'landing.faq.supported.question': '支援哪些訂閱服務？',
+    'landing.faq.supported.answer': '串流媒體、軟體服務、健身會員等各種類型都支援。',
+    'landing.faq.price.question': '可以追蹤價格變動嗎？',
+    'landing.faq.price.answer': '可以！設定新價格的生效日期，系統會自動計算總花費。',
+    'landing.faq.devices.question': '支援多個裝置嗎？',
+    'landing.faq.devices.answer': '是的！任何裝置登入都會即時同步資料。',
+    'landing.cta.title': '開始管理你的訂閱',
+    'landing.cta.description':
+      '立即註冊，免費使用所有功能。無需信用卡，無需承諾。',
+    'landing.cta.button': '立即開始使用',
+    'landing.footer': '© 2025 訂閱管理平台. All rights reserved.',
+
+    'notFound.title': '找不到頁面',
+    'notFound.description': '抱歉，您通往的頁面不存在或已被移除。',
+    'notFound.back': '回到首頁',
+
+    'brandAutofill.error.noResults': '找不到相關品牌',
+    'brandAutofill.error.invalidClient': 'Brandfetch clientId 無效或權限不足',
+    'brandAutofill.error.authFailed': 'Brandfetch 驗證失敗',
+    'brandAutofill.error.generic': '品牌搜尋發生錯誤',
+
+    'auth.dialog.title': '訂閱管理平台',
+    'auth.tabs.signIn': '登入',
+    'auth.tabs.signUp': '註冊',
+    'auth.fields.email': '電子郵件',
+    'auth.fields.password': '密碼',
+    'auth.fields.confirmPassword': '確認密碼',
+    'auth.validation.fillAll': '請填寫所有欄位',
+    'auth.validation.passwordMismatch': '密碼確認不匹配',
+    'auth.validation.passwordLength': '密碼至少需要6個字符',
+    'auth.signIn.successTitle': '登入成功',
+    'auth.signIn.successDescription': '歡迎回來！',
+    'auth.signIn.error': '登入失敗',
+    'auth.signUp.successTitle': '註冊成功',
+    'auth.signUp.successDescription': '請檢查您的郵件以確認帳號',
+    'auth.signUp.error': '註冊失敗',
+    'auth.oauth.orContinue': '或使用以下方式繼續',
+    'auth.oauth.redirectingTitle': '重新導向中',
+    'auth.oauth.redirectingGoogle': '正在前往 Google 登入...',
+    'auth.oauth.redirectingApple': '正在前往 Apple 登入...',
+    'auth.oauth.googleError': 'Google 登入失敗',
+    'auth.oauth.appleError': 'Apple 登入失敗',
+    'auth.actions.cancel': '取消',
+    'auth.actions.signIn': '登入',
+    'auth.actions.signInLoading': '登入中...',
+    'auth.actions.signUp': '註冊',
+    'auth.actions.signUpLoading': '註冊中...',
+    'auth.actions.google': 'Google',
+    'auth.actions.apple': 'Apple',
+    'auth.actions.signOutLoading': '登出中...',
+    'auth.user.fallback': '用戶',
+
+    'error.loadData': '無法載入資料',
+    'error.loadDataHint': '請確認後端服務是否啟動，或稍後再試。',
+    'errorBoundary.title': '糟糕！發生了一些問題',
+    'errorBoundary.subtitle': '我們遇到了一個意外錯誤。請嘗試重新整理頁面。',
+    'errorBoundary.backHome': '返回首頁',
+  },
+};

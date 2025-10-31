@@ -10,8 +10,8 @@ export interface Subscription {
   endDate: string;
   cycle: BillingCycle;
   iconUrl?: string | null;
-  autoRenew?: boolean; // 自動續訂
-  categoryId?: number | null; // 訂閱類型
+  autoRenew?: boolean; // Auto-renew flag
+  categoryId?: number | null; // Optional category reference
 }
 
 export interface PriceChange {
@@ -21,7 +21,7 @@ export interface PriceChange {
   oldPrice: number;
   newPrice: number;
   currency: string;
-  effectiveDate: string; // 價格生效日期
+  effectiveDate: string; // Date when the new price takes effect
   createdAt: string;
 }
 

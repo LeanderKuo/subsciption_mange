@@ -14,6 +14,7 @@ import { differenceInDays, format } from 'date-fns';
 import type { DragEvent } from 'react';
 import { Subscription, SubscriptionCategory } from '../types/subscription';
 import { EditSubscriptionDialog } from './EditSubscriptionDialog';
+import { useLocale } from '../i18n/LocaleProvider';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -28,18 +29,6 @@ interface SubscriptionCardProps {
   onDragEnd?: () => void;
 }
 
-const statusChip = (endDate: string) => {
-  const days = differenceInDays(new Date(endDate), new Date());
-  if (Number.isNaN(days)) return null;
-  if (days < 0) {
-    return <Chip label="逾期" color="error" size="small" variant="outlined" />;
-  }
-  if (days <= 7) {
-    return <Chip label="即將到期" color="warning" size="small" variant="outlined" />;
-  }
-  return <Chip label="使用中" color="success" size="small" variant="outlined" />;
-};
-
 export const SubscriptionCard = ({
   subscription,
   onDelete,
@@ -52,8 +41,42 @@ export const SubscriptionCard = ({
   onDragStart,
   onDragEnd,
 }: SubscriptionCardProps) => {
+  const { t } = useLocale();
   const handleDelete = () => onDelete(subscription.id);
   const chipColor = categoryColor ?? '#6b7280';
+
+  const renderStatusChip = () => {
+    const days = differenceInDays(new Date(subscription.endDate), new Date());
+    if (Number.isNaN(days)) return null;
+    if (days < 0) {
+      return (
+        <Chip
+          label={t('subscriptionCard.status.expired')}
+          color="error"
+          size="small"
+          variant="outlined"
+        />
+      );
+    }
+    if (days <= 7) {
+      return (
+        <Chip
+          label={t('subscriptionCard.status.expiringSoon')}
+          color="warning"
+          size="small"
+          variant="outlined"
+        />
+      );
+    }
+    return (
+      <Chip
+        label={t('subscriptionCard.status.active')}
+        color="success"
+        size="small"
+        variant="outlined"
+      />
+    );
+  };
 
   return (
     <Card
@@ -116,10 +139,10 @@ export const SubscriptionCard = ({
           {format(new Date(subscription.startDate), 'yyyy/MM/dd')} -{' '}
           {format(new Date(subscription.endDate), 'yyyy/MM/dd')}
         </Typography>
-        <Box mt={1}>{statusChip(subscription.endDate)}</Box>
+        <Box mt={1}>{renderStatusChip()}</Box>
       </CardContent>
       <CardActions>
-        <Tooltip title="編輯">
+        <Tooltip title={t('common.edit')}>
           <span>
             <EditSubscriptionDialog
               subscription={subscription}
@@ -128,8 +151,8 @@ export const SubscriptionCard = ({
             />
           </span>
         </Tooltip>
-        <Tooltip title="刪除">
-          <IconButton color="error" onClick={handleDelete} aria-label="刪除">
+        <Tooltip title={t('common.delete')}>
+          <IconButton color="error" onClick={handleDelete} aria-label={t('common.delete')}>
             <DeleteIcon fontSize="small" />
           </IconButton>
         </Tooltip>

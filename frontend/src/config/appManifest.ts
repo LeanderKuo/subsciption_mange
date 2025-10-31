@@ -1,6 +1,6 @@
 export const appManifest = {
-  short_name: '訂閱管理',
-  name: '訂閱管理平台',
+  short_name: 'Subscription Manager',
+  name: 'Subscription Manager',
   icons: [
     {
       src: '/favicon.ico',

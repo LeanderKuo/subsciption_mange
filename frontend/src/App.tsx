@@ -10,6 +10,7 @@ import LandingPage from './pages/Landing';
 import UserSettings from './pages/UserSettings';
 import { ToastProvider } from './components/ToastProvider';
 import ErrorBoundary from './components/ErrorBoundary';
+import { LocaleProvider } from './i18n/LocaleProvider';
 
 const queryClient = new QueryClient();
 
@@ -59,13 +60,13 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 檢查初始用戶狀態
+    // Check initial auth state
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
       setLoading(false);
     });
 
-    // 監聽認證狀態變化
+    // Subscribe to auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user ?? null);
@@ -76,59 +77,65 @@ const App = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // 載入中狀態
+  // Show loading indicator while checking auth
   if (loading) {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh',
-            backgroundColor: '#fff',
-          }}
-        >
-          <CircularProgress size={60} sx={{ color: '#000' }} />
-        </Box>
+        <LocaleProvider>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '100vh',
+              backgroundColor: '#fff',
+            }}
+          >
+            <CircularProgress size={60} sx={{ color: '#000' }} />
+          </Box>
+        </LocaleProvider>
       </ThemeProvider>
     );
   }
 
-  // 未登入 - 顯示 Landing Page
+  // Render landing page when user is signed out
   if (user === null) {
     return (
       <ErrorBoundary>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <QueryClientProvider client={queryClient}>
-            <ToastProvider>
-              <LandingPage />
-            </ToastProvider>
-          </QueryClientProvider>
+          <LocaleProvider>
+            <QueryClientProvider client={queryClient}>
+              <ToastProvider>
+                <LandingPage />
+              </ToastProvider>
+            </QueryClientProvider>
+          </LocaleProvider>
         </ThemeProvider>
       </ErrorBoundary>
     );
   }
 
-  // 已登入 - 顯示應用主體
+  // Render main app when user is signed in
   return (
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <QueryClientProvider client={queryClient}>
-          <ToastProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<IndexPage />} />
-                <Route path="/dashboard" element={<IndexPage />} />
-                <Route path="/settings" element={<UserSettings />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </BrowserRouter>
-          </ToastProvider>
-        </QueryClientProvider>
+        <LocaleProvider>
+          <QueryClientProvider client={queryClient}>
+            <ToastProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<IndexPage />} />
+                  <Route path="/dashboard" element={<IndexPage />} />
+                  <Route path="/settings" element={<UserSettings />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </BrowserRouter>
+            </ToastProvider>
+          </QueryClientProvider>
+        </LocaleProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

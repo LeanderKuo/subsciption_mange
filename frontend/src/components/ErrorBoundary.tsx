@@ -1,6 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { LocaleContext } from '../i18n/LocaleProvider';
 
 interface Props {
   children: ReactNode;
@@ -13,6 +14,9 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
+  static contextType = LocaleContext;
+  context!: React.ContextType<typeof LocaleContext>;
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -23,7 +27,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): State {
-    // 更新 state 以便下次渲染能夠顯示降級 UI
+    // Update state so next render shows the fallback UI
     return {
       hasError: true,
       error,
@@ -32,7 +36,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // 你可以將錯誤記錄到錯誤報告服務
+    // Log errors to your monitoring service if desired
     console.error('ErrorBoundary caught an error:', error, errorInfo);
 
     this.setState({
@@ -40,8 +44,7 @@ class ErrorBoundary extends Component<Props, State> {
       errorInfo,
     });
 
-    // 可選：將錯誤發送到監控服務（如 Sentry）
-    // logErrorToService(error, errorInfo);
+    // Example: logErrorToService(error, errorInfo);
   }
 
   handleReset = () => {
@@ -50,11 +53,13 @@ class ErrorBoundary extends Component<Props, State> {
       error: null,
       errorInfo: null,
     });
-    // 重新載入頁面
+    // Reload the page to reset application state
     window.location.href = '/';
   };
 
   render() {
+    const t = this.context?.t ?? ((key: string) => key);
+
     if (this.state.hasError) {
       return (
         <Box
@@ -85,14 +90,14 @@ class ErrorBoundary extends Component<Props, State> {
                 }}
               />
               <Typography variant="h4" fontWeight={700} gutterBottom>
-                糟糕！發生了一些問題
+                {t('errorBoundary.title')}
               </Typography>
               <Typography
                 variant="body1"
                 color="text.secondary"
                 sx={{ mb: 4 }}
               >
-                我們遇到了一個意外錯誤。請嘗試重新整理頁面。
+                {t('errorBoundary.subtitle')}
               </Typography>
 
               {process.env.NODE_ENV === 'development' && this.state.error && (
@@ -141,7 +146,7 @@ class ErrorBoundary extends Component<Props, State> {
                   },
                 }}
               >
-                返回首頁
+                {t('errorBoundary.backHome')}
               </Button>
             </Box>
           </Container>

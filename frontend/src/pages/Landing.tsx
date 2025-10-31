@@ -18,57 +18,65 @@ import {
   Security,
   ExpandMore,
 } from "@mui/icons-material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AuthDialog } from "../components/AuthDialog";
+import { useLocale } from "../i18n/LocaleProvider";
 
 const Landing = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const { t } = useLocale();
 
-  const features = [
-    {
-      icon: <AttachMoney sx={{ fontSize: 48, color: "#000" }} />,
-      title: "智能費用追蹤",
-      description: "自動計算月費、年費，一目了然掌握訂閱開支",
-    },
-    {
-      icon: <TrendingUp sx={{ fontSize: 48, color: "#000" }} />,
-      title: "價格變動管理",
-      description: "追蹤訂閱價格變化，設定截止日期，精準計算總花費",
-    },
-    {
-      icon: <Notifications sx={{ fontSize: 48, color: "#000" }} />,
-      title: "自動續訂管理",
-      description: "標記自動續訂項目，永遠不會錯過續訂日期",
-    },
-    {
-      icon: <Security sx={{ fontSize: 48, color: "#000" }} />,
-      title: "安全可靠",
-      description: "基於 Supabase 的企業級安全保障，資料加密存儲",
-    },
-  ];
+  const features = useMemo(
+    () => [
+      {
+        icon: <AttachMoney sx={{ fontSize: 48, color: "#000" }} />,
+        title: t("landing.features.track.title"),
+        description: t("landing.features.track.description"),
+      },
+      {
+        icon: <TrendingUp sx={{ fontSize: 48, color: "#000" }} />,
+        title: t("landing.features.price.title"),
+        description: t("landing.features.price.description"),
+      },
+      {
+        icon: <Notifications sx={{ fontSize: 48, color: "#000" }} />,
+        title: t("landing.features.renew.title"),
+        description: t("landing.features.renew.description"),
+      },
+      {
+        icon: <Security sx={{ fontSize: 48, color: "#000" }} />,
+        title: t("landing.features.security.title"),
+        description: t("landing.features.security.description"),
+      },
+    ],
+    [t]
+  );
 
-  const faqs = [
-    {
-      question: "這個服務是免費的嗎？",
-      answer: "是的！我們提供完全免費的訂閱管理服務。",
-    },
-    {
-      question: "我的資料安全嗎？",
-      answer: "絕對安全！我們使用 Supabase 企業級資料庫，所有資料都經過加密存儲。",
-    },
-    {
-      question: "支援哪些訂閱服務？",
-      answer: "我們支援所有類型的訂閱服務，包括串流媒體、軟體服務、健身會員等。",
-    },
-    {
-      question: "可以追蹤價格變動嗎？",
-      answer: "可以！當服務價格變動時，您可以設定新價格的截止日期，系統會自動計算總花費。",
-    },
-    {
-      question: "支援多個裝置嗎？",
-      answer: "是的！您可以在任何裝置上登入使用，資料會即時同步。",
-    },
-  ];
+  const faqs = useMemo(
+    () => [
+      {
+        question: t("landing.faq.free.question"),
+        answer: t("landing.faq.free.answer"),
+      },
+      {
+        question: t("landing.faq.security.question"),
+        answer: t("landing.faq.security.answer"),
+      },
+      {
+        question: t("landing.faq.supported.question"),
+        answer: t("landing.faq.supported.answer"),
+      },
+      {
+        question: t("landing.faq.price.question"),
+        answer: t("landing.faq.price.answer"),
+      },
+      {
+        question: t("landing.faq.devices.question"),
+        answer: t("landing.faq.devices.answer"),
+      },
+    ],
+    [t]
+  );
 
   const handleAuthSuccess = () => {
     setAuthDialogOpen(false);
@@ -99,9 +107,9 @@ const Landing = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                掌控你的
+                {t("landing.hero.title.line1")}
                 <br />
-                訂閱支出
+                {t("landing.hero.title.line2")}
               </Typography>
               <Typography
                 variant="h5"
@@ -114,9 +122,7 @@ const Landing = () => {
                   lineHeight: 1.5,
                 }}
               >
-                追蹤所有訂閱服務，管理價格變動，自動計算總花費。
-                <br />
-                讓每一筆訂閱都清晰透明。
+                {t("landing.hero.subtitle")}
               </Typography>
               <Button
                 variant="contained"
@@ -137,7 +143,7 @@ const Landing = () => {
                   boxShadow: "none",
                 }}
               >
-                立即開始使用
+                {t("landing.hero.cta")}
               </Button>
             </Grid>
             <Grid item xs={12} md={5}>
@@ -155,25 +161,25 @@ const Landing = () => {
                       variant="h2"
                       sx={{ fontSize: "3rem", fontWeight: 700, color: "#fff" }}
                     >
-                      免費
+                      {t("landing.pricing.free")}
                     </Typography>
                     <Typography sx={{ color: "#999", mt: 1 }}>
-                      完整功能，永久免費
+                      {t("landing.pricing.freeDescription")}
                     </Typography>
                   </Box>
                   <Box sx={{ borderTop: "1px solid #333", pt: 3 }}>
                     <Stack spacing={2}>
                       <Typography sx={{ color: "#fff" }}>
-                        ✓ 無限訂閱追蹤
+                        ✓ {t("landing.pricing.features.unlimited")}
                       </Typography>
                       <Typography sx={{ color: "#fff" }}>
-                        ✓ 價格變動管理
+                        ✓ {t("landing.pricing.features.priceChange")}
                       </Typography>
                       <Typography sx={{ color: "#fff" }}>
-                        ✓ 自動續訂標記
+                        ✓ {t("landing.pricing.features.autoRenew")}
                       </Typography>
                       <Typography sx={{ color: "#fff" }}>
-                        ✓ 多幣別支援
+                        ✓ {t("landing.pricing.features.multiCurrency")}
                       </Typography>
                     </Stack>
                   </Box>
@@ -197,7 +203,7 @@ const Landing = () => {
               color: "#000",
             }}
           >
-            功能特色
+            {t("landing.features.title")}
           </Typography>
           <Grid container spacing={4}>
             {features.map((feature, index) => (
@@ -247,7 +253,7 @@ const Landing = () => {
               color: "#000",
             }}
           >
-            常見問題
+            {t("landing.faq.title")}
           </Typography>
           <Stack spacing={2}>
             {faqs.map((faq, index) => (
@@ -300,7 +306,7 @@ const Landing = () => {
                 color: "#fff",
               }}
             >
-              開始管理你的訂閱
+              {t("landing.cta.title")}
             </Typography>
             <Typography
               variant="h6"
@@ -310,7 +316,7 @@ const Landing = () => {
                 maxWidth: "600px",
               }}
             >
-              立即註冊，免費使用所有功能。無需信用卡，無需承諾。
+              {t("landing.cta.description")}
             </Typography>
             <Button
               variant="contained"
@@ -331,7 +337,7 @@ const Landing = () => {
                 boxShadow: "none",
               }}
             >
-              立即開始使用
+              {t("landing.cta.button")}
             </Button>
           </Stack>
         </Container>
@@ -348,7 +354,7 @@ const Landing = () => {
       >
         <Container maxWidth="lg">
           <Typography variant="body2" textAlign="center">
-            © 2025 訂閱管理平台. All rights reserved.
+            {t("landing.footer")}
           </Typography>
         </Container>
       </Box>
