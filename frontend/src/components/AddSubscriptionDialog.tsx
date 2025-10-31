@@ -8,18 +8,34 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
+  FormLabel,
   MenuItem,
+  Radio,
+  RadioGroup,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
 import type { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
+import type { SelectChangeEvent } from '@mui/material/Select';
 import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
-import { SubscriptionInput, SubscriptionCategory } from '../types/subscription';
+import {
+  SubscriptionInput,
+  SubscriptionCategory,
+  CycleUnit,
+  BillingCycle,
+  PresetBillingCycle,
+} from '../types/subscription';
 import {
   calculateEndDate,
   getDefaultCycle,
+  buildCustomCycle,
+  isCustomCycle,
+  isPresetCycle,
+  parseCustomCycle,
 } from '../utils/subscriptionDates';
 import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill';
 import { useLocale } from '../i18n/LocaleProvider';
@@ -30,6 +46,29 @@ interface AddSubscriptionDialogProps {
   categories?: SubscriptionCategory[];
 }
 
+type CycleMode = 'preset' | 'custom';
+
+const defaultCustomUnit: CycleUnit = 'months';
+
+const deriveCycleState = (
+  cycle: BillingCycle
+): { cycleMode: CycleMode; customUnit: CycleUnit; customValue: string } => {
+  if (isCustomCycle(cycle)) {
+    const { unit, amount } = parseCustomCycle(cycle);
+    return {
+      cycleMode: 'custom',
+      customUnit: unit,
+      customValue: String(amount),
+    };
+  }
+
+  return {
+    cycleMode: 'preset',
+    customUnit: defaultCustomUnit,
+    customValue: '1',
+  };
+};
+
 type FormState = {
   name: string;
   brand: string;
@@ -38,6 +77,9 @@ type FormState = {
   startDate: string;
   endDate: string;
   cycle: SubscriptionInput['cycle'];
+  cycleMode: CycleMode;
+  customUnit: CycleUnit;
+  customValue: string;
   iconUrl: string;
   autoRenew: boolean;
   categoryId: number | null;
@@ -46,6 +88,7 @@ type FormState = {
 const createDefaultFormState = (): FormState => {
   const today = new Date().toISOString().split('T')[0];
   const cycle = getDefaultCycle();
+  const cycleState = deriveCycleState(cycle);
   return {
     name: '',
     brand: '',
@@ -54,6 +97,9 @@ const createDefaultFormState = (): FormState => {
     startDate: today,
     endDate: calculateEndDate(today, cycle),
     cycle,
+    cycleMode: cycleState.cycleMode,
+    customUnit: cycleState.customUnit,
+    customValue: cycleState.customValue,
     iconUrl: '',
     autoRenew: false,
     categoryId: null,
@@ -116,28 +162,118 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
     (field: keyof FormState) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = event.target.value;
-      setForm((prev) => {
-        const next = {
-          ...prev,
-          [field]: value,
-        } as FormState;
 
-        if (field === 'startDate' || field === 'cycle') {
-          const startDate = field === 'startDate' ? value : next.startDate;
-          const cycle =
-            (field === 'cycle' ? (value as SubscriptionInput['cycle']) : next.cycle) ||
-            getDefaultCycle();
-          const autoEndDate = calculateEndDate(startDate, cycle);
+      if (field === 'startDate') {
+        setForm((prev) => {
+          const next: FormState = {
+            ...prev,
+            startDate: value,
+          };
+          const autoEndDate = calculateEndDate(value, next.cycle);
           if (autoEndDate) {
             next.endDate = autoEndDate;
           }
-        }
+          return next;
+        });
+        return;
+      }
 
-        return next;
-      });
+      if (field === 'cycle') {
+        const cycleValue = (value as BillingCycle) || getDefaultCycle();
+        const cycleState = deriveCycleState(cycleValue);
+        setForm((prev) => {
+          const next: FormState = {
+            ...prev,
+            cycle: cycleValue,
+            cycleMode: cycleState.cycleMode,
+            customUnit: cycleState.customUnit,
+            customValue: cycleState.customValue,
+          };
+          const autoEndDate = calculateEndDate(next.startDate, cycleValue);
+          if (autoEndDate) {
+            next.endDate = autoEndDate;
+          }
+          return next;
+        });
+        return;
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
     };
 
+  const applyCycleUpdate = (updater: (prev: FormState) => FormState) => {
+    setForm((prev) => {
+      const next = updater(prev);
+      const autoEndDate = calculateEndDate(next.startDate, next.cycle);
+      if (autoEndDate) {
+        next.endDate = autoEndDate;
+      }
+      return next;
+    });
+  };
+
+  const handleCycleModeChange = (_event: ChangeEvent<HTMLInputElement>, value: string) => {
+    if (value !== 'preset' && value !== 'custom') {
+      return;
+    }
+
+    applyCycleUpdate((prev) => {
+      const next: FormState = { ...prev, cycleMode: value as CycleMode };
+      if (value === 'preset') {
+        const preset = isPresetCycle(prev.cycle) ? prev.cycle : getDefaultCycle();
+        next.cycle = preset;
+      } else {
+        const amount = Number(prev.customValue) || 1;
+        next.cycle = buildCustomCycle(prev.customUnit, amount);
+      }
+      return next;
+    });
+  };
+
+  const handlePresetCycleChange = (
+    event: SelectChangeEvent<PresetBillingCycle>
+  ) => {
+    const value = event.target.value as PresetBillingCycle;
+    applyCycleUpdate((prev) => ({
+      ...prev,
+      cycleMode: 'preset',
+      cycle: value,
+    }));
+  };
+
+  const handleCustomValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const parsed = Number(event.target.value);
+    const amount = Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : 1;
+    applyCycleUpdate((prev) => ({
+      ...prev,
+      cycleMode: 'custom',
+      customValue: String(amount),
+      cycle: buildCustomCycle(prev.customUnit, amount),
+    }));
+  };
+
+  const handleCustomUnitChange = (event: SelectChangeEvent<CycleUnit>) => {
+    const unit = event.target.value as CycleUnit;
+    applyCycleUpdate((prev) => {
+      const amount = Number(prev.customValue) || 1;
+      return {
+        ...prev,
+        cycleMode: 'custom',
+        customUnit: unit,
+        cycle: buildCustomCycle(unit, amount),
+      };
+    });
+  };
+
   const handleSubmit = async () => {
+    const resolvedCycle =
+      form.cycleMode === 'custom'
+        ? buildCustomCycle(form.customUnit, Number(form.customValue) || 1)
+        : (isPresetCycle(form.cycle) ? form.cycle : getDefaultCycle());
+
     const payload: SubscriptionInput = {
       name: form.name.trim(),
       brand: form.brand.trim(),
@@ -145,7 +281,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
       currency: form.currency,
       startDate: form.startDate,
       endDate: form.endDate,
-      cycle: form.cycle,
+      cycle: resolvedCycle,
       iconUrl: form.iconUrl ? form.iconUrl.trim() : null,
       autoRenew: form.autoRenew,
       categoryId: form.categoryId,
@@ -305,18 +441,63 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
                 required
               />
             </Stack>
-            <TextField
-              label={t('addSubscription.fields.billingCycle')}
-              select
-              value={form.cycle}
-              onChange={handleChange('cycle')}
-              fullWidth
-              required
-            >
-              <MenuItem value="30days">{t('billingCycle.30days')}</MenuItem>
-              <MenuItem value="6months">{t('billingCycle.6months')}</MenuItem>
-              <MenuItem value="1year">{t('billingCycle.1year')}</MenuItem>
-            </TextField>
+            <FormControl component="fieldset" fullWidth>
+              <FormLabel>{t('addSubscription.fields.billingCycle')}</FormLabel>
+              <RadioGroup
+                row
+                value={form.cycleMode}
+                onChange={handleCycleModeChange}
+                name="billing-cycle-mode"
+              >
+                <FormControlLabel
+                  value="preset"
+                  control={<Radio />}
+                  label={t('addSubscription.cycle.mode.preset')}
+                />
+                <FormControlLabel
+                  value="custom"
+                  control={<Radio />}
+                  label={t('addSubscription.cycle.mode.custom')}
+                />
+              </RadioGroup>
+            </FormControl>
+            {form.cycleMode === 'preset' ? (
+              <TextField
+                select
+                value={isPresetCycle(form.cycle) ? form.cycle : getDefaultCycle()}
+                onChange={handlePresetCycleChange}
+                fullWidth
+              >
+                <MenuItem value="30days">{t('billingCycle.30days')}</MenuItem>
+                <MenuItem value="6months">{t('billingCycle.6months')}</MenuItem>
+                <MenuItem value="1year">{t('billingCycle.1year')}</MenuItem>
+              </TextField>
+            ) : (
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  label={t('addSubscription.cycle.customValue')}
+                  type="number"
+                  value={form.customValue}
+                  onChange={handleCustomValueChange}
+                  fullWidth
+                  inputProps={{ min: 1 }}
+                />
+                <TextField
+                  label={t('addSubscription.cycle.customUnit')}
+                  select
+                  value={form.customUnit}
+                  onChange={handleCustomUnitChange}
+                  fullWidth
+                >
+                  <MenuItem value="days">{t('addSubscription.cycle.customUnit.days')}</MenuItem>
+                  <MenuItem value="months">{t('addSubscription.cycle.customUnit.months')}</MenuItem>
+                  <MenuItem value="years">{t('addSubscription.cycle.customUnit.years')}</MenuItem>
+                </TextField>
+              </Stack>
+            )}
+            <FormHelperText sx={{ color: 'text.secondary', ml: 0.5 }}>
+              {t('addSubscription.cycle.helper')}
+            </FormHelperText>
             <TextField
               label={t('addSubscription.fields.iconUrl')}
               value={form.iconUrl}

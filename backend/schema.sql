@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   currency VARCHAR(3) DEFAULT 'TWD',
   start_date DATE NOT NULL,
   end_date DATE NOT NULL,
-  cycle ENUM('30days', '6months', '1year') NOT NULL,
+  cycle VARCHAR(64) NOT NULL,
   icon_url VARCHAR(500),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

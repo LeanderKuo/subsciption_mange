@@ -45,6 +45,7 @@ import { supabase } from "../services/supabaseClient";
 import { getExchangeRate } from "../services/exchangeRateService";
 import { useLocale } from "../i18n/LocaleProvider";
 import type { Locale } from "../i18n/translations";
+import { getCycleDurationInMonths } from "../utils/subscriptionDates";
 
 const IndexPage = () => {
   const queryClient = useQueryClient();
@@ -295,12 +296,9 @@ const IndexPage = () => {
     const priceInUserCurrency = sub.price * effectiveRate;
 
     // Convert to monthly cost based on cycle
-    let monthlyCost = priceInUserCurrency;
-    if (sub.cycle === '1year') {
-      monthlyCost = priceInUserCurrency / 12;
-    } else if (sub.cycle === '6months') {
-      monthlyCost = priceInUserCurrency / 6;
-    }
+    const cycleMonths = getCycleDurationInMonths(sub.cycle);
+    const durationMonths = cycleMonths > 0 ? cycleMonths : 1;
+    const monthlyCost = priceInUserCurrency / durationMonths;
 
     console.log(`Subscription: ${sub.name}, Price: ${sub.price} ${sub.currency}, Rate: ${effectiveRate}, Monthly: ${monthlyCost} ${userDefaultCurrency}`);
 

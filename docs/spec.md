@@ -95,7 +95,12 @@ CREATE TABLE public.subscriptions (
   currency TEXT DEFAULT 'TWD',
   start_date DATE NOT NULL,
   end_date DATE NOT NULL,
-  cycle TEXT NOT NULL CHECK (cycle IN ('30days', '6months', '1year')),
+  cycle TEXT NOT NULL CHECK (
+    cycle IN ('30days', '6months', '1year')
+    OR cycle LIKE 'custom:days:%'
+    OR cycle LIKE 'custom:months:%'
+    OR cycle LIKE 'custom:years:%'
+  ),
   icon_url TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

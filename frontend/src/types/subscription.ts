@@ -1,4 +1,8 @@
-export type BillingCycle = '30days' | '6months' | '1year';
+export type CycleUnit = 'days' | 'months' | 'years';
+export type PresetBillingCycle = '30days' | '6months' | '1year';
+export type CustomBillingCycle = `custom:${CycleUnit}:${number}`;
+
+export type BillingCycle = PresetBillingCycle | CustomBillingCycle;
 
 export interface Subscription {
   id: number;
