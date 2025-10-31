@@ -37,18 +37,31 @@ const IndexPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState<string>("");
+  const [userDefaultCurrency, setUserDefaultCurrency] = useState<string>("TWD");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
   const menuOpen = Boolean(anchorEl);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUserProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (user?.email) {
-        setUserEmail(user.email);
+      if (user) {
+        setUserEmail(user.email || "");
+
+        // Fetch user's default currency from profile
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('default_currency')
+          .eq('id', user.id)
+          .single();
+
+        if (profile?.default_currency) {
+          setUserDefaultCurrency(profile.default_currency);
+          console.log('User default currency:', profile.default_currency);
+        }
       }
     };
-    fetchUser();
+    fetchUserProfile();
   }, []);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -96,19 +109,20 @@ const IndexPage = () => {
   // Fetch exchange rates for all currencies used in subscriptions
   useEffect(() => {
     const fetchExchangeRates = async () => {
-      if (subscriptions.length === 0) return;
+      if (subscriptions.length === 0 || !userDefaultCurrency) return;
 
       const currencies = Array.from(new Set(subscriptions.map(sub => sub.currency)));
       console.log('Fetching exchange rates for currencies:', currencies);
+      console.log('Target currency (user default):', userDefaultCurrency);
       const rates: Record<string, number> = {};
 
       for (const currency of currencies) {
-        if (currency === 'TWD') {
+        if (currency === userDefaultCurrency) {
           rates[currency] = 1;
         } else {
-          const rate = await getExchangeRate(currency);
+          const rate = await getExchangeRate(currency, userDefaultCurrency);
           rates[currency] = rate;
-          console.log(`Fetched rate for ${currency}: ${rate}`);
+          console.log(`Fetched rate for ${currency} -> ${userDefaultCurrency}: ${rate}`);
         }
       }
 
@@ -117,7 +131,7 @@ const IndexPage = () => {
     };
 
     fetchExchangeRates();
-  }, [subscriptions]);
+  }, [subscriptions, userDefaultCurrency]);
 
   const createMutation = useMutation({
     mutationFn: createSubscription,
@@ -189,24 +203,24 @@ const IndexPage = () => {
     // Get exchange rate, fallback to 1 if not yet loaded
     const rate = exchangeRates[sub.currency];
 
-    // If rate is undefined and currency is not TWD, skip this subscription for now
-    if (!rate && sub.currency !== 'TWD') {
+    // If rate is undefined and currency is not user's default, skip this subscription for now
+    if (!rate && sub.currency !== userDefaultCurrency) {
       console.log(`Exchange rate not loaded yet for ${sub.currency}`);
       return sum;
     }
 
     const effectiveRate = rate || 1;
-    const priceInTWD = sub.price * effectiveRate;
+    const priceInUserCurrency = sub.price * effectiveRate;
 
     // Convert to monthly cost based on cycle
-    let monthlyCost = priceInTWD;
+    let monthlyCost = priceInUserCurrency;
     if (sub.cycle === '1year') {
-      monthlyCost = priceInTWD / 12;
+      monthlyCost = priceInUserCurrency / 12;
     } else if (sub.cycle === '6months') {
-      monthlyCost = priceInTWD / 6;
+      monthlyCost = priceInUserCurrency / 6;
     }
 
-    console.log(`Subscription: ${sub.name}, Price: ${sub.price} ${sub.currency}, Rate: ${effectiveRate}, Monthly: ${monthlyCost} TWD`);
+    console.log(`Subscription: ${sub.name}, Price: ${sub.price} ${sub.currency}, Rate: ${effectiveRate}, Monthly: ${monthlyCost} ${userDefaultCurrency}`);
 
     return sum + monthlyCost;
   }, 0);
@@ -319,7 +333,7 @@ const IndexPage = () => {
               <Grid item xs={12} md={4}>
                 <StatsCard
                   title="總月費"
-                  value={`TWD ${Math.round(totalMonthly)}`}
+                  value={`${userDefaultCurrency} ${Math.round(totalMonthly)}`}
                   icon={<AttachMoneyIcon color="primary" />}
                   description={`${subscriptions.length} 個服務`}
                 />
@@ -335,7 +349,7 @@ const IndexPage = () => {
               <Grid item xs={12} md={4}>
                 <StatsCard
                   title="年度預估"
-                  value={`TWD ${Math.round(totalMonthly * 12)}`}
+                  value={`${userDefaultCurrency} ${Math.round(totalMonthly * 12)}`}
                   icon={<TrendingUpIcon color="secondary" />}
                   description="預估花費"
                 />

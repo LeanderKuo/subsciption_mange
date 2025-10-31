@@ -23,12 +23,26 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { targetCurrency, baseCurrency = 'USD' } = await req.json()
+    const { targetCurrency, baseCurrency } = await req.json()
 
-    if (!targetCurrency) {
+    if (!targetCurrency || !baseCurrency) {
       return new Response(
-        JSON.stringify({ error: 'Target currency is required' }),
+        JSON.stringify({ error: 'Both baseCurrency and targetCurrency are required' }),
         { status: 400, headers: corsHeaders }
+      )
+    }
+
+    // If same currency, return rate = 1
+    if (baseCurrency === targetCurrency) {
+      return new Response(
+        JSON.stringify({
+          rate: 1,
+          base: baseCurrency,
+          target: targetCurrency,
+          cached: true,
+          date: new Date().toISOString().split('T')[0]
+        }),
+        { status: 200, headers: corsHeaders }
       )
     }
 
@@ -66,26 +80,59 @@ Deno.serve(async (req) => {
     // Cache MISS - fetch from ExchangeRate API
     console.log(`Cache MISS for ${baseCurrency} -> ${targetCurrency}, fetching from API...`)
 
-    const apiUrl = `${EXCHANGERATE_BASE_URL}/${EXCHANGERATE_API_KEY}/latest/${baseCurrency}`
-    const response = await fetch(apiUrl)
+    // ExchangeRate API only supports USD as base, so we need to calculate cross-rates
+    let rate: number
 
-    if (!response.ok) {
-      throw new Error(`ExchangeRate API error: ${response.status}`)
-    }
+    if (baseCurrency === 'USD') {
+      // Direct conversion from USD
+      const apiUrl = `${EXCHANGERATE_BASE_URL}/${EXCHANGERATE_API_KEY}/latest/USD`
+      const response = await fetch(apiUrl)
 
-    const data: ExchangeRateResponse = await response.json()
+      if (!response.ok) {
+        throw new Error(`ExchangeRate API error: ${response.status}`)
+      }
 
-    if (data.result !== 'success') {
-      throw new Error('ExchangeRate API returned error')
-    }
+      const data: ExchangeRateResponse = await response.json()
 
-    const rate = data.conversion_rates[targetCurrency]
+      if (data.result !== 'success') {
+        throw new Error('ExchangeRate API returned error')
+      }
 
-    if (!rate) {
-      return new Response(
-        JSON.stringify({ error: `Currency ${targetCurrency} not found` }),
-        { status: 404, headers: corsHeaders }
-      )
+      rate = data.conversion_rates[targetCurrency]
+
+      if (!rate) {
+        return new Response(
+          JSON.stringify({ error: `Currency ${targetCurrency} not found` }),
+          { status: 404, headers: corsHeaders }
+        )
+      }
+    } else {
+      // Cross-rate calculation: base -> target = (USD -> target) / (USD -> base)
+      const apiUrl = `${EXCHANGERATE_BASE_URL}/${EXCHANGERATE_API_KEY}/latest/USD`
+      const response = await fetch(apiUrl)
+
+      if (!response.ok) {
+        throw new Error(`ExchangeRate API error: ${response.status}`)
+      }
+
+      const data: ExchangeRateResponse = await response.json()
+
+      if (data.result !== 'success') {
+        throw new Error('ExchangeRate API returned error')
+      }
+
+      const usdToBase = data.conversion_rates[baseCurrency]
+      const usdToTarget = data.conversion_rates[targetCurrency]
+
+      if (!usdToBase || !usdToTarget) {
+        return new Response(
+          JSON.stringify({ error: `Currency ${baseCurrency} or ${targetCurrency} not found` }),
+          { status: 404, headers: corsHeaders }
+        )
+      }
+
+      // Cross rate formula: EUR -> GBP = (USD -> GBP) / (USD -> EUR)
+      rate = usdToTarget / usdToBase
     }
 
     // Save to cache
