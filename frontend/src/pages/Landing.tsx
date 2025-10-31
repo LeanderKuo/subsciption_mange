@@ -122,11 +122,11 @@ const Landing = () => {
 
   const headerRight = (
     <Stack direction="row" spacing={2} alignItems="center">
-      <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant="light" />
       <Button
         variant="text"
         onClick={() => setAuthDialogOpen(true)}
-        sx={{ color: '#fff', fontWeight: 600 }}
+        sx={{ color: '#000', fontWeight: 600 }}
       >
         {t('landing.nav.signIn')}
       </Button>
@@ -134,12 +134,12 @@ const Landing = () => {
         variant="contained"
         onClick={() => setAuthDialogOpen(true)}
         sx={{
-          backgroundColor: '#fff',
-          color: '#000',
+          backgroundColor: '#000',
+          color: '#fff',
           borderRadius: '999px',
           fontWeight: 700,
           px: 4,
-          '&:hover': { backgroundColor: '#e5e5e5' },
+          '&:hover': { backgroundColor: '#333' },
         }}
       >
         {t('landing.nav.join')}
@@ -156,13 +156,13 @@ const Landing = () => {
         flexDirection: 'column',
       }}
     >
-      <SiteHeader navLinks={navLinks} rightSlot={headerRight} variant="dark" />
+      <SiteHeader navLinks={navLinks} rightSlot={headerRight} variant="light" />
 
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Box
           sx={{
-            backgroundColor: '#000',
-            color: '#fff',
+            backgroundColor: '#fff',
+            color: '#000',
             pt: { xs: 10, md: 14 },
             pb: { xs: 10, md: 14 },
           }}
@@ -178,6 +178,7 @@ const Landing = () => {
                     mb: 3,
                     lineHeight: 1.05,
                     letterSpacing: '-0.02em',
+                    color: '#000',
                   }}
                 >
                   {t('landing.hero.title.line1')}
@@ -191,7 +192,7 @@ const Landing = () => {
                     mb: 4,
                     fontWeight: 400,
                     lineHeight: 1.6,
-                    color: '#fff',
+                    color: '#000',
                   }}
                 >
                   {t('landing.hero.subtitle')}
@@ -201,18 +202,18 @@ const Landing = () => {
                     variant="contained"
                     onClick={() => setAuthDialogOpen(true)}
                     sx={{
-                      backgroundColor: '#fff',
-                      color: '#000',
+                      backgroundColor: '#000',
+                      color: '#fff',
                       borderRadius: '999px',
                       fontWeight: 700,
                       px: 5,
                       py: 1.5,
-                      '&:hover': { backgroundColor: '#e5e5e5' },
+                      '&:hover': { backgroundColor: '#333' },
                     }}
                   >
                     {t('landing.hero.cta')}
                   </Button>
-                  <Typography variant="body2" sx={{ color: '#fff' }}>
+                  <Typography variant="body2" sx={{ color: '#000' }}>
                     {t('landing.hero.helper')}
                   </Typography>
                 </Stack>
@@ -223,17 +224,17 @@ const Landing = () => {
                   sx={{
                     p: { xs: 4, md: 5 },
                     borderRadius: 4,
-                    backgroundColor: '#111',
-                    border: '1px solid #2c2c2c',
-                    color: '#f5f5f5',
+                    backgroundColor: '#fff',
+                    border: '2px solid #000',
+                    color: '#000',
                   }}
                 >
                   <Stack spacing={3}>
                     <Stack spacing={1}>
-                      <Typography variant="body2" sx={{ color: '#fff' }}>
+                      <Typography variant="body2" sx={{ color: '#000' }}>
                         {t('landing.hero.card.session')}
                       </Typography>
-                      <Typography variant="h5" fontWeight={700}>
+                      <Typography variant="h5" fontWeight={700} sx={{ color: '#000' }}>
                         {t('landing.hero.card.title')}
                       </Typography>
                     </Stack>
@@ -242,22 +243,22 @@ const Landing = () => {
                       sx={{
                         p: 3,
                         borderRadius: 3,
-                        backgroundColor: '#1f1f1f',
-                        border: '1px solid #2f2f2f',
+                        backgroundColor: '#f5f5f5',
+                        border: '1px solid #e0e0e0',
                       }}
                     >
-                      <Typography fontWeight={600}>
+                      <Typography fontWeight={600} sx={{ color: '#000' }}>
                         {t('landing.hero.card.focus')}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: '#fff', mt: 1.5 }}>
+                      <Typography variant="body2" sx={{ color: '#000', mt: 1.5 }}>
                         {t('landing.hero.card.description')}
                       </Typography>
                     </Paper>
                     <Stack spacing={1.5}>
-                      <Typography fontWeight={600}>
+                      <Typography fontWeight={600} sx={{ color: '#000' }}>
                         {t('landing.hero.card.upNext')}
                       </Typography>
-                      <Stack spacing={0.5} sx={{ color: '#fff' }}>
+                      <Stack spacing={0.5} sx={{ color: '#000' }}>
                         <Typography variant="body2">
                           • {t('landing.hero.card.taskOne')}
                         </Typography>
@@ -277,9 +278,9 @@ const Landing = () => {
               <Box
                 sx={{
                   borderRadius: 999,
-                  backgroundColor: '#1a1a1a',
+                  backgroundColor: '#f5f5f5',
                   overflow: 'hidden',
-                  border: '1px solid #2a2a2a',
+                  border: '2px solid #000',
                 }}
               >
                 <Box
@@ -297,12 +298,12 @@ const Landing = () => {
                       key={`${item}-${index}`}
                       label={item}
                       sx={{
-                        backgroundColor: '#2d2d2d',
-                        color: '#f5f5f5',
+                        backgroundColor: '#fff',
+                        color: '#000',
                         fontWeight: 600,
                         borderRadius: 999,
                         px: 1.5,
-                        boxShadow: '0 8px 20px rgba(0,0,0,0.35)',
+                        border: '1px solid #000',
                       }}
                     />
                   ))}
