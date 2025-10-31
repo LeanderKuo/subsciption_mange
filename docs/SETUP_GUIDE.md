@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 目錄
+## 目錄
 
 1. [Supabase 專案設定](#1-supabase-專案設定)
 2. [設定 Google OAuth 登入](#2-設定-google-oauth-登入)
@@ -121,7 +121,7 @@ SELECT * FROM public.subscriptions;
 
 ```bash
 # 在專案根目錄
-./setup-env.sh
+./scripts/setup-env.sh
 ```
 
 按照提示輸入你的 Supabase 憑證。
@@ -269,19 +269,19 @@ SELECT * FROM pg_policies WHERE tablename = 'subscriptions';
 
 ---
 
-## 🎉 完成設定
+## 完成設定
 
 恭喜！你已經完成所有設定。現在可以開始使用訂閱管理平台了。
 
 ### 下一步
 
-- 閱讀 [IMPROVEMENTS.md](IMPROVEMENTS.md) 了解未來改進計劃
+- 閱讀 [IMPROVEMENTS.md](./IMPROVEMENTS.md) 了解未來改進計劃
 - 閱讀 [README.md](README.md) 了解專案架構
 - 開始新增你的訂閱服務！
 
 ---
 
-## 📞 需要協助？
+## 需要協助？
 
 如果遇到任何問題：
 

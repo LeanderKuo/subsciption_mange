@@ -1,15 +1,15 @@
 # Backend (已棄用)
 
-## ⚠️ 重要通知
+## 重要通知
 
 此目錄中的 Express.js 後端已經棄用，不再使用。
 
 所有後端功能已遷移至 **Supabase**：
 
-- ✅ 資料庫：PostgreSQL (Supabase Database)
-- ✅ 認證：Supabase Auth
-- ✅ API：直接使用 Supabase Client SDK
-- ✅ 安全性：Row Level Security (RLS)
+- 資料庫：PostgreSQL (Supabase Database)
+- 認證：Supabase Auth
+- API：直接使用 Supabase Client SDK
+- 安全性：Row Level Security (RLS)
 
 ## 為什麼遷移？
 

@@ -155,10 +155,10 @@ npx supabase functions deploy
 
 ## 部署狀態
 
-- ✅ **前端**：部署至 Vercel (https://frontend-34vmsbi1t-leanderks-projects.vercel.app)
-- ✅ **資料庫**：Supabase PostgreSQL 資料庫
-- ✅ **Edge Functions**：brandfetch-api 已部署
-- ✅ **Git 整合**：連接至 GitHub (https://github.com/LeanderKuo/subsciption_mange)
+- **前端**：部署至 Vercel (https://frontend-34vmsbi1t-leanderks-projects.vercel.app)
+- **資料庫**：Supabase PostgreSQL 資料庫
+- **Edge Functions**：brandfetch-api 已部署
+- **Git 整合**：連接至 GitHub (https://github.com/LeanderKuo/subsciption_mange)
 
 ## 第三方服務
 

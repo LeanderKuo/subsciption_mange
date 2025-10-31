@@ -4,12 +4,12 @@
 
 ## 功能特色
 
-- 📊 智能費用追蹤與統計分析
-- 🔔 到期提醒通知（開發中）
-- 🎨 品牌圖標自動識別
-- 🔒 企業級安全保障 (Supabase RLS)
-- 📱 響應式設計，支援所有裝置
-- 🚀 快速且直觀的使用者介面
+- 智能費用追蹤與統計分析
+- 到期提醒通知（開發中）
+- 品牌圖標自動識別
+- 企業級安全保障 (Supabase RLS)
+- 響應式設計，支援所有裝置
+- 快速且直觀的使用者介面
 
 ## 技術架構
 
@@ -55,7 +55,7 @@ REACT_APP_SUPABASE_URL=your_supabase_project_url
 REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-> 💡 從 [Supabase Dashboard](https://app.supabase.com) > Settings > API 取得這些值
+> Note: 從 [Supabase Dashboard](https://app.supabase.com) > Settings > API 取得這些值
 
 ### 3. 安裝依賴並啟動
 
@@ -142,12 +142,12 @@ npm test
 
 ## 已知問題與修正
 
-### ⚠️ 環境設定
+### 注意：環境設定
 
 - **問題**: 缺少前端 `.env` 檔案
 - **修正**: 複製 `.env.example` 為 `.env` 並填入正確的 Supabase 憑證
 
-### ⚠️ 後端遷移
+### 注意：後端遷移
 
 - **狀態**: `backend/` 目錄中的 Express.js 後端已棄用
 - **說明**: 所有後端功能已遷移至 Supabase

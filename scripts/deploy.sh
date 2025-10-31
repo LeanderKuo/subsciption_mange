@@ -14,7 +14,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # 檢查 Git 狀態
-echo "📝 檢查 Git 狀態..."
+echo "檢查 Git 狀態..."
 if ! git diff-index --quiet HEAD --; then
     echo ""
     echo "${YELLOW}以下檔案有未提交的變更：${NC}"
@@ -30,35 +30,31 @@ if ! git diff-index --quiet HEAD --; then
         fi
 
         echo ""
-        echo "📦 提交變更..."
+        echo "提交變更..."
         git add .
-        git commit -m "$commit_message
+        git commit -m "$commit_message"
 
-🤖 Generated with Claude Code
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
-
-        echo "${GREEN}✓${NC} 變更已提交"
+        echo "${GREEN}完成${NC} 變更已提交"
     else
-        echo "${YELLOW}⚠${NC} 取消部署，請先提交變更"
+        echo "${YELLOW}提醒${NC} 取消部署，請先提交變更"
         exit 1
     fi
 else
-    echo "${GREEN}✓${NC} 沒有未提交的變更"
+    echo "${GREEN}完成${NC} 沒有未提交的變更"
 fi
 
 echo ""
-echo "🚀 推送到 GitHub..."
+echo "推送到 GitHub..."
 if git push origin main; then
-    echo "${GREEN}✓${NC} 成功推送到 GitHub"
+    echo "${GREEN}完成${NC} 成功推送到 GitHub"
 else
-    echo "${RED}✗${NC} 推送失敗，請檢查網路連線或 Git 權限"
+    echo "${RED}失敗${NC} 推送失敗，請檢查網路連線或 Git 權限"
     exit 1
 fi
 
 echo ""
 echo "=========================================="
-echo "${GREEN}✓ 部署完成！${NC}"
+echo "${GREEN}部署完成${NC}"
 echo "=========================================="
 echo ""
 echo "接下來："

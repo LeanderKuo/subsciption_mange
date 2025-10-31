@@ -246,6 +246,8 @@ export const translations: TranslationMap = {
       'Sign up now to use every feature for free. No credit card. No commitment.',
     'landing.cta.button': 'Start now',
     'landing.footer': '© 2025 Subscription Manager. All rights reserved.',
+    'landing.footer.developer': 'Built by Leander Kuo',
+    'landing.footer.githubLabel': 'Visit my GitHub profile',
 
     /**
      * Not Found
@@ -500,6 +502,8 @@ export const translations: TranslationMap = {
       '立即註冊，免費使用所有功能。無需信用卡，無需承諾。',
     'landing.cta.button': '立即開始使用',
     'landing.footer': '© 2025 訂閱管理平台. All rights reserved.',
+    'landing.footer.developer': '開發者: Leander Kuo',
+    'landing.footer.githubLabel': '在 GitHub 上查看個人頁面',
 
     'notFound.title': '找不到頁面',
     'notFound.description': '抱歉，您通往的頁面不存在或已被移除。',

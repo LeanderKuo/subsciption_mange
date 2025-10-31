@@ -14,6 +14,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Link,
 } from "@mui/material";
 import {
   AttachMoney,
@@ -398,9 +399,25 @@ const Landing = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Typography variant="body2" textAlign="center">
-            {t("landing.footer")}
-          </Typography>
+          <Stack spacing={1} alignItems="center">
+            <Typography variant="body2" textAlign="center">
+              {t("landing.footer")}
+            </Typography>
+            <Typography variant="body2" textAlign="center">
+              {t("landing.footer.developer")}
+            </Typography>
+            <Typography variant="body2" textAlign="center">
+              <Link
+                href="https://github.com/LeanderKuo"
+                target="_blank"
+                rel="noopener noreferrer"
+                color="inherit"
+                underline="hover"
+              >
+                {t("landing.footer.githubLabel")}
+              </Link>
+            </Typography>
+          </Stack>
         </Container>
       </Box>
 
