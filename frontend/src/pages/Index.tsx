@@ -5,10 +5,7 @@ import {
   Grid,
   Stack,
   Typography,
-  IconButton,
-  Menu,
   MenuItem,
-  Avatar,
   Button,
   Select,
   FormControl,
@@ -56,13 +53,11 @@ const IndexPage = () => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState<string>("");
   const [userDefaultCurrency, setUserDefaultCurrency] = useState<string>("TWD");
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [sortBy, setSortBy] = useState<'endDate' | 'price' | 'name'>('endDate');
   const [draggedSubscriptionId, setDraggedSubscriptionId] = useState<number | null>(null);
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
-  const menuOpen = Boolean(anchorEl);
   const { t, locale, setLocale } = useLocale();
 
   const handleGoToSettings = () => {
