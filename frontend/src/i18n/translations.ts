@@ -36,6 +36,11 @@ export const translations: TranslationMap = {
     'header.logoutSuccessDescription': 'You have successfully signed out.',
     'header.logoutFailure': 'Sign out failed',
     'header.logoutFailureDescription': 'Please try again later.',
+    'landing.nav.brand': 'submange',
+    'landing.nav.features': 'Features',
+    'landing.nav.faq': 'FAQ',
+    'landing.nav.signIn': 'Sign in',
+    'landing.nav.join': 'Join for free',
 
     /**
      * Dashboard Cards
@@ -209,8 +214,17 @@ export const translations: TranslationMap = {
     'landing.hero.title.line1': 'Take control of your',
     'landing.hero.title.line2': 'subscription spending',
     'landing.hero.subtitle':
-      'Track every subscription, manage price changes, and calculate your costs automatically.',
-    'landing.hero.cta': 'Get started',
+      'Stay focused on growth while we keep every subscription, renewal date, and price change in sync.',
+    'landing.hero.helper': 'No credit card required. Cancel anytime.',
+    'landing.hero.cta': 'Join for free',
+    'landing.hero.card.title': 'Today at a glance',
+    'landing.hero.card.session': 'Active session',
+    'landing.hero.card.focus': 'Review upcoming renewals',
+    'landing.hero.card.description':
+      'Netflix renews in 3 days. Gemini renews in 1 week. Prepare your monthly budget.',
+    'landing.hero.card.upNext': 'Up next',
+    'landing.hero.card.taskOne': 'Confirm ChatGPT plan usage',
+    'landing.hero.card.taskTwo': 'Adjust Spotify family seats',
     'landing.pricing.free': 'Free',
     'landing.pricing.freeDescription': 'Full feature set, free forever',
     'landing.pricing.features.unlimited': 'Unlimited subscription tracking',
@@ -332,6 +346,11 @@ export const translations: TranslationMap = {
     'header.logoutSuccessDescription': '您已成功登出',
     'header.logoutFailure': '登出失敗',
     'header.logoutFailureDescription': '請稍後再試',
+    'landing.nav.brand': 'submange',
+    'landing.nav.features': '功能介紹',
+    'landing.nav.faq': '常見問題',
+    'landing.nav.signIn': '登入',
+    'landing.nav.join': '立即註冊',
 
     'dashboard.totalMonthly': '總月費',
     'dashboard.totalSubscriptions': '{count} 個服務',
@@ -469,8 +488,17 @@ export const translations: TranslationMap = {
     'landing.hero.title.line1': '掌控你的',
     'landing.hero.title.line2': '訂閱支出',
     'landing.hero.subtitle':
-      '追蹤所有訂閱服務，管理價格變動，自動計算總花費。',
-    'landing.hero.cta': '立即開始使用',
+      '專注於成長，交給我們追蹤每項訂閱、續約日期與價格變動。',
+    'landing.hero.helper': '不需信用卡，隨時可取消。',
+    'landing.hero.cta': '立即註冊使用',
+    'landing.hero.card.title': '今日重點',
+    'landing.hero.card.session': '目前進行中',
+    'landing.hero.card.focus': '檢視即將到期的訂閱',
+    'landing.hero.card.description':
+      'Netflix 還有 3 天續約，Gemini 還有 1 週。請預先安排本月預算。',
+    'landing.hero.card.upNext': '下一步',
+    'landing.hero.card.taskOne': '確認 ChatGPT 方案用量',
+    'landing.hero.card.taskTwo': '調整 Spotify 家庭方案成員',
     'landing.pricing.free': '免費',
     'landing.pricing.freeDescription': '完整功能，永久免費',
     'landing.pricing.features.unlimited': '✓ 無限訂閱追蹤',
