@@ -23,7 +23,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { targetCurrency } = await req.json()
+    const { targetCurrency, baseCurrency = 'USD' } = await req.json()
 
     if (!targetCurrency) {
       return new Response(
@@ -39,7 +39,6 @@ Deno.serve(async (req) => {
     )
 
     const today = new Date().toISOString().split('T')[0]
-    const baseCurrency = 'USD'
 
     // Check if rate exists in cache for today
     const { data: cachedRate, error: cacheError } = await supabaseClient
