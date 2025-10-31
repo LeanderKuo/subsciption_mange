@@ -30,6 +30,7 @@ import {
 import { useToast } from "../hooks/use-toast";
 import { Subscription, SubscriptionInput } from "../types/subscription";
 import { supabase } from "../services/supabaseClient";
+import { getExchangeRate } from "../services/exchangeRateService";
 
 const IndexPage = () => {
   const queryClient = useQueryClient();
@@ -37,6 +38,7 @@ const IndexPage = () => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
   const menuOpen = Boolean(anchorEl);
 
   useEffect(() => {
@@ -48,6 +50,28 @@ const IndexPage = () => {
     };
     fetchUser();
   }, []);
+
+  // Fetch exchange rates for all currencies used in subscriptions
+  useEffect(() => {
+    const fetchExchangeRates = async () => {
+      if (subscriptions.length === 0) return;
+
+      const currencies = Array.from(new Set(subscriptions.map(sub => sub.currency)));
+      const rates: Record<string, number> = {};
+
+      for (const currency of currencies) {
+        if (currency === 'TWD') {
+          rates[currency] = 1;
+        } else {
+          rates[currency] = await getExchangeRate(currency);
+        }
+      }
+
+      setExchangeRates(rates);
+    };
+
+    fetchExchangeRates();
+  }, [subscriptions]);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -158,8 +182,18 @@ const IndexPage = () => {
   };
 
   const totalMonthly = subscriptions.reduce((sum, sub) => {
-    const price = sub.currency === "USD" ? sub.price * 30 : sub.price;
-    return sum + price;
+    const rate = exchangeRates[sub.currency] || 1;
+    const priceInTWD = sub.price * rate;
+
+    // Convert to monthly cost based on cycle
+    let monthlyCost = priceInTWD;
+    if (sub.cycle === '1year') {
+      monthlyCost = priceInTWD / 12;
+    } else if (sub.cycle === '6months') {
+      monthlyCost = priceInTWD / 6;
+    }
+
+    return sum + monthlyCost;
   }, 0);
 
   const activeSubscriptions = subscriptions.filter(
