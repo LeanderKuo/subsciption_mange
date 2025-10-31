@@ -99,16 +99,20 @@ const IndexPage = () => {
       if (subscriptions.length === 0) return;
 
       const currencies = Array.from(new Set(subscriptions.map(sub => sub.currency)));
+      console.log('Fetching exchange rates for currencies:', currencies);
       const rates: Record<string, number> = {};
 
       for (const currency of currencies) {
         if (currency === 'TWD') {
           rates[currency] = 1;
         } else {
-          rates[currency] = await getExchangeRate(currency);
+          const rate = await getExchangeRate(currency);
+          rates[currency] = rate;
+          console.log(`Fetched rate for ${currency}: ${rate}`);
         }
       }
 
+      console.log('All exchange rates loaded:', rates);
       setExchangeRates(rates);
     };
 
@@ -182,8 +186,17 @@ const IndexPage = () => {
   };
 
   const totalMonthly = subscriptions.reduce((sum, sub) => {
-    const rate = exchangeRates[sub.currency] || 1;
-    const priceInTWD = sub.price * rate;
+    // Get exchange rate, fallback to 1 if not yet loaded
+    const rate = exchangeRates[sub.currency];
+
+    // If rate is undefined and currency is not TWD, skip this subscription for now
+    if (!rate && sub.currency !== 'TWD') {
+      console.log(`Exchange rate not loaded yet for ${sub.currency}`);
+      return sum;
+    }
+
+    const effectiveRate = rate || 1;
+    const priceInTWD = sub.price * effectiveRate;
 
     // Convert to monthly cost based on cycle
     let monthlyCost = priceInTWD;
@@ -192,6 +205,8 @@ const IndexPage = () => {
     } else if (sub.cycle === '6months') {
       monthlyCost = priceInTWD / 6;
     }
+
+    console.log(`Subscription: ${sub.name}, Price: ${sub.price} ${sub.currency}, Rate: ${effectiveRate}, Monthly: ${monthlyCost} TWD`);
 
     return sum + monthlyCost;
   }, 0);
