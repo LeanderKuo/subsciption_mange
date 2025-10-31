@@ -48,6 +48,7 @@ import { getCycleDurationInMonths } from "../utils/subscriptionDates";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import AccountMenu from "../components/AccountMenu";
 
 const IndexPage = () => {
   const queryClient = useQueryClient();
@@ -67,60 +68,11 @@ const IndexPage = () => {
   const headerRight = (
     <>
       <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
-      <IconButton
-        onClick={handleMenuOpen}
-        sx={{
-          color: '#fff',
-          '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
-        }}
-      >
-        <Avatar
-          sx={{
-            width: 40,
-            height: 40,
-            backgroundColor: '#fff',
-            color: '#000',
-            fontSize: '0.875rem',
-            fontWeight: 700,
-          }}
-        >
-          {userEmail.charAt(0).toUpperCase() || 'S'}
-        </Avatar>
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={menuOpen}
-        onClose={handleMenuClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        PaperProps={{
-          sx: {
-            mt: 1,
-            border: '2px solid #000',
-            borderRadius: 2,
-            minWidth: 200,
-          },
-        }}
-      >
-        <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #e0e0e0' }}>
-          <Typography variant="body2" sx={{ color: '#666', fontSize: '0.75rem' }}>
-            {t('header.loggedInAs')}
-          </Typography>
-          <Typography variant="body2" fontWeight={600} sx={{ color: '#000' }}>
-            {userEmail}
-          </Typography>
-        </Box>
-        <MenuItem onClick={handleGoToSettings}>{t('header.menu.settings')}</MenuItem>
-        <MenuItem onClick={handleLogout} sx={{ color: '#d32f2f' }}>
-          {t('header.menu.logout')}
-        </MenuItem>
-      </Menu>
+      <AccountMenu
+        email={userEmail}
+        onSettings={handleGoToSettings}
+        onLogout={handleLogout}
+      />
     </>
   );
 
@@ -146,27 +98,17 @@ const IndexPage = () => {
     fetchUserProfile();
   }, []);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleGoToSettings = () => {
-    handleMenuClose();
     navigate('/settings');
   };
 
   const handleLogout = async () => {
     try {
       await signOut();
-          toast({
-            title: t("header.logoutSuccess"),
-            description: t("header.logoutSuccessDescription"),
-          });
-      // Use a short delay before reload so the toast is visible
+      toast({
+        title: t("header.logoutSuccess"),
+        description: t("header.logoutSuccessDescription"),
+      });
       setTimeout(() => {
         window.location.href = "/";
       }, 500);
