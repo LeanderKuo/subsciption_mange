@@ -17,7 +17,7 @@ export const translations: TranslationMap = {
     /**
      * Header / Navigation
      */
-    'header.title': 'Subscription Manager',
+    'header.title': 'SubMange',
     'header.subtitle': 'Manage every subscription with clarity',
     'header.language.label': 'Language',
     'header.language.en': 'English',
@@ -36,7 +36,6 @@ export const translations: TranslationMap = {
     'header.logoutSuccessDescription': 'You have successfully signed out.',
     'header.logoutFailure': 'Sign out failed',
     'header.logoutFailureDescription': 'Please try again later.',
-    'landing.nav.brand': 'submange',
     'landing.nav.features': 'Features',
     'landing.nav.faq': 'FAQ',
     'landing.nav.signIn': 'Sign in',
@@ -268,9 +267,9 @@ export const translations: TranslationMap = {
     'landing.cta.description':
       'Sign up now to use every feature for free. No credit card. No commitment.',
     'landing.cta.button': 'Start now',
-    'landing.footer': '© 2025 Subscription Manager. All rights reserved.',
-    'landing.footer.developer': 'Built by Leander Kuo',
-    'landing.footer.githubLabel': 'Visit my GitHub profile',
+    'footer.copyright': '© 2025 SubMange. All rights reserved.',
+    'footer.developer': 'Built by Leander Kuo',
+    'footer.github': 'Visit my GitHub profile',
 
     /**
      * Not Found
@@ -337,7 +336,7 @@ export const translations: TranslationMap = {
     'common.loading': '載入中…',
     'common.unknownError': '發生錯誤，請稍後再試。',
 
-    'header.title': '訂閱管理平台',
+    'header.title': 'SubMange',
     'header.subtitle': '輕鬆管理你的所有訂閱服務',
     'header.language.en': 'English',
     'header.language.zh-TW': '繁體中文',
@@ -355,7 +354,6 @@ export const translations: TranslationMap = {
     'header.logoutSuccessDescription': '您已成功登出',
     'header.logoutFailure': '登出失敗',
     'header.logoutFailureDescription': '請稍後再試',
-    'landing.nav.brand': 'submange',
     'landing.nav.features': '功能介紹',
     'landing.nav.faq': '常見問題',
     'landing.nav.signIn': '登入',
@@ -546,9 +544,9 @@ export const translations: TranslationMap = {
     'landing.cta.description':
       '立即註冊，免費使用所有功能。無需信用卡，無需承諾。',
     'landing.cta.button': '立即開始使用',
-    'landing.footer': '© 2025 訂閱管理平台. All rights reserved.',
-    'landing.footer.developer': '開發者: Leander Kuo',
-    'landing.footer.githubLabel': '在 GitHub 上查看個人頁面',
+    'footer.copyright': '© 2025 SubMange. All rights reserved.',
+    'footer.developer': '開發者: Leander Kuo',
+    'footer.github': '在 GitHub 上查看個人頁面',
 
     'notFound.title': '找不到頁面',
     'notFound.description': '抱歉，您通往的頁面不存在或已被移除。',

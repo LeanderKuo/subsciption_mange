@@ -44,8 +44,10 @@ import { Subscription, SubscriptionInput, SubscriptionCategoryInput, Subscriptio
 import { supabase } from "../services/supabaseClient";
 import { getExchangeRate } from "../services/exchangeRateService";
 import { useLocale } from "../i18n/LocaleProvider";
-import type { Locale } from "../i18n/translations";
 import { getCycleDurationInMonths } from "../utils/subscriptionDates";
+import SiteHeader from "../components/SiteHeader";
+import SiteFooter from "../components/SiteFooter";
+import LanguageSwitcher from "../components/LanguageSwitcher";
 
 const IndexPage = () => {
   const queryClient = useQueryClient();
@@ -61,6 +63,66 @@ const IndexPage = () => {
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
   const menuOpen = Boolean(anchorEl);
   const { t, locale, setLocale } = useLocale();
+
+  const headerRight = (
+    <>
+      <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
+      <IconButton
+        onClick={handleMenuOpen}
+        sx={{
+          color: '#fff',
+          '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
+        }}
+      >
+        <Avatar
+          sx={{
+            width: 40,
+            height: 40,
+            backgroundColor: '#fff',
+            color: '#000',
+            fontSize: '0.875rem',
+            fontWeight: 700,
+          }}
+        >
+          {userEmail.charAt(0).toUpperCase() || 'S'}
+        </Avatar>
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        open={menuOpen}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        PaperProps={{
+          sx: {
+            mt: 1,
+            border: '2px solid #000',
+            borderRadius: 2,
+            minWidth: 200,
+          },
+        }}
+      >
+        <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #e0e0e0' }}>
+          <Typography variant="body2" sx={{ color: '#666', fontSize: '0.75rem' }}>
+            {t('header.loggedInAs')}
+          </Typography>
+          <Typography variant="body2" fontWeight={600} sx={{ color: '#000' }}>
+            {userEmail}
+          </Typography>
+        </Box>
+        <MenuItem onClick={handleGoToSettings}>{t('header.menu.settings')}</MenuItem>
+        <MenuItem onClick={handleLogout} sx={{ color: '#d32f2f' }}>
+          {t('header.menu.logout')}
+        </MenuItem>
+      </Menu>
+    </>
+  );
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -431,121 +493,23 @@ const IndexPage = () => {
   };
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff" }}>
-      <Box
-        component="header"
-        sx={{ borderBottom: "2px solid #000", backgroundColor: "#000" }}>
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between">
-            <div>
-              <Typography variant="h4" fontWeight={700} sx={{ color: "#fff" }}>
-                {t("header.title")}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ mt: 1, color: "#ccc" }}>
-                {t("header.subtitle")}
-              </Typography>
-            </div>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <FormControl
-                size="small"
-                sx={{
-                  minWidth: 160,
-                  '& .MuiInputBase-root': {
-                    color: '#fff',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#fff',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#fff',
-                  },
-                  '& .MuiSvgIcon-root': {
-                    color: '#fff',
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: '#fff',
-                  },
-                }}
-              >
-                <InputLabel id="locale-select-label">{t("header.language.label")}</InputLabel>
-                <Select
-                  labelId="locale-select-label"
-                  value={locale}
-                  label={t("header.language.label")}
-                  onChange={(event) => setLocale(event.target.value as Locale)}
-                  sx={{
-                    backgroundColor: 'rgba(255,255,255,0.04)',
-                  }}
-                >
-                  <MenuItem value="en">{t("header.language.en")}</MenuItem>
-                  <MenuItem value="zh-TW">{t("header.language.zh-TW")}</MenuItem>
-                </Select>
-              </FormControl>
-              <IconButton
-                onClick={handleMenuOpen}
-                sx={{
-                  color: '#fff',
-                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
-                }}
-              >
-                <Avatar
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    backgroundColor: '#fff',
-                    color: '#000',
-                    fontSize: '0.875rem',
-                    fontWeight: 700,
-                  }}
-                >
-                  {userEmail.charAt(0).toUpperCase()}
-                </Avatar>
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={menuOpen}
-                onClose={handleMenuClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                PaperProps={{
-                  sx: {
-                    mt: 1,
-                    border: '2px solid #000',
-                    borderRadius: 2,
-                    minWidth: 200,
-                  },
-                }}
-              >
-                <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #e0e0e0' }}>
-                  <Typography variant="body2" sx={{ color: '#666', fontSize: '0.75rem' }}>
-                    {t("header.loggedInAs")}
-                  </Typography>
-                  <Typography variant="body2" fontWeight={600} sx={{ color: '#000' }}>
-                    {userEmail}
-                  </Typography>
-                </Box>
-                <MenuItem onClick={handleGoToSettings}>{t("header.menu.settings")}</MenuItem>
-                <MenuItem onClick={handleLogout} sx={{ color: '#d32f2f' }}>
-                  {t("header.menu.logout")}
-                </MenuItem>
-              </Menu>
-            </Stack>
-          </Stack>
-        </Container>
-      </Box>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        backgroundColor: '#ffffff',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <SiteHeader
+        navLinks={[]}
+        subtitle={t('header.subtitle')}
+        rightSlot={headerRight}
+        variant="dark"
+      />
 
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <Container maxWidth="lg" sx={{ py: 6 }}>
         {isLoading ? (
           <Box display="flex" justifyContent="center" py={8}>
             <CircularProgress />
@@ -750,7 +714,10 @@ const IndexPage = () => {
             )}
           </>
         )}
-      </Container>
+        </Container>
+      </Box>
+
+      <SiteFooter />
 
       <CategoryManagementDialog
         open={categoryDialogOpen}
@@ -760,7 +727,7 @@ const IndexPage = () => {
         onUpdateCategory={handleUpdateCategory}
         onDeleteCategory={handleDeleteCategory}
       />
-    </div>
+    </Box>
   );
 };
 

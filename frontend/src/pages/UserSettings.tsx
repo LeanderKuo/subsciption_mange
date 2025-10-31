@@ -20,13 +20,16 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../services/supabaseClient';
 import { UserProfile, UserProfileInput } from '../types/subscription';
-import { ArrowBack, Person } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
 import { useLocale } from '../i18n/LocaleProvider';
+import SiteHeader from '../components/SiteHeader';
+import SiteFooter from '../components/SiteFooter';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import { useToast } from '../hooks/use-toast';
 
 export const UserSettings = () => {
   const navigate = useNavigate();
-  const { t } = useLocale();
+  const { t, locale, setLocale } = useLocale();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -48,6 +51,19 @@ export const UserSettings = () => {
   const [deleteConfirmValue, setDeleteConfirmValue] = useState('');
   const [deleteLoading, setDeleteLoading] = useState(false);
   const deleteConfirmationCode = 'DELETE';
+
+  const headerRight = (
+    <>
+      <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
+      <Button
+        startIcon={<ArrowBack />}
+        onClick={() => navigate('/dashboard')}
+        sx={{ color: '#fff' }}
+      >
+        {t('settings.back')}
+      </Button>
+    </>
+  );
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -318,36 +334,23 @@ export const UserSettings = () => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f9f9f9' }}>
-      {/* Header */}
-      <Box
-        component="header"
-        sx={{
-          borderBottom: '2px solid #000',
-          backgroundColor: '#000',
-          py: 2,
-          px: 3,
-        }}
-      >
-        <Container maxWidth="lg">
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Button
-              startIcon={<ArrowBack />}
-              onClick={() => navigate('/dashboard')}
-              sx={{ color: '#fff' }}
-            >
-              {t('settings.back')}
-            </Button>
-            <Person sx={{ color: '#fff' }} />
-            <Typography variant="h5" fontWeight={700} sx={{ color: '#fff' }}>
-              {t('settings.title')}
-            </Typography>
-          </Stack>
-        </Container>
-      </Box>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        backgroundColor: '#f9f9f9',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <SiteHeader
+        navLinks={[]}
+        subtitle={t('settings.title')}
+        rightSlot={headerRight}
+        variant="dark"
+      />
 
-      {/* Main Content */}
-      <Container maxWidth="md" sx={{ py: 4 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <Container maxWidth="md" sx={{ py: 4 }}>
         <Card
           elevation={0}
           sx={{ borderRadius: 2, border: '2px solid #000', backgroundColor: '#fff' }}
@@ -549,7 +552,10 @@ export const UserSettings = () => {
             </Stack>
           </CardContent>
         </Card>
-      </Container>
+        </Container>
+      </Box>
+
+      <SiteFooter />
 
       <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog} fullWidth maxWidth="xs">
         <DialogTitle>{t('settings.delete.dialog.title')}</DialogTitle>
