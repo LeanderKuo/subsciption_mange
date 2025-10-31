@@ -251,7 +251,7 @@ export const EditSubscriptionDialog = ({
   };
 
   const handlePresetCycleChange = (
-    event: SelectChangeEvent<PresetBillingCycle>
+    event: SelectChangeEvent<unknown>
   ) => {
     const value = event.target.value as PresetBillingCycle;
     applyCycleUpdate((prev) => ({
@@ -272,7 +272,7 @@ export const EditSubscriptionDialog = ({
     }));
   };
 
-  const handleCustomUnitChange = (event: SelectChangeEvent<CycleUnit>) => {
+  const handleCustomUnitChange = (event: SelectChangeEvent<unknown>) => {
     const unit = event.target.value as CycleUnit;
     applyCycleUpdate((prev) => {
       const amount = Number(prev.customValue) || 1;
