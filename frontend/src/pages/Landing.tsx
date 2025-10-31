@@ -10,6 +10,10 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import {
   AttachMoney,
@@ -18,13 +22,14 @@ import {
   Security,
   ExpandMore,
 } from "@mui/icons-material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AuthDialog } from "../components/AuthDialog";
 import { useLocale } from "../i18n/LocaleProvider";
+import type { Locale } from "../i18n/translations";
 
 const Landing = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  const { t } = useLocale();
+  const { t, locale, setLocale } = useLocale();
 
   const features = useMemo(
     () => [
@@ -83,6 +88,11 @@ const Landing = () => {
     window.location.reload();
   };
 
+  useEffect(() => {
+    document.title =
+      "submange - Track every subscription, manage price changes, and calculate your costs automatically.";
+  }, []);
+
   return (
     <Box sx={{ backgroundColor: "#fff", minHeight: "100vh" }}>
       {/* Hero Section - Uber Style */}
@@ -95,6 +105,42 @@ const Landing = () => {
         }}
       >
         <Container maxWidth="lg">
+          <Box display="flex" justifyContent="flex-end" mb={3}>
+            <FormControl
+              size="small"
+              sx={{
+                minWidth: 160,
+                '& .MuiInputBase-root': {
+                  color: '#fff',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#fff',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#fff',
+                },
+                '& .MuiSvgIcon-root': {
+                  color: '#fff',
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#fff',
+                },
+              }}
+            >
+              <InputLabel>{t("header.language.label")}</InputLabel>
+              <Select
+                value={locale}
+                label={t("header.language.label")}
+                onChange={(event) => setLocale(event.target.value as Locale)}
+                sx={{
+                  backgroundColor: 'rgba(255,255,255,0.08)',
+                }}
+              >
+                <MenuItem value="en">{t("header.language.en")}</MenuItem>
+                <MenuItem value="zh-TW">{t("header.language.zh-TW")}</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={7}>
               <Typography
