@@ -85,7 +85,7 @@ const IndexPage = () => {
 
   const headerRight = (
     <>
-      <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant="light" />
       <AccountMenu
         email={userEmail}
         onSettings={handleGoToSettings}
@@ -442,7 +442,7 @@ const IndexPage = () => {
         navLinks={[]}
         subtitle={t('header.subtitle')}
         rightSlot={headerRight}
-        variant="dark"
+        variant="light"
       />
 
       <Box component="main" sx={{ flexGrow: 1 }}>
