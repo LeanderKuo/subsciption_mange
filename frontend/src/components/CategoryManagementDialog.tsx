@@ -154,30 +154,45 @@ export const CategoryManagementDialog = ({
                   rows={2}
                 />
 
-                <Box>
-                  <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                    選擇顏色
-                  </Typography>
-                  <Stack direction="row" spacing={1} flexWrap="wrap">
-                    {predefinedColors.map((color) => (
-                      <Box
-                        key={color}
-                        onClick={() => setForm({ ...form, color })}
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          backgroundColor: color,
-                          border: form.color === color ? '3px solid #000' : '2px solid #ccc',
-                          borderRadius: 1,
-                          cursor: 'pointer',
-                          '&:hover': {
-                            transform: 'scale(1.1)',
-                          },
-                        }}
-                      />
-                    ))}
+                <Stack spacing={1.5}>
+                  <Box>
+                    <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
+                      選擇顏色
+                    </Typography>
+                    <Stack direction="row" spacing={1} flexWrap="wrap">
+                      {predefinedColors.map((color) => (
+                        <Box
+                          key={color}
+                          onClick={() => setForm({ ...form, color })}
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            backgroundColor: color,
+                            border: form.color === color ? '3px solid #000' : '2px solid #ccc',
+                            borderRadius: 1,
+                            cursor: 'pointer',
+                            '&:hover': {
+                              transform: 'scale(1.1)',
+                            },
+                          }}
+                        />
+                      ))}
+                    </Stack>
+                  </Box>
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <TextField
+                      label="自訂顏色"
+                      type="color"
+                      value={form.color}
+                      onChange={(event) => setForm({ ...form, color: event.target.value })}
+                      sx={{ width: 100 }}
+                      InputLabelProps={{ shrink: true }}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      當前顏色：{form.color.toUpperCase()}
+                    </Typography>
                   </Stack>
-                </Box>
+                </Stack>
 
                 <Stack direction="row" spacing={1} justifyContent="flex-end">
                   <Button onClick={handleCancel} variant="outlined">

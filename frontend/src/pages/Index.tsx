@@ -20,7 +20,7 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { Category as CategoryIcon } from "@mui/icons-material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { differenceInDays } from "date-fns";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddSubscriptionDialog } from "../components/AddSubscriptionDialog";
 import { CategoryManagementDialog } from "../components/CategoryManagementDialog";
@@ -40,9 +40,14 @@ import {
   deleteCategory,
 } from "../services/categoryService";
 import { useToast } from "../hooks/use-toast";
-import { Subscription, SubscriptionInput, SubscriptionCategoryInput } from "../types/subscription";
+import { Subscription, SubscriptionInput, SubscriptionCategoryInput, SubscriptionCategory } from "../types/subscription";
 import { supabase } from "../services/supabaseClient";
 import { getExchangeRate } from "../services/exchangeRateService";
+
+const UNCATEGORIZED_DISPLAY = {
+  name: '未分類',
+  color: '#9CA3AF',
+} as const;
 
 const IndexPage = () => {
   const queryClient = useQueryClient();
@@ -317,6 +322,69 @@ const IndexPage = () => {
     }
   });
 
+  const categoryMap = useMemo(() => {
+    const map = new Map<number, SubscriptionCategory>();
+    categories.forEach((category) => {
+      map.set(category.id, category);
+    });
+    return map;
+  }, [categories]);
+
+  const getCategoryDisplay = (subscription: Subscription) => {
+    if (subscription.categoryId) {
+      const category = categoryMap.get(subscription.categoryId);
+      if (category) {
+        return {
+          name: category.name,
+          color: category.color,
+        };
+      }
+    }
+    return UNCATEGORIZED_DISPLAY;
+  };
+
+  const groupedSubscriptions = useMemo(() => {
+    if (sortBy !== 'name') {
+      return [];
+    }
+
+    const nameSorted = [...sortedSubscriptions];
+    const groups: Array<{
+      key: string;
+      title: string;
+      color: string;
+      subscriptions: Subscription[];
+    }> = [];
+
+    const orderedCategories = [...categories].sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    orderedCategories.forEach((category) => {
+      const items = nameSorted.filter((sub) => sub.categoryId === category.id);
+      if (items.length > 0) {
+        groups.push({
+          key: `category-${category.id}`,
+          title: category.name,
+          color: category.color,
+          subscriptions: items,
+        });
+      }
+    });
+
+    const uncategorizedItems = nameSorted.filter((sub) => !sub.categoryId);
+    if (uncategorizedItems.length > 0) {
+      groups.push({
+        key: 'category-uncategorized',
+        title: UNCATEGORIZED_DISPLAY.name,
+        color: UNCATEGORIZED_DISPLAY.color,
+        subscriptions: uncategorizedItems,
+      });
+    }
+
+    return groups;
+  }, [categories, sortBy, sortedSubscriptions]);
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff" }}>
       <Box
@@ -514,18 +582,59 @@ const IndexPage = () => {
                   點擊「新增訂閱」開始管理你的訂閱服務
                 </Typography>
               </Box>
+            ) : sortBy === 'name' ? (
+              <Stack spacing={3}>
+                {groupedSubscriptions.map((group) => (
+                  <Box
+                    key={group.key}
+                    sx={{
+                      border: `2px solid ${group.color}`,
+                      borderRadius: 2,
+                      p: 2,
+                      backgroundColor: '#fff',
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight={700}
+                      sx={{ mb: 2, color: group.color }}
+                    >
+                      {group.title}
+                    </Typography>
+                    <Grid container spacing={2}>
+                      {group.subscriptions.map((subscription) => (
+                        <Grid item xs={12} md={6} lg={4} key={subscription.id}>
+                          <SubscriptionCard
+                            subscription={subscription}
+                            onDelete={handleDelete}
+                            onEdit={handleEdit}
+                            categories={categories}
+                            categoryColor={group.color}
+                            categoryName={group.title}
+                          />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
+                ))}
+              </Stack>
             ) : (
               <Grid container spacing={2}>
-                {sortedSubscriptions.map((subscription) => (
-                  <Grid item xs={12} md={6} lg={4} key={subscription.id}>
-                    <SubscriptionCard
-                      subscription={subscription}
-                      onDelete={handleDelete}
-                      onEdit={handleEdit}
-                      categories={categories}
-                    />
-                  </Grid>
-                ))}
+                {sortedSubscriptions.map((subscription) => {
+                  const categoryDisplay = getCategoryDisplay(subscription);
+                  return (
+                    <Grid item xs={12} md={6} lg={4} key={subscription.id}>
+                      <SubscriptionCard
+                        subscription={subscription}
+                        onDelete={handleDelete}
+                        onEdit={handleEdit}
+                        categories={categories}
+                        categoryColor={categoryDisplay.color}
+                        categoryName={categoryDisplay.name}
+                      />
+                    </Grid>
+                  );
+                })}
               </Grid>
             )}
           </>

@@ -19,6 +19,8 @@ interface SubscriptionCardProps {
   onDelete: (id: number) => Promise<void> | void;
   onEdit: (subscription: Subscription) => Promise<void> | void;
   categories?: SubscriptionCategory[];
+  categoryName?: string;
+  categoryColor?: string;
 }
 
 const statusChip = (endDate: string) => {
@@ -38,12 +40,35 @@ export const SubscriptionCard = ({
   onDelete,
   onEdit,
   categories,
+  categoryName,
+  categoryColor,
 }: SubscriptionCardProps) => {
   const handleDelete = () => onDelete(subscription.id);
+  const borderColor = categoryColor ?? '#e5e7eb';
+  const chipColor = categoryColor ?? '#6b7280';
 
   return (
-    <Card elevation={0} sx={{ borderRadius: 2, border: '1px solid #eee' }}>
+    <Card
+      elevation={0}
+      sx={{
+        borderRadius: 2,
+        border: `2px solid ${borderColor}`,
+        backgroundColor: '#fff',
+      }}
+    >
       <CardContent>
+        {categoryName && (
+          <Chip
+            label={categoryName}
+            size="small"
+            sx={{
+              backgroundColor: chipColor,
+              color: '#fff',
+              fontWeight: 600,
+              mb: 1.5,
+            }}
+          />
+        )}
         <Box display="flex" alignItems="center" mb={2}>
           <Avatar
             src={subscription.iconUrl ?? undefined}
