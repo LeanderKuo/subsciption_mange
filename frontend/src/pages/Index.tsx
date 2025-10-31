@@ -65,6 +65,29 @@ const IndexPage = () => {
   const menuOpen = Boolean(anchorEl);
   const { t, locale, setLocale } = useLocale();
 
+  const handleGoToSettings = () => {
+    navigate('/settings');
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast({
+        title: t("header.logoutSuccess"),
+        description: t("header.logoutSuccessDescription"),
+      });
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
+    } catch (error) {
+      toast({
+        title: t("header.logoutFailure"),
+        description: t("header.logoutFailureDescription"),
+        variant: "destructive",
+      });
+    }
+  };
+
   const headerRight = (
     <>
       <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
@@ -97,29 +120,6 @@ const IndexPage = () => {
     };
     fetchUserProfile();
   }, []);
-
-  const handleGoToSettings = () => {
-    navigate('/settings');
-  };
-
-  const handleLogout = async () => {
-    try {
-      await signOut();
-      toast({
-        title: t("header.logoutSuccess"),
-        description: t("header.logoutSuccessDescription"),
-      });
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 500);
-    } catch (error) {
-      toast({
-        title: t("header.logoutFailure"),
-        description: t("header.logoutFailureDescription"),
-        variant: "destructive",
-      });
-    }
-  };
 
   const {
     data: subscriptions = [],
