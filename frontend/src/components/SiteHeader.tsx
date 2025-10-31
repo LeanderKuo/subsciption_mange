@@ -1,4 +1,4 @@
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
+import { Box, Container, Link, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 type NavLink = {
@@ -77,7 +77,7 @@ export const SiteHeader = ({
             }}
           >
             {navLinks.map((link) => {
-              const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+              const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
                 if (link.onClick) {
                   event.preventDefault();
                   link.onClick();
@@ -85,23 +85,25 @@ export const SiteHeader = ({
               };
 
               return (
-                <Button
+                <Link
                   key={link.label}
-                  component="a"
                   href={link.href}
                   onClick={link.onClick ? handleClick : undefined}
+                  underline="none"
                   sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
                     color: textColor,
                     fontWeight: 600,
                     textTransform: 'none',
-                    paddingX: 0,
+                    px: 0,
                     '&:hover': {
                       backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : '#f3f4f6',
                     },
                   }}
                 >
                   {link.label}
-                </Button>
+                </Link>
               );
             })}
           </Stack>
