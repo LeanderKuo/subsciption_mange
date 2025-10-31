@@ -707,14 +707,8 @@ const IndexPage = () => {
                         categories={categories}
                         categoryColor={categoryDisplay.color}
                         categoryName={categoryDisplay.name}
-                        draggable={sortBy === 'name'}
-                        onDragStart={
-                          sortBy === 'name'
-                            ? (subscriptionId) => handleDragStart(subscriptionId)
-                            : undefined
-                        }
-                        onDragEnd={sortBy === 'name' ? handleDragEnd : undefined}
-                        isDragging={draggedSubscriptionId === subscription.id}
+                        draggable={false}
+                        isDragging={false}
                       />
                     </Grid>
                   );
