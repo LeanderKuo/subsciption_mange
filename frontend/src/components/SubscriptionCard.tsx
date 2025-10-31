@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { differenceInDays, format } from 'date-fns';
+import type { DragEvent } from 'react';
 import { Subscription, SubscriptionCategory } from '../types/subscription';
 import { EditSubscriptionDialog } from './EditSubscriptionDialog';
 
@@ -21,6 +22,10 @@ interface SubscriptionCardProps {
   categories?: SubscriptionCategory[];
   categoryName?: string;
   categoryColor?: string;
+  draggable?: boolean;
+  isDragging?: boolean;
+  onDragStart?: (subscriptionId: number, event: DragEvent<HTMLDivElement>) => void;
+  onDragEnd?: () => void;
 }
 
 const statusChip = (endDate: string) => {
@@ -42,6 +47,10 @@ export const SubscriptionCard = ({
   categories,
   categoryName,
   categoryColor,
+  draggable = false,
+  isDragging = false,
+  onDragStart,
+  onDragEnd,
 }: SubscriptionCardProps) => {
   const handleDelete = () => onDelete(subscription.id);
   const borderColor = categoryColor ?? '#e5e7eb';
@@ -54,6 +63,19 @@ export const SubscriptionCard = ({
         borderRadius: 2,
         border: `2px solid ${borderColor}`,
         backgroundColor: '#fff',
+        opacity: isDragging ? 0.6 : 1,
+        cursor: draggable ? 'grab' : 'default',
+      }}
+      draggable={draggable}
+      onDragStart={(event) => {
+        if (!draggable) return;
+        event.dataTransfer.setData('text/plain', String(subscription.id));
+        event.dataTransfer.effectAllowed = 'move';
+        onDragStart?.(subscription.id, event);
+      }}
+      onDragEnd={() => {
+        if (!draggable) return;
+        onDragEnd?.();
       }}
     >
       <CardContent>

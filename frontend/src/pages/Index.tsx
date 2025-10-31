@@ -59,6 +59,8 @@ const IndexPage = () => {
   const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [sortBy, setSortBy] = useState<'endDate' | 'price' | 'name'>('endDate');
+  const [draggedSubscriptionId, setDraggedSubscriptionId] = useState<number | null>(null);
+  const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
   const menuOpen = Boolean(anchorEl);
 
   useEffect(() => {
@@ -353,6 +355,7 @@ const IndexPage = () => {
       key: string;
       title: string;
       color: string;
+      categoryId: number | null;
       subscriptions: Subscription[];
     }> = [];
 
@@ -362,28 +365,67 @@ const IndexPage = () => {
 
     orderedCategories.forEach((category) => {
       const items = nameSorted.filter((sub) => sub.categoryId === category.id);
-      if (items.length > 0) {
-        groups.push({
-          key: `category-${category.id}`,
-          title: category.name,
-          color: category.color,
-          subscriptions: items,
-        });
-      }
+      groups.push({
+        key: `category-${category.id}`,
+        title: category.name,
+        color: category.color,
+        categoryId: category.id,
+        subscriptions: items,
+      });
     });
 
     const uncategorizedItems = nameSorted.filter((sub) => !sub.categoryId);
-    if (uncategorizedItems.length > 0) {
-      groups.push({
-        key: 'category-uncategorized',
-        title: UNCATEGORIZED_DISPLAY.name,
-        color: UNCATEGORIZED_DISPLAY.color,
-        subscriptions: uncategorizedItems,
-      });
-    }
+    groups.push({
+      key: 'category-uncategorized',
+      title: UNCATEGORIZED_DISPLAY.name,
+      color: UNCATEGORIZED_DISPLAY.color,
+      categoryId: null,
+      subscriptions: uncategorizedItems,
+    });
 
     return groups;
   }, [categories, sortBy, sortedSubscriptions]);
+
+  const handleDragStart = (subscriptionId: number) => {
+    setDraggedSubscriptionId(subscriptionId);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedSubscriptionId(null);
+    setActiveDropTarget(null);
+  };
+
+  const handleDropOnCategory = async (categoryId: number | null) => {
+    if (draggedSubscriptionId === null) {
+      return;
+    }
+    const subscription = subscriptions.find((sub) => sub.id === draggedSubscriptionId);
+    setActiveDropTarget(null);
+    setDraggedSubscriptionId(null);
+    if (!subscription) {
+      return;
+    }
+    const currentCategory = subscription.categoryId ?? null;
+    if (currentCategory === (categoryId ?? null)) {
+      return;
+    }
+    await handleEdit({
+      ...subscription,
+      categoryId,
+    });
+  };
+
+  const handleDragEnter = (groupKey: string) => {
+    if (draggedSubscriptionId !== null) {
+      setActiveDropTarget(groupKey);
+    }
+  };
+
+  const handleDragLeave = (groupKey: string) => {
+    if (activeDropTarget === groupKey) {
+      setActiveDropTarget(null);
+    }
+  };
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff" }}>
@@ -591,7 +633,22 @@ const IndexPage = () => {
                       border: `2px solid ${group.color}`,
                       borderRadius: 2,
                       p: 2,
-                      backgroundColor: '#fff',
+                      backgroundColor:
+                        activeDropTarget === group.key ? 'rgba(0,0,0,0.04)' : '#fff',
+                      transition: 'background-color 0.2s ease, border-color 0.2s ease',
+                    }}
+                    onDragOver={(event) => {
+                      if (draggedSubscriptionId !== null) {
+                        event.preventDefault();
+                        event.dataTransfer.dropEffect = 'move';
+                      }
+                    }}
+                    onDragEnter={() => handleDragEnter(group.key)}
+                    onDragLeave={() => handleDragLeave(group.key)}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      void handleDropOnCategory(group.categoryId);
                     }}
                   >
                     <Typography
@@ -601,20 +658,39 @@ const IndexPage = () => {
                     >
                       {group.title}
                     </Typography>
-                    <Grid container spacing={2}>
-                      {group.subscriptions.map((subscription) => (
-                        <Grid item xs={12} md={6} lg={4} key={subscription.id}>
-                          <SubscriptionCard
-                            subscription={subscription}
-                            onDelete={handleDelete}
-                            onEdit={handleEdit}
-                            categories={categories}
-                            categoryColor={group.color}
-                            categoryName={group.title}
-                          />
-                        </Grid>
-                      ))}
-                    </Grid>
+                    {group.subscriptions.length === 0 ? (
+                      <Box
+                        sx={{
+                          border: '2px dashed rgba(0,0,0,0.2)',
+                          borderRadius: 2,
+                          p: 3,
+                          textAlign: 'center',
+                          color: 'text.secondary',
+                          fontSize: 14,
+                        }}
+                      >
+                        拖曳訂閱至此分類
+                      </Box>
+                    ) : (
+                      <Grid container spacing={2}>
+                        {group.subscriptions.map((subscription) => (
+                          <Grid item xs={12} md={6} lg={4} key={subscription.id}>
+                            <SubscriptionCard
+                              subscription={subscription}
+                              onDelete={handleDelete}
+                              onEdit={handleEdit}
+                              categories={categories}
+                              categoryColor={group.color}
+                              categoryName={group.title}
+                              draggable
+                              onDragStart={(subscriptionId) => handleDragStart(subscriptionId)}
+                              onDragEnd={handleDragEnd}
+                              isDragging={draggedSubscriptionId === subscription.id}
+                            />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    )}
                   </Box>
                 ))}
               </Stack>
@@ -631,6 +707,14 @@ const IndexPage = () => {
                         categories={categories}
                         categoryColor={categoryDisplay.color}
                         categoryName={categoryDisplay.name}
+                        draggable={sortBy === 'name'}
+                        onDragStart={
+                          sortBy === 'name'
+                            ? (subscriptionId) => handleDragStart(subscriptionId)
+                            : undefined
+                        }
+                        onDragEnd={sortBy === 'name' ? handleDragEnd : undefined}
+                        isDragging={draggedSubscriptionId === subscription.id}
                       />
                     </Grid>
                   );
