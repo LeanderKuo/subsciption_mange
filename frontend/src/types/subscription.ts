@@ -34,6 +34,7 @@ export interface UserProfile {
   defaultCurrency: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string | null;
 }
 
 export type UserProfileInput = Partial<Pick<UserProfile, 'email' | 'nickname' | 'defaultCurrency'>>;
