@@ -1,27 +1,20 @@
-// Setup type definitions for built-in Supabase Runtime APIs
+// Brandfetch API with daily caching
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+import { createClient } from 'jsr:@supabase/supabase-js@2'
 
-// Brandfetch API Response Interface (更新為正確的結構)
 interface BrandfetchBrand {
   name?: string;
   domain?: string;
   logos?: Array<{
     src?: string;
     type?: string;
-    theme?: string;
     formats?: Array<{
       src?: string;
       format?: string;
-      background?: string;
     }>;
-  }>;
-  images?: Array<{
-    src?: string;
-    type?: string;
   }>;
 }
 
-// CORS headers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -29,7 +22,6 @@ const corsHeaders = {
 };
 
 Deno.serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -44,6 +36,39 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Initialize Supabase client with service role
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
+
+    const today = new Date().toISOString().split('T')[0]
+    const domain = brand.toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '')
+
+    // Check cache first
+    const { data: cachedBrand, error: cacheError } = await supabaseClient
+      .from('brands_cache')
+      .select('*')
+      .eq('domain', domain)
+      .eq('fetched_date', today)
+      .single()
+
+    if (cachedBrand && !cacheError) {
+      console.log(`Brand cache HIT for: ${domain}`)
+      return new Response(
+        JSON.stringify({
+          iconUrl: cachedBrand.icon_url,
+          name: cachedBrand.brand_name,
+          domain: cachedBrand.domain,
+          cached: true
+        }),
+        { status: 200, headers: corsHeaders }
+      );
+    }
+
+    // Cache MISS - fetch from Brandfetch API
+    console.log(`Brand cache MISS for: ${domain}, fetching from API...`)
+
     const apiKey = Deno.env.get('BRANDFETCH_API_KEY');
     if (!apiKey) {
       console.error('BRANDFETCH_API_KEY not configured');
@@ -53,11 +78,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 使用正確的 Brandfetch API endpoint
     const brandIdentifier = encodeURIComponent(brand);
     const apiUrl = `https://api.brandfetch.io/v2/brands/${brandIdentifier}`;
-
-    console.log(`Fetching brand data for: ${brand}`);
 
     const response = await fetch(apiUrl, {
       headers: {
@@ -66,7 +88,7 @@ Deno.serve(async (req) => {
       },
     });
 
-    // 處理 rate limit
+    // Handle rate limit
     if (response.status === 429) {
       const quotaHeader = response.headers.get('x-api-key-quota');
       const usageHeader = response.headers.get('x-api-key-approximate-usage');
@@ -82,16 +104,26 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 處理 404 - 品牌未找到
+    // Handle 404
     if (response.status === 404) {
       console.log(`Brand not found: ${brand}`);
+      // Cache the "not found" result too
+      await supabaseClient
+        .from('brands_cache')
+        .upsert({
+          domain: domain,
+          brand_name: null,
+          icon_url: null,
+          brand_id: null,
+          fetched_date: today
+        }, { onConflict: 'domain' })
+
       return new Response(
-        JSON.stringify({ iconUrl: null, error: 'Brand not found' }),
+        JSON.stringify({ iconUrl: null, name: null, domain: domain }),
         { status: 200, headers: corsHeaders }
       );
     }
 
-    // 處理其他錯誤
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`Brandfetch API error ${response.status}:`, errorText);
@@ -106,21 +138,18 @@ Deno.serve(async (req) => {
 
     const data: BrandfetchBrand = await response.json();
 
-    // 優先順序：icon > logo > 第一個可用的 logo
+    // Extract icon URL
     let iconUrl: string | null = null;
 
     if (data.logos && Array.isArray(data.logos)) {
-      // 1. 嘗試找 icon 類型
       const iconLogo = data.logos.find(l => l.type === 'icon');
       if (iconLogo?.src) {
         iconUrl = iconLogo.src;
       } else if (iconLogo?.formats && iconLogo.formats.length > 0) {
-        // 優先使用 SVG 格式
         const svgFormat = iconLogo.formats.find(f => f.format === 'svg');
         iconUrl = svgFormat?.src || iconLogo.formats[0]?.src || null;
       }
 
-      // 2. 如果沒有 icon，嘗試找 logo 類型
       if (!iconUrl) {
         const logo = data.logos.find(l => l.type === 'logo');
         if (logo?.src) {
@@ -131,7 +160,6 @@ Deno.serve(async (req) => {
         }
       }
 
-      // 3. 使用第一個可用的 logo
       if (!iconUrl && data.logos.length > 0) {
         const firstLogo = data.logos[0];
         if (firstLogo.src) {
@@ -142,13 +170,29 @@ Deno.serve(async (req) => {
       }
     }
 
-    console.log(`Successfully fetched brand data for ${brand}, iconUrl: ${iconUrl ? 'found' : 'not found'}`);
+    // Save to cache
+    const { error: insertError } = await supabaseClient
+      .from('brands_cache')
+      .upsert({
+        domain: domain,
+        brand_name: data.name || null,
+        icon_url: iconUrl,
+        brand_id: null,
+        fetched_date: today
+      }, { onConflict: 'domain' })
+
+    if (insertError) {
+      console.error('Failed to cache brand:', insertError)
+    } else {
+      console.log(`Cached brand: ${domain}`)
+    }
 
     return new Response(
       JSON.stringify({
         iconUrl,
         name: data.name,
-        domain: data.domain
+        domain: data.domain,
+        cached: false
       }),
       { status: 200, headers: corsHeaders }
     );
