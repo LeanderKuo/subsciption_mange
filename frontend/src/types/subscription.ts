@@ -25,3 +25,14 @@ export interface PriceChange {
 }
 
 export type SubscriptionInput = Omit<Subscription, 'id'>;
+
+export interface UserProfile {
+  id: string;
+  email: string | null;
+  nickname: string | null;
+  defaultCurrency: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type UserProfileInput = Partial<Pick<UserProfile, 'email' | 'nickname' | 'defaultCurrency'>>;

@@ -7,6 +7,7 @@ import { supabase } from './services/supabaseClient';
 import IndexPage from './pages/Index';
 import NotFoundPage from './pages/NotFound';
 import LandingPage from './pages/Landing';
+import UserSettings from './pages/UserSettings';
 import { ToastProvider } from './components/ToastProvider';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -121,6 +122,8 @@ const App = () => {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<IndexPage />} />
+                <Route path="/dashboard" element={<IndexPage />} />
+                <Route path="/settings" element={<UserSettings />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </BrowserRouter>

@@ -5,12 +5,18 @@ import {
   Grid,
   Stack,
   Typography,
+  IconButton,
+  Menu,
+  MenuItem,
+  Avatar,
 } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { differenceInDays } from "date-fns";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AddSubscriptionDialog } from "../components/AddSubscriptionDialog";
 import { StatsCard } from "../components/StatsCard";
 import { SubscriptionCard } from "../components/SubscriptionCard";
@@ -24,10 +30,38 @@ import {
 } from "../services/supabaseService";
 import { useToast } from "../hooks/use-toast";
 import { Subscription, SubscriptionInput } from "../types/subscription";
+import { supabase } from "../lib/supabase";
 
 const IndexPage = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const menuOpen = Boolean(anchorEl);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) {
+        setUserEmail(user.email);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleGoToSettings = () => {
+    handleMenuClose();
+    navigate('/settings');
+  };
 
   const handleLogout = async () => {
     try {
@@ -158,7 +192,60 @@ const IndexPage = () => {
                 onAdd={handleAdd}
                 disabled={createMutation.isPending}
               />
-              <LogoutButton onLogout={handleLogout} />
+              <IconButton
+                onClick={handleMenuOpen}
+                sx={{
+                  color: '#fff',
+                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
+                }}
+              >
+                <Avatar
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: '#fff',
+                    color: '#000',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                  }}
+                >
+                  {userEmail.charAt(0).toUpperCase()}
+                </Avatar>
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={menuOpen}
+                onClose={handleMenuClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                PaperProps={{
+                  sx: {
+                    mt: 1,
+                    border: '2px solid #000',
+                    borderRadius: 2,
+                    minWidth: 200,
+                  },
+                }}
+              >
+                <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #e0e0e0' }}>
+                  <Typography variant="body2" sx={{ color: '#666', fontSize: '0.75rem' }}>
+                    登入為
+                  </Typography>
+                  <Typography variant="body2" fontWeight={600} sx={{ color: '#000' }}>
+                    {userEmail}
+                  </Typography>
+                </Box>
+                <MenuItem onClick={handleGoToSettings}>個人設定</MenuItem>
+                <MenuItem onClick={handleLogout} sx={{ color: '#d32f2f' }}>
+                  登出
+                </MenuItem>
+              </Menu>
             </Stack>
           </Stack>
         </Container>
