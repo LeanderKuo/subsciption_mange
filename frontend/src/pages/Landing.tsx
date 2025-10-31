@@ -298,12 +298,12 @@ const Landing = () => {
                       key={`${item}-${index}`}
                       label={item}
                       sx={{
-                        backgroundColor: '#fff',
-                        color: '#000',
+                        backgroundColor: '#000',
+                        color: '#fff',
                         fontWeight: 600,
                         borderRadius: 999,
                         px: 1.5,
-                        border: '1px solid #000',
+                        border: 'none',
                       }}
                     />
                   ))}
