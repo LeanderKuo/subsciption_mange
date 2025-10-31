@@ -1,4 +1,4 @@
-// Brandfetch API with daily caching
+// Brandfetch API with monthly caching
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 
@@ -42,15 +42,16 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const today = new Date().toISOString().split('T')[0]
+    const now = new Date()
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
     const domain = brand.toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '')
 
-    // Check cache first
+    // Check cache first - using fetched_month for monthly caching
     const { data: cachedBrand, error: cacheError } = await supabaseClient
       .from('brands_cache')
       .select('*')
       .eq('domain', domain)
-      .eq('fetched_date', today)
+      .eq('fetched_month', currentMonth)
       .single()
 
     if (cachedBrand && !cacheError) {
@@ -115,7 +116,7 @@ Deno.serve(async (req) => {
           brand_name: null,
           icon_url: null,
           brand_id: null,
-          fetched_date: today
+          fetched_month: currentMonth
         }, { onConflict: 'domain' })
 
       return new Response(
@@ -170,7 +171,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Save to cache
+    // Save to cache with monthly update
     const { error: insertError } = await supabaseClient
       .from('brands_cache')
       .upsert({
@@ -178,13 +179,13 @@ Deno.serve(async (req) => {
         brand_name: data.name || null,
         icon_url: iconUrl,
         brand_id: null,
-        fetched_date: today
+        fetched_month: currentMonth
       }, { onConflict: 'domain' })
 
     if (insertError) {
       console.error('Failed to cache brand:', insertError)
     } else {
-      console.log(`Cached brand: ${domain}`)
+      console.log(`Cached brand: ${domain} for month ${currentMonth}`)
     }
 
     return new Response(
