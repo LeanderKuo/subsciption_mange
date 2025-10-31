@@ -11,6 +11,7 @@ export interface Subscription {
   cycle: BillingCycle;
   iconUrl?: string | null;
   autoRenew?: boolean; // 自動續訂
+  categoryId?: number | null; // 訂閱類型
 }
 
 export interface PriceChange {
@@ -36,3 +37,15 @@ export interface UserProfile {
 }
 
 export type UserProfileInput = Partial<Pick<UserProfile, 'email' | 'nickname' | 'defaultCurrency'>>;
+
+export interface SubscriptionCategory {
+  id: number;
+  userId: string;
+  name: string;
+  description?: string | null;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type SubscriptionCategoryInput = Omit<SubscriptionCategory, 'id' | 'userId' | 'createdAt' | 'updatedAt'>;

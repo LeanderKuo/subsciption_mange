@@ -17,13 +17,14 @@ import {
 import type { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
-import { Subscription } from '../types/subscription';
+import { Subscription, SubscriptionCategory } from '../types/subscription';
 import { calculateEndDate } from '../utils/subscriptionDates';
 import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill';
 
 interface EditSubscriptionDialogProps {
   subscription: Subscription;
   onSave: (subscription: Subscription) => Promise<void> | void;
+  categories?: SubscriptionCategory[];
 }
 
 type FormState = {
@@ -38,6 +39,7 @@ type FormState = {
   autoRenew: boolean;
   recordPriceChange: boolean;
   priceChangeDate: string;
+  categoryId: number | null;
 };
 
 const toFormState = (subscription: Subscription): FormState => ({
@@ -52,11 +54,13 @@ const toFormState = (subscription: Subscription): FormState => ({
   autoRenew: subscription.autoRenew ?? false,
   recordPriceChange: false,
   priceChangeDate: new Date().toISOString().split('T')[0],
+  categoryId: subscription.categoryId ?? null,
 });
 
 export const EditSubscriptionDialog = ({
   subscription,
   onSave,
+  categories = [],
 }: EditSubscriptionDialogProps) => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(() => toFormState(subscription));
@@ -157,6 +161,7 @@ export const EditSubscriptionDialog = ({
       cycle: form.cycle,
       iconUrl: form.iconUrl ? form.iconUrl.trim() : null,
       autoRenew: form.autoRenew,
+      categoryId: form.categoryId,
     };
 
     // TODO: If recordPriceChange is true and price changed, create price_changes record
@@ -188,6 +193,7 @@ export const EditSubscriptionDialog = ({
 
   const handleClose = () => {
     setOpen(false);
+    setForm(toFormState(subscription));
     setBrandTouched(false);
     setSelectedBrand(null);
     autoFilledIconRef.current = null;
@@ -335,6 +341,25 @@ export const EditSubscriptionDialog = ({
               fullWidth
               placeholder="https://"
             />
+            <TextField
+              label="訂閱類型（選填）"
+              select
+              value={form.categoryId ?? ''}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  categoryId: e.target.value ? Number(e.target.value) : null,
+                })
+              }
+              fullWidth
+            >
+              <MenuItem value="">無類型</MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </TextField>
             <FormControlLabel
               control={
                 <Checkbox

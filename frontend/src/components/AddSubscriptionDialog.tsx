@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Checkbox,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -15,7 +16,7 @@ import {
 } from '@mui/material';
 import type { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
 import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
-import { SubscriptionInput } from '../types/subscription';
+import { SubscriptionInput, SubscriptionCategory } from '../types/subscription';
 import {
   calculateEndDate,
   getDefaultCycle,
@@ -25,6 +26,7 @@ import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill
 interface AddSubscriptionDialogProps {
   onAdd: (payload: SubscriptionInput) => Promise<void> | void;
   disabled?: boolean;
+  categories?: SubscriptionCategory[];
 }
 
 type FormState = {
@@ -37,6 +39,7 @@ type FormState = {
   cycle: SubscriptionInput['cycle'];
   iconUrl: string;
   autoRenew: boolean;
+  categoryId: number | null;
 };
 
 const createDefaultFormState = (): FormState => {
@@ -52,10 +55,11 @@ const createDefaultFormState = (): FormState => {
     cycle,
     iconUrl: '',
     autoRenew: false,
+    categoryId: null,
   };
 };
 
-export const AddSubscriptionDialog = ({ onAdd, disabled }: AddSubscriptionDialogProps) => {
+export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddSubscriptionDialogProps) => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(() => createDefaultFormState());
   const autoFilledIconRef = useRef<string | null>(null);
@@ -142,6 +146,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled }: AddSubscriptionDialog
       cycle: form.cycle,
       iconUrl: form.iconUrl ? form.iconUrl.trim() : null,
       autoRenew: form.autoRenew,
+      categoryId: form.categoryId,
     };
 
     if (!payload.name || !payload.brand) {
@@ -313,6 +318,32 @@ export const AddSubscriptionDialog = ({ onAdd, disabled }: AddSubscriptionDialog
               fullWidth
               placeholder="https://"
             />
+            <TextField
+              label="訂閱類型（選填）"
+              select
+              value={form.categoryId ?? ''}
+              onChange={(e) => setForm({ ...form, categoryId: e.target.value ? Number(e.target.value) : null })}
+              fullWidth
+            >
+              <MenuItem value="">無類型</MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Chip
+                      sx={{
+                        backgroundColor: category.color,
+                        color: '#fff',
+                        width: 16,
+                        height: 16,
+                      }}
+                      label=" "
+                      size="small"
+                    />
+                    <span>{category.name}</span>
+                  </Stack>
+                </MenuItem>
+              ))}
+            </TextField>
             <FormControlLabel
               control={
                 <Checkbox

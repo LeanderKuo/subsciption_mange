@@ -15,6 +15,8 @@ const mapFromSupabase = (record: any): Subscription => ({
   endDate: record.end_date,
   cycle: record.cycle,
   iconUrl: record.icon_url,
+  autoRenew: record.auto_renew,
+  categoryId: record.category_id,
 });
 
 const mapToSupabase = (input: SubscriptionInput) => ({
@@ -26,6 +28,8 @@ const mapToSupabase = (input: SubscriptionInput) => ({
   end_date: input.endDate,
   cycle: input.cycle,
   icon_url: input.iconUrl,
+  auto_renew: input.autoRenew,
+  category_id: input.categoryId,
 });
 
 export const fetchSubscriptions = async (): Promise<Subscription[]> => {

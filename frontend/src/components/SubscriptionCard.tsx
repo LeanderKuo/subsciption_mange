@@ -11,13 +11,14 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { differenceInDays, format } from 'date-fns';
-import { Subscription } from '../types/subscription';
+import { Subscription, SubscriptionCategory } from '../types/subscription';
 import { EditSubscriptionDialog } from './EditSubscriptionDialog';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
   onDelete: (id: number) => Promise<void> | void;
   onEdit: (subscription: Subscription) => Promise<void> | void;
+  categories?: SubscriptionCategory[];
 }
 
 const statusChip = (endDate: string) => {
@@ -36,6 +37,7 @@ export const SubscriptionCard = ({
   subscription,
   onDelete,
   onEdit,
+  categories,
 }: SubscriptionCardProps) => {
   const handleDelete = () => onDelete(subscription.id);
 
@@ -73,7 +75,11 @@ export const SubscriptionCard = ({
       <CardActions>
         <Tooltip title="編輯">
           <span>
-            <EditSubscriptionDialog subscription={subscription} onSave={onEdit} />
+            <EditSubscriptionDialog
+              subscription={subscription}
+              onSave={onEdit}
+              categories={categories}
+            />
           </span>
         </Tooltip>
         <Tooltip title="刪除">

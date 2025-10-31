@@ -9,15 +9,21 @@ import {
   Menu,
   MenuItem,
   Avatar,
+  Button,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import { Category as CategoryIcon } from "@mui/icons-material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { differenceInDays } from "date-fns";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddSubscriptionDialog } from "../components/AddSubscriptionDialog";
+import { CategoryManagementDialog } from "../components/CategoryManagementDialog";
 import { StatsCard } from "../components/StatsCard";
 import { SubscriptionCard } from "../components/SubscriptionCard";
 import {
@@ -27,8 +33,14 @@ import {
   updateSubscription,
   signOut,
 } from "../services/supabaseService";
+import {
+  fetchCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "../services/categoryService";
 import { useToast } from "../hooks/use-toast";
-import { Subscription, SubscriptionInput } from "../types/subscription";
+import { Subscription, SubscriptionInput, SubscriptionCategoryInput } from "../types/subscription";
 import { supabase } from "../services/supabaseClient";
 import { getExchangeRate } from "../services/exchangeRateService";
 
@@ -40,6 +52,8 @@ const IndexPage = () => {
   const [userDefaultCurrency, setUserDefaultCurrency] = useState<string>("TWD");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<'endDate' | 'price' | 'name'>('endDate');
   const menuOpen = Boolean(anchorEl);
 
   useEffect(() => {
@@ -104,6 +118,11 @@ const IndexPage = () => {
   } = useQuery({
     queryKey: ["subscriptions"],
     queryFn: fetchSubscriptions,
+  });
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
   });
 
   // Fetch exchange rates for all currencies used in subscriptions
@@ -187,6 +206,57 @@ const IndexPage = () => {
     },
   });
 
+  // Category mutations
+  const createCategoryMutation = useMutation({
+    mutationFn: createCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      toast({
+        title: "新增成功",
+        description: "類型已新增。",
+      });
+    },
+  });
+
+  const updateCategoryMutation = useMutation({
+    mutationFn: ({ id, updates }: { id: number; updates: Partial<SubscriptionCategoryInput> }) =>
+      updateCategory(id, updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      toast({
+        title: "更新成功",
+        description: "類型已更新。",
+      });
+    },
+  });
+
+  const deleteCategoryMutation = useMutation({
+    mutationFn: deleteCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
+      toast({
+        title: "刪除成功",
+        description: "類型已刪除。",
+      });
+    },
+  });
+
+  const handleAddCategory = async (payload: SubscriptionCategoryInput) => {
+    await createCategoryMutation.mutateAsync(payload);
+  };
+
+  const handleUpdateCategory = async (
+    id: number,
+    updates: Partial<SubscriptionCategoryInput>
+  ) => {
+    await updateCategoryMutation.mutateAsync({ id, updates });
+  };
+
+  const handleDeleteCategory = async (id: number) => {
+    await deleteCategoryMutation.mutateAsync(id);
+  };
+
   const handleAdd = async (payload: SubscriptionInput) => {
     await createMutation.mutateAsync(payload);
   };
@@ -229,6 +299,24 @@ const IndexPage = () => {
     (sub) => differenceInDays(new Date(sub.endDate), new Date()) >= 0
   ).length;
 
+  // Sort subscriptions
+  const sortedSubscriptions = [...subscriptions].sort((a, b) => {
+    switch (sortBy) {
+      case 'endDate':
+        return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
+      case 'price':
+        const rateA = exchangeRates[a.currency] || 1;
+        const rateB = exchangeRates[b.currency] || 1;
+        const priceA = a.price * rateA;
+        const priceB = b.price * rateB;
+        return priceB - priceA; // Descending
+      case 'name':
+        return a.name.localeCompare(b.name);
+      default:
+        return 0;
+    }
+  });
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff" }}>
       <Box
@@ -253,6 +341,7 @@ const IndexPage = () => {
               <AddSubscriptionDialog
                 onAdd={handleAdd}
                 disabled={createMutation.isPending}
+                categories={categories}
               />
               <IconButton
                 onClick={handleMenuOpen}
@@ -360,12 +449,47 @@ const IndexPage = () => {
               direction="row"
               alignItems="center"
               justifyContent="space-between"
-              mb={3}>
+              mb={3}
+              flexWrap="wrap"
+              gap={2}>
               <Typography variant="h6">所有訂閱</Typography>
-              <AddSubscriptionDialog
-                onAdd={handleAdd}
-                disabled={createMutation.isPending}
-              />
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Button
+                  startIcon={<CategoryIcon />}
+                  variant="outlined"
+                  onClick={() => setCategoryDialogOpen(true)}
+                  sx={{
+                    borderColor: '#000',
+                    color: '#000',
+                    '&:hover': { borderColor: '#333', backgroundColor: '#f5f5f5' },
+                  }}
+                >
+                  管理類型
+                </Button>
+                <FormControl size="small" sx={{ minWidth: 150 }}>
+                  <InputLabel>排序</InputLabel>
+                  <Select
+                    value={sortBy}
+                    label="排序"
+                    onChange={(e) => setSortBy(e.target.value as 'endDate' | 'price' | 'name')}
+                    sx={{
+                      borderColor: '#000',
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#000',
+                      },
+                    }}
+                  >
+                    <MenuItem value="endDate">到期日期</MenuItem>
+                    <MenuItem value="price">月費價格</MenuItem>
+                    <MenuItem value="name">服務名稱</MenuItem>
+                  </Select>
+                </FormControl>
+                <AddSubscriptionDialog
+                  onAdd={handleAdd}
+                  disabled={createMutation.isPending}
+                  categories={categories}
+                />
+              </Stack>
             </Stack>
 
             {subscriptions.length === 0 ? (
@@ -392,12 +516,13 @@ const IndexPage = () => {
               </Box>
             ) : (
               <Grid container spacing={2}>
-                {subscriptions.map((subscription) => (
+                {sortedSubscriptions.map((subscription) => (
                   <Grid item xs={12} md={6} lg={4} key={subscription.id}>
                     <SubscriptionCard
                       subscription={subscription}
                       onDelete={handleDelete}
                       onEdit={handleEdit}
+                      categories={categories}
                     />
                   </Grid>
                 ))}
@@ -406,6 +531,15 @@ const IndexPage = () => {
           </>
         )}
       </Container>
+
+      <CategoryManagementDialog
+        open={categoryDialogOpen}
+        onClose={() => setCategoryDialogOpen(false)}
+        categories={categories}
+        onAddCategory={handleAddCategory}
+        onUpdateCategory={handleUpdateCategory}
+        onDeleteCategory={handleDeleteCategory}
+      />
     </div>
   );
 };
