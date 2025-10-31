@@ -2,10 +2,12 @@ import {
   Autocomplete,
   Avatar,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   MenuItem,
   Stack,
   TextField,
@@ -33,6 +35,9 @@ type FormState = {
   endDate: string;
   cycle: Subscription['cycle'];
   iconUrl: string;
+  autoRenew: boolean;
+  recordPriceChange: boolean;
+  priceChangeDate: string;
 };
 
 const toFormState = (subscription: Subscription): FormState => ({
@@ -44,6 +49,9 @@ const toFormState = (subscription: Subscription): FormState => ({
   endDate: subscription.endDate,
   cycle: subscription.cycle,
   iconUrl: subscription.iconUrl ?? '',
+  autoRenew: subscription.autoRenew ?? false,
+  recordPriceChange: false,
+  priceChangeDate: new Date().toISOString().split('T')[0],
 });
 
 export const EditSubscriptionDialog = ({
@@ -134,17 +142,32 @@ export const EditSubscriptionDialog = ({
     };
 
   const handleSubmit = async () => {
+    const newPrice = Number(form.price) || 0;
+    const oldPrice = subscription.price;
+    const priceChanged = newPrice !== oldPrice;
+
     const payload: Subscription = {
       ...subscription,
       name: form.name.trim(),
       brand: form.brand.trim(),
-      price: Number(form.price) || 0,
+      price: newPrice,
       currency: form.currency,
       startDate: form.startDate,
       endDate: form.endDate,
       cycle: form.cycle,
       iconUrl: form.iconUrl ? form.iconUrl.trim() : null,
+      autoRenew: form.autoRenew,
     };
+
+    // TODO: If recordPriceChange is true and price changed, create price_changes record
+    // This will be implemented in the service layer
+    if (form.recordPriceChange && priceChanged) {
+      console.log('Price change recorded:', {
+        oldPrice,
+        newPrice,
+        effectiveDate: form.priceChangeDate,
+      });
+    }
 
     await onSave(payload);
     setOpen(false);
@@ -308,6 +331,41 @@ export const EditSubscriptionDialog = ({
               fullWidth
               placeholder="https://"
             />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={form.autoRenew}
+                  onChange={(e) => setForm({ ...form, autoRenew: e.target.checked })}
+                  sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
+                />
+              }
+              label="自動續訂"
+            />
+            {Number(form.price) !== subscription.price && (
+              <>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={form.recordPriceChange}
+                      onChange={(e) => setForm({ ...form, recordPriceChange: e.target.checked })}
+                      sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
+                    />
+                  }
+                  label="記錄價格變動"
+                />
+                {form.recordPriceChange && (
+                  <TextField
+                    label="價格生效日期"
+                    type="date"
+                    value={form.priceChangeDate}
+                    onChange={(e) => setForm({ ...form, priceChangeDate: e.target.value })}
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    helperText={`從 ${subscription.currency} ${subscription.price} 變更為 ${form.currency} ${form.price}`}
+                  />
+                )}
+              </>
+            )}
           </Stack>
         </DialogContent>
         <DialogActions>

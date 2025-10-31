@@ -2,10 +2,12 @@ import {
   Autocomplete,
   Avatar,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   MenuItem,
   Stack,
   TextField,
@@ -34,6 +36,7 @@ type FormState = {
   endDate: string;
   cycle: SubscriptionInput['cycle'];
   iconUrl: string;
+  autoRenew: boolean;
 };
 
 const createDefaultFormState = (): FormState => {
@@ -48,6 +51,7 @@ const createDefaultFormState = (): FormState => {
     endDate: calculateEndDate(today, cycle),
     cycle,
     iconUrl: '',
+    autoRenew: false,
   };
 };
 
@@ -137,6 +141,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled }: AddSubscriptionDialog
       endDate: form.endDate,
       cycle: form.cycle,
       iconUrl: form.iconUrl ? form.iconUrl.trim() : null,
+      autoRenew: form.autoRenew,
     };
 
     if (!payload.name || !payload.brand) {
@@ -303,6 +308,16 @@ export const AddSubscriptionDialog = ({ onAdd, disabled }: AddSubscriptionDialog
               onChange={handleChange('iconUrl')}
               fullWidth
               placeholder="https://"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={form.autoRenew}
+                  onChange={(e) => setForm({ ...form, autoRenew: e.target.checked })}
+                  sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
+                />
+              }
+              label="自動續訂"
             />
           </Stack>
         </DialogContent>

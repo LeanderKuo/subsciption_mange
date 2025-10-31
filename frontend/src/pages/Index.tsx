@@ -134,22 +134,22 @@ const IndexPage = () => {
   ).length;
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#f7f7fb" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff" }}>
       <Box
         component="header"
-        sx={{ borderBottom: "1px solid #e5e5ef", backgroundColor: "#6d4eff" }}>
+        sx={{ borderBottom: "2px solid #000", backgroundColor: "#000" }}>
         <Container maxWidth="lg" sx={{ py: 4 }}>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between">
             <div>
-              <Typography variant="h4" fontWeight={700} sx={{ color: "white" }}>
+              <Typography variant="h4" fontWeight={700} sx={{ color: "#fff" }}>
                 訂閱管理平台
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ mt: 1, color: "rgba(255, 255, 255, 0.8)" }}>
+                sx={{ mt: 1, color: "#ccc" }}>
                 輕鬆管理你的所有訂閱服務
               </Typography>
             </div>
