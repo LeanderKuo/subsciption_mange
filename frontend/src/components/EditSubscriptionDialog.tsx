@@ -341,30 +341,26 @@ export const EditSubscriptionDialog = ({
               }
               label="自動續訂"
             />
-            {Number(form.price) !== subscription.price && (
-              <>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={form.recordPriceChange}
-                      onChange={(e) => setForm({ ...form, recordPriceChange: e.target.checked })}
-                      sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
-                    />
-                  }
-                  label="記錄價格變動"
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={form.recordPriceChange}
+                  onChange={(e) => setForm({ ...form, recordPriceChange: e.target.checked })}
+                  sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
                 />
-                {form.recordPriceChange && (
-                  <TextField
-                    label="價格生效日期"
-                    type="date"
-                    value={form.priceChangeDate}
-                    onChange={(e) => setForm({ ...form, priceChangeDate: e.target.value })}
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    helperText={`從 ${subscription.currency} ${subscription.price} 變更為 ${form.currency} ${form.price}`}
-                  />
-                )}
-              </>
+              }
+              label="記錄價格變動"
+            />
+            {form.recordPriceChange && (
+              <TextField
+                label="價格生效日期"
+                type="date"
+                value={form.priceChangeDate}
+                onChange={(e) => setForm({ ...form, priceChangeDate: e.target.value })}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                helperText={Number(form.price) !== subscription.price ? `從 ${subscription.currency} ${subscription.price} 變更為 ${form.currency} ${form.price}` : '設定價格變動的生效日期'}
+              />
             )}
           </Stack>
         </DialogContent>

@@ -22,27 +22,43 @@ CREATE INDEX IF NOT EXISTS idx_price_changes_user
 ON price_changes(user_id);
 
 -- Enable RLS for price_changes table
-ALTER TABLE price_changes ENABLE ROW LEVEL SECURITY;
+DO $$ BEGIN
+  ALTER TABLE price_changes ENABLE ROW LEVEL SECURITY;
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;
 
--- RLS Policy: Users can only see their own price changes
-CREATE POLICY "Users can view own price changes"
-ON price_changes FOR SELECT
-USING (auth.uid() = user_id);
+-- RLS Policies with IF NOT EXISTS logic
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'price_changes' AND policyname = 'Users can view own price changes') THEN
+    CREATE POLICY "Users can view own price changes"
+    ON price_changes FOR SELECT
+    USING (auth.uid() = user_id);
+  END IF;
+END $$;
 
--- RLS Policy: Users can insert their own price changes
-CREATE POLICY "Users can insert own price changes"
-ON price_changes FOR INSERT
-WITH CHECK (auth.uid() = user_id);
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'price_changes' AND policyname = 'Users can insert own price changes') THEN
+    CREATE POLICY "Users can insert own price changes"
+    ON price_changes FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+  END IF;
+END $$;
 
--- RLS Policy: Users can update their own price changes
-CREATE POLICY "Users can update own price changes"
-ON price_changes FOR UPDATE
-USING (auth.uid() = user_id);
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'price_changes' AND policyname = 'Users can update own price changes') THEN
+    CREATE POLICY "Users can update own price changes"
+    ON price_changes FOR UPDATE
+    USING (auth.uid() = user_id);
+  END IF;
+END $$;
 
--- RLS Policy: Users can delete their own price changes
-CREATE POLICY "Users can delete own price changes"
-ON price_changes FOR DELETE
-USING (auth.uid() = user_id);
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'price_changes' AND policyname = 'Users can delete own price changes') THEN
+    CREATE POLICY "Users can delete own price changes"
+    ON price_changes FOR DELETE
+    USING (auth.uid() = user_id);
+  END IF;
+END $$;
 
 -- Add comment for documentation
 COMMENT ON COLUMN subscriptions.auto_renew IS 'Whether the subscription automatically renews';
