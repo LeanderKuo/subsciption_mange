@@ -9,7 +9,7 @@ export const SiteFooter = () => {
       component="footer"
       sx={{
         backgroundColor: '#000',
-        color: '#9ca3af',
+        color: '#fff',
         py: 4,
         borderTop: '1px solid #1f1f1f',
         mt: 6,

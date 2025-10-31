@@ -191,7 +191,7 @@ const Landing = () => {
                     mb: 4,
                     fontWeight: 400,
                     lineHeight: 1.6,
-                    color: '#d1d5db',
+                    color: '#fff',
                   }}
                 >
                   {t('landing.hero.subtitle')}
@@ -212,7 +212,7 @@ const Landing = () => {
                   >
                     {t('landing.hero.cta')}
                   </Button>
-                  <Typography variant="body2" sx={{ color: '#9ca3af' }}>
+                  <Typography variant="body2" sx={{ color: '#fff' }}>
                     {t('landing.hero.helper')}
                   </Typography>
                 </Stack>
@@ -230,7 +230,7 @@ const Landing = () => {
                 >
                   <Stack spacing={3}>
                     <Stack spacing={1}>
-                      <Typography variant="body2" sx={{ color: '#9ca3af' }}>
+                      <Typography variant="body2" sx={{ color: '#fff' }}>
                         {t('landing.hero.card.session')}
                       </Typography>
                       <Typography variant="h5" fontWeight={700}>
@@ -249,7 +249,7 @@ const Landing = () => {
                       <Typography fontWeight={600}>
                         {t('landing.hero.card.focus')}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: '#9ca3af', mt: 1.5 }}>
+                      <Typography variant="body2" sx={{ color: '#fff', mt: 1.5 }}>
                         {t('landing.hero.card.description')}
                       </Typography>
                     </Paper>
@@ -257,7 +257,7 @@ const Landing = () => {
                       <Typography fontWeight={600}>
                         {t('landing.hero.card.upNext')}
                       </Typography>
-                      <Stack spacing={0.5} sx={{ color: '#cbd5f5' }}>
+                      <Stack spacing={0.5} sx={{ color: '#fff' }}>
                         <Typography variant="body2">
                           • {t('landing.hero.card.taskOne')}
                         </Typography>
@@ -430,7 +430,7 @@ const Landing = () => {
                 variant="h6"
                 sx={{
                   fontSize: { xs: '1rem', md: '1.25rem' },
-                  color: '#d1d5db',
+                  color: '#fff',
                   maxWidth: '600px',
                 }}
               >

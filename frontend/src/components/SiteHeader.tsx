@@ -59,7 +59,7 @@ export const SiteHeader = ({
               SubMange
             </Typography>
             {subtitle ? (
-              <Typography variant="body2" sx={{ color: isDark ? '#bfbfbf' : '#4b5563' }}>
+              <Typography variant="body2" sx={{ color: isDark ? '#fff' : '#4b5563' }}>
                 {subtitle}
               </Typography>
             ) : null}
