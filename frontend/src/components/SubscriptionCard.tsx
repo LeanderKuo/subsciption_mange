@@ -53,7 +53,6 @@ export const SubscriptionCard = ({
   onDragEnd,
 }: SubscriptionCardProps) => {
   const handleDelete = () => onDelete(subscription.id);
-  const borderColor = categoryColor ?? '#e5e7eb';
   const chipColor = categoryColor ?? '#6b7280';
 
   return (
@@ -61,7 +60,7 @@ export const SubscriptionCard = ({
       elevation={0}
       sx={{
         borderRadius: 2,
-        border: `2px solid ${borderColor}`,
+        border: '2px solid #e5e7eb',
         backgroundColor: '#fff',
         opacity: isDragging ? 0.6 : 1,
         cursor: draggable ? 'grab' : 'default',
