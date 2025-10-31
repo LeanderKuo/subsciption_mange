@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 import { AddSubscriptionDialog } from "../components/AddSubscriptionDialog";
 import { StatsCard } from "../components/StatsCard";
 import { SubscriptionCard } from "../components/SubscriptionCard";
-import { LogoutButton } from "../components/LogoutButton";
 import {
   createSubscription,
   deleteSubscription,

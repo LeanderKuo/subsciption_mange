@@ -23,7 +23,6 @@ export const UserSettings = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [form, setForm] = useState({
     email: '',
     nickname: '',
@@ -31,82 +30,80 @@ export const UserSettings = () => {
   });
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const fetchProfile = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        navigate('/');
-        return;
-      }
-
-      // Fetch user profile
-      const { data, error: fetchError } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (fetchError) {
-        // Profile doesn't exist, create one
-        const { data: newProfile, error: createError } = await supabase
-          .from('user_profiles')
-          .insert({
-            id: user.id,
-            email: user.email,
-            default_currency: 'TWD',
-          })
-          .select()
-          .single();
-
-        if (createError) {
-          throw createError;
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          navigate('/');
+          return;
         }
 
-        const profileData: UserProfile = {
-          id: newProfile.id,
-          email: newProfile.email,
-          nickname: newProfile.nickname,
-          defaultCurrency: newProfile.default_currency,
-          createdAt: newProfile.created_at,
-          updatedAt: newProfile.updated_at,
-        };
+        // Fetch user profile
+        const { data, error: fetchError } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
 
-        setProfile(profileData);
-        setForm({
-          email: profileData.email || '',
-          nickname: profileData.nickname || '',
-          defaultCurrency: profileData.defaultCurrency,
-        });
-      } else {
-        const profileData: UserProfile = {
-          id: data.id,
-          email: data.email,
-          nickname: data.nickname,
-          defaultCurrency: data.default_currency,
-          createdAt: data.created_at,
-          updatedAt: data.updated_at,
-        };
+        if (fetchError) {
+          // Profile doesn't exist, create one
+          const { data: newProfile, error: createError } = await supabase
+            .from('user_profiles')
+            .insert({
+              id: user.id,
+              email: user.email,
+              default_currency: 'TWD',
+            })
+            .select()
+            .single();
 
-        setProfile(profileData);
-        setForm({
-          email: profileData.email || '',
-          nickname: profileData.nickname || '',
-          defaultCurrency: profileData.defaultCurrency,
-        });
+          if (createError) {
+            throw createError;
+          }
+
+          const profileData: UserProfile = {
+            id: newProfile.id,
+            email: newProfile.email,
+            nickname: newProfile.nickname,
+            defaultCurrency: newProfile.default_currency,
+            createdAt: newProfile.created_at,
+            updatedAt: newProfile.updated_at,
+          };
+
+          setForm({
+            email: profileData.email || '',
+            nickname: profileData.nickname || '',
+            defaultCurrency: profileData.defaultCurrency,
+          });
+        } else {
+          const profileData: UserProfile = {
+            id: data.id,
+            email: data.email,
+            nickname: data.nickname,
+            defaultCurrency: data.default_currency,
+            createdAt: data.created_at,
+            updatedAt: data.updated_at,
+          };
+
+          setForm({
+            email: profileData.email || '',
+            nickname: profileData.nickname || '',
+            defaultCurrency: profileData.defaultCurrency,
+          });
+        }
+      } catch (err) {
+        console.error('Failed to fetch profile:', err);
+        setError(err instanceof Error ? err.message : '載入個人資料失敗');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error('Failed to fetch profile:', err);
-      setError(err instanceof Error ? err.message : '載入個人資料失敗');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchProfile();
+  }, [navigate]);
 
   const handleSave = async () => {
     try {
@@ -140,7 +137,6 @@ export const UserSettings = () => {
       }
 
       setSuccess('個人資料已更新');
-      fetchProfile();
     } catch (err) {
       console.error('Failed to update profile:', err);
       setError(err instanceof Error ? err.message : '更新個人資料失敗');
