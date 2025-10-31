@@ -26,6 +26,10 @@ CREATE TABLE IF NOT EXISTS brands_cache (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Ensure fetched_date column exists even if table was created manually
+ALTER TABLE brands_cache
+ADD COLUMN IF NOT EXISTS fetched_date DATE NOT NULL DEFAULT CURRENT_DATE;
+
 -- Create index for faster queries
 CREATE INDEX IF NOT EXISTS idx_brands_cache_domain_date
 ON brands_cache(domain, fetched_date);
@@ -34,31 +38,71 @@ ON brands_cache(domain, fetched_date);
 ALTER TABLE exchange_rates ENABLE ROW LEVEL SECURITY;
 
 -- Allow all authenticated users to read exchange rates
-CREATE POLICY "Anyone can view exchange rates"
-ON exchange_rates FOR SELECT
-TO authenticated
-USING (true);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'exchange_rates'
+      AND policyname = 'Anyone can view exchange rates'
+  ) THEN
+    CREATE POLICY "Anyone can view exchange rates"
+    ON exchange_rates FOR SELECT
+    TO authenticated
+    USING (true);
+  END IF;
+END $$;
 
 -- Allow service role to insert/update exchange rates
-CREATE POLICY "Service role can manage exchange rates"
-ON exchange_rates FOR ALL
-TO service_role
-USING (true);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'exchange_rates'
+      AND policyname = 'Service role can manage exchange rates'
+  ) THEN
+    CREATE POLICY "Service role can manage exchange rates"
+    ON exchange_rates FOR ALL
+    TO service_role
+    USING (true);
+  END IF;
+END $$;
 
 -- Enable RLS for brands_cache table (public read, admin write)
 ALTER TABLE brands_cache ENABLE ROW LEVEL SECURITY;
 
 -- Allow all authenticated users to read brands cache
-CREATE POLICY "Anyone can view brands cache"
-ON brands_cache FOR SELECT
-TO authenticated
-USING (true);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'brands_cache'
+      AND policyname = 'Anyone can view brands cache'
+  ) THEN
+    CREATE POLICY "Anyone can view brands cache"
+    ON brands_cache FOR SELECT
+    TO authenticated
+    USING (true);
+  END IF;
+END $$;
 
 -- Allow service role to insert/update brands cache
-CREATE POLICY "Service role can manage brands cache"
-ON brands_cache FOR ALL
-TO service_role
-USING (true);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'brands_cache'
+      AND policyname = 'Service role can manage brands cache'
+  ) THEN
+    CREATE POLICY "Service role can manage brands cache"
+    ON brands_cache FOR ALL
+    TO service_role
+    USING (true);
+  END IF;
+END $$;
 
 -- Add comments for documentation
 COMMENT ON TABLE exchange_rates IS 'Daily cache of currency exchange rates from ExchangeRate API';
