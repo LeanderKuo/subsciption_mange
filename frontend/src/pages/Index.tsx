@@ -359,6 +359,7 @@ const IndexPage = () => {
       color: string;
       categoryId: number | null;
       subscriptions: Subscription[];
+      totalMonthly: number;
     }> = [];
 
     const orderedCategories = [...categories].sort((a, b) =>
@@ -367,26 +368,50 @@ const IndexPage = () => {
 
     orderedCategories.forEach((category) => {
       const items = nameSorted.filter((sub) => sub.categoryId === category.id);
+
+      // Calculate total monthly cost for this category
+      const categoryTotal = items.reduce((sum, sub) => {
+        const rate = exchangeRates[sub.currency] || 1;
+        const priceInUserCurrency = sub.price * rate;
+        const cycleMonths = getCycleDurationInMonths(sub.cycle);
+        const durationMonths = cycleMonths > 0 ? cycleMonths : 1;
+        const monthlyCost = priceInUserCurrency / durationMonths;
+        return sum + monthlyCost;
+      }, 0);
+
       groups.push({
         key: `category-${category.id}`,
         title: category.name,
         color: category.color,
         categoryId: category.id,
         subscriptions: items,
+        totalMonthly: categoryTotal,
       });
     });
 
     const uncategorizedItems = nameSorted.filter((sub) => !sub.categoryId);
+
+    // Calculate total monthly cost for uncategorized items
+    const uncategorizedTotal = uncategorizedItems.reduce((sum, sub) => {
+      const rate = exchangeRates[sub.currency] || 1;
+      const priceInUserCurrency = sub.price * rate;
+      const cycleMonths = getCycleDurationInMonths(sub.cycle);
+      const durationMonths = cycleMonths > 0 ? cycleMonths : 1;
+      const monthlyCost = priceInUserCurrency / durationMonths;
+      return sum + monthlyCost;
+    }, 0);
+
     groups.push({
       key: 'category-uncategorized',
       title: uncategorizedDisplay.name,
       color: uncategorizedDisplay.color,
       categoryId: null,
       subscriptions: uncategorizedItems,
+      totalMonthly: uncategorizedTotal,
     });
 
     return groups;
-  }, [categories, sortBy, sortedSubscriptions, uncategorizedDisplay]);
+  }, [categories, sortBy, sortedSubscriptions, uncategorizedDisplay, exchangeRates]);
 
   const handleDragStart = (subscriptionId: number) => {
     setDraggedSubscriptionId(subscriptionId);
@@ -585,13 +610,22 @@ const IndexPage = () => {
                       void handleDropOnCategory(group.categoryId);
                     }}
                   >
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight={700}
-                      sx={{ mb: 2, color: group.color }}
-                    >
-                      {group.title}
-                    </Typography>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                      <Typography
+                        variant="subtitle1"
+                        fontWeight={700}
+                        sx={{ color: group.color }}
+                      >
+                        {group.title}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        fontWeight={700}
+                        sx={{ color: group.color }}
+                      >
+                        {t("dashboard.totalMonthly")}: {userDefaultCurrency} {Math.round(group.totalMonthly)}
+                      </Typography>
+                    </Stack>
                     {group.subscriptions.length === 0 ? (
                       <Box
                         sx={{
