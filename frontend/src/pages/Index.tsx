@@ -17,7 +17,7 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { Category as CategoryIcon } from "@mui/icons-material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { differenceInDays } from "date-fns";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddSubscriptionDialog } from "../components/AddSubscriptionDialog";
 import { CategoryManagementDialog } from "../components/CategoryManagementDialog";
@@ -47,15 +47,282 @@ import SiteFooter from "../components/SiteFooter";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import AccountMenu from "../components/AccountMenu";
 
+type SortOption = "endDate" | "price" | "name";
+
+type CategoryDisplay = {
+  name: string;
+  color: string;
+};
+
+type CategoryGroup = {
+  key: string;
+  title: string;
+  color: string;
+  categoryId: number | null;
+  subscriptions: Subscription[];
+  totalMonthly: number;
+};
+
+const DEFAULT_CURRENCY = "TWD";
+
+const resolveRate = (
+  currency: string,
+  rates: Record<string, number>,
+  targetCurrency: string
+) => {
+  if (currency === targetCurrency) {
+    return 1;
+  }
+  return rates[currency];
+};
+
+const convertToTargetCurrency = (
+  subscription: Subscription,
+  rates: Record<string, number>,
+  targetCurrency: string
+) => {
+  const rate = resolveRate(subscription.currency, rates, targetCurrency) ?? 1;
+  return subscription.price * rate;
+};
+
+const computeMonthlyCost = (
+  subscription: Subscription,
+  rates: Record<string, number>,
+  targetCurrency: string
+): number | null => {
+  const rate = resolveRate(subscription.currency, rates, targetCurrency);
+  if (!rate && subscription.currency !== targetCurrency) {
+    return null;
+  }
+
+  const effectiveRate = rate ?? 1;
+  const priceInTarget = subscription.price * effectiveRate;
+  const durationMonths = Math.max(1, getCycleDurationInMonths(subscription.cycle));
+  return priceInTarget / durationMonths;
+};
+
+const computeTotalMonthly = (
+  subscriptions: Subscription[],
+  rates: Record<string, number>,
+  targetCurrency: string
+) =>
+  subscriptions.reduce((sum, subscription) => {
+    const monthly = computeMonthlyCost(subscription, rates, targetCurrency);
+    return monthly === null ? sum : sum + monthly;
+  }, 0);
+
+const countActiveSubscriptions = (subscriptions: Subscription[]) => {
+  const today = new Date();
+  return subscriptions.reduce((count, subscription) => {
+    const remainingDays = differenceInDays(new Date(subscription.endDate), today);
+    return remainingDays >= 0 ? count + 1 : count;
+  }, 0);
+};
+
+const sortSubscriptionsBy = (
+  subscriptions: Subscription[],
+  sortBy: SortOption,
+  rates: Record<string, number>,
+  targetCurrency: string
+) => {
+  const list = [...subscriptions];
+  switch (sortBy) {
+    case "endDate":
+      return list.sort(
+        (a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
+      );
+    case "price":
+      return list.sort((a, b) => {
+        const priceA = convertToTargetCurrency(a, rates, targetCurrency);
+        const priceB = convertToTargetCurrency(b, rates, targetCurrency);
+        return priceB - priceA;
+      });
+    case "name":
+      return list.sort((a, b) => a.name.localeCompare(b.name));
+    default:
+      return list;
+  }
+};
+
+const buildCategoryMap = (categories: SubscriptionCategory[]) => {
+  const map = new Map<number, SubscriptionCategory>();
+  categories.forEach((category) => {
+    map.set(category.id, category);
+  });
+  return map;
+};
+
+const resolveCategoryDisplay = (
+  subscription: Subscription,
+  categoryMap: Map<number, SubscriptionCategory>,
+  fallback: CategoryDisplay
+): CategoryDisplay => {
+  if (subscription.categoryId) {
+    const category = categoryMap.get(subscription.categoryId);
+    if (category) {
+      return {
+        name: category.name,
+        color: category.color,
+      };
+    }
+  }
+  return fallback;
+};
+
+const buildGroupedSubscriptions = (
+  subscriptions: Subscription[],
+  categories: SubscriptionCategory[],
+  rates: Record<string, number>,
+  targetCurrency: string,
+  uncategorizedDisplay: CategoryDisplay
+): CategoryGroup[] => {
+  const groups: CategoryGroup[] = [];
+  const orderedCategories = [...categories].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
+  orderedCategories.forEach((category) => {
+    const items = subscriptions.filter((sub) => sub.categoryId === category.id);
+    const categoryTotal = items.reduce((sum, subscription) => {
+      const monthly = computeMonthlyCost(subscription, rates, targetCurrency);
+      return monthly === null ? sum : sum + monthly;
+    }, 0);
+
+    groups.push({
+      key: `category-${category.id}`,
+      title: category.name,
+      color: category.color,
+      categoryId: category.id,
+      subscriptions: items,
+      totalMonthly: categoryTotal,
+    });
+  });
+
+  const uncategorizedItems = subscriptions.filter((sub) => !sub.categoryId);
+  const uncategorizedTotal = uncategorizedItems.reduce((sum, subscription) => {
+    const monthly = computeMonthlyCost(subscription, rates, targetCurrency);
+    return monthly === null ? sum : sum + monthly;
+  }, 0);
+
+  groups.push({
+    key: "category-uncategorized",
+    title: uncategorizedDisplay.name,
+    color: uncategorizedDisplay.color,
+    categoryId: null,
+    subscriptions: uncategorizedItems,
+    totalMonthly: uncategorizedTotal,
+  });
+
+  return groups;
+};
+
+const useUserProfileSnapshot = () => {
+  const [state, setState] = useState({
+    email: "",
+    defaultCurrency: DEFAULT_CURRENCY,
+  });
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchProfile = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user || !active) {
+          return;
+        }
+
+        const email = user.email ?? "";
+        let defaultCurrency = DEFAULT_CURRENCY;
+
+        const { data } = await supabase
+          .from("user_profiles")
+          .select("default_currency")
+          .eq("id", user.id)
+          .single();
+
+        if (data?.default_currency) {
+          defaultCurrency = data.default_currency;
+        }
+
+        if (active) {
+          setState({ email, defaultCurrency });
+        }
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+      }
+    };
+
+    fetchProfile();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  return state;
+};
+
+const useExchangeRates = (
+  subscriptions: Subscription[],
+  targetCurrency: string
+) => {
+  const [rates, setRates] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    if (!subscriptions.length || !targetCurrency) {
+      setRates({});
+      return;
+    }
+
+    let cancelled = false;
+    const loadRates = async () => {
+      const currencies = Array.from(
+        new Set(subscriptions.map((sub) => sub.currency))
+      );
+
+      const tasks = currencies.map(async (currency) => {
+        if (currency === targetCurrency) {
+          return [currency, 1] as const;
+        }
+        const rate = await getExchangeRate(currency, targetCurrency);
+        return [currency, rate] as const;
+      });
+
+      try {
+        const results = await Promise.all(tasks);
+        if (!cancelled) {
+          const next: Record<string, number> = {};
+          results.forEach(([currency, rate]) => {
+            next[currency] = rate;
+          });
+          setRates(next);
+        }
+      } catch (error) {
+        console.error("Failed to fetch exchange rates:", error);
+      }
+    };
+
+    loadRates();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [subscriptions, targetCurrency]);
+
+  return rates;
+};
+
 const IndexPage = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState<string>("");
-  const [userDefaultCurrency, setUserDefaultCurrency] = useState<string>("TWD");
-  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
+  const { email: userEmail, defaultCurrency: userDefaultCurrency } =
+    useUserProfileSnapshot();
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
-  const [sortBy, setSortBy] = useState<'endDate' | 'price' | 'name'>('endDate');
+  const [sortBy, setSortBy] = useState<SortOption>("endDate");
   const [draggedSubscriptionId, setDraggedSubscriptionId] = useState<number | null>(null);
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
   const { t, locale, setLocale } = useLocale();
@@ -94,28 +361,6 @@ const IndexPage = () => {
     </>
   );
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUserEmail(user.email || "");
-
-        // Fetch user's default currency from profile
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('default_currency')
-          .eq('id', user.id)
-          .single();
-
-        if (profile?.default_currency) {
-          setUserDefaultCurrency(profile.default_currency);
-          console.log('User default currency:', profile.default_currency);
-        }
-      }
-    };
-    fetchUserProfile();
-  }, []);
-
   const {
     data: subscriptions = [],
     isLoading,
@@ -130,6 +375,8 @@ const IndexPage = () => {
     queryFn: fetchCategories,
   });
 
+  const exchangeRates = useExchangeRates(subscriptions, userDefaultCurrency);
+
   const uncategorizedDisplay = useMemo(
     () => ({
       name: t("categories.uncategorized"),
@@ -137,32 +384,6 @@ const IndexPage = () => {
     }),
     [t]
   );
-
-  // Fetch exchange rates for all currencies used in subscriptions
-  useEffect(() => {
-    const fetchExchangeRates = async () => {
-      if (subscriptions.length === 0 || !userDefaultCurrency) return;
-
-      const currencies = Array.from(new Set(subscriptions.map(sub => sub.currency)));
-      console.log('Fetching exchange rates for currencies:', currencies);
-      console.log('Target currency (user default):', userDefaultCurrency);
-      const rates: Record<string, number> = {};
-
-      for (const currency of currencies) {
-        if (currency === userDefaultCurrency) {
-          rates[currency] = 1;
-        } else {
-          const rate = await getExchangeRate(currency, userDefaultCurrency);
-          rates[currency] = rate;
-          console.log(`Fetched rate for ${currency} -> ${userDefaultCurrency}: ${rate}`);
-        }
-      }
-
-      setExchangeRates(rates);
-    };
-
-    fetchExchangeRates();
-  }, [subscriptions, userDefaultCurrency]);
 
   const createMutation = useMutation({
     mutationFn: createSubscription,
@@ -281,137 +502,58 @@ const IndexPage = () => {
     await deleteMutation.mutateAsync(id);
   };
 
-  const totalMonthly = subscriptions.reduce((sum, sub) => {
-    // Get exchange rate, fallback to 1 if not yet loaded
-    const rate = exchangeRates[sub.currency];
+  const totalMonthly = useMemo(
+    () => computeTotalMonthly(subscriptions, exchangeRates, userDefaultCurrency),
+    [subscriptions, exchangeRates, userDefaultCurrency]
+  );
 
-    // If rate is undefined and currency is not user's default, skip this subscription for now
-    if (!rate && sub.currency !== userDefaultCurrency) {
-      console.log(`Exchange rate not loaded yet for ${sub.currency}`);
-      return sum;
-    }
+  const activeSubscriptions = useMemo(
+    () => countActiveSubscriptions(subscriptions),
+    [subscriptions]
+  );
 
-    const effectiveRate = rate || 1;
-    const priceInUserCurrency = sub.price * effectiveRate;
+  const sortedSubscriptions = useMemo(
+    () =>
+      sortSubscriptionsBy(
+        subscriptions,
+        sortBy,
+        exchangeRates,
+        userDefaultCurrency
+      ),
+    [subscriptions, sortBy, exchangeRates, userDefaultCurrency]
+  );
 
-    // Convert to monthly cost based on cycle
-    const cycleMonths = getCycleDurationInMonths(sub.cycle);
-    const durationMonths = cycleMonths > 0 ? cycleMonths : 1;
-    const monthlyCost = priceInUserCurrency / durationMonths;
+  const categoryMap = useMemo(
+    () => buildCategoryMap(categories),
+    [categories]
+  );
 
-    console.log(`Subscription: ${sub.name}, Price: ${sub.price} ${sub.currency}, Rate: ${effectiveRate}, Monthly: ${monthlyCost} ${userDefaultCurrency}`);
-
-    return sum + monthlyCost;
-  }, 0);
-
-  const activeSubscriptions = subscriptions.filter(
-    (sub) => differenceInDays(new Date(sub.endDate), new Date()) >= 0
-  ).length;
-
-  // Sort subscriptions
-  const sortedSubscriptions = [...subscriptions].sort((a, b) => {
-    switch (sortBy) {
-      case 'endDate':
-        return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
-      case 'price':
-        const rateA = exchangeRates[a.currency] || 1;
-        const rateB = exchangeRates[b.currency] || 1;
-        const priceA = a.price * rateA;
-        const priceB = b.price * rateB;
-        return priceB - priceA; // Descending
-      case 'name':
-        return a.name.localeCompare(b.name);
-      default:
-        return 0;
-    }
-  });
-
-  const categoryMap = useMemo(() => {
-    const map = new Map<number, SubscriptionCategory>();
-    categories.forEach((category) => {
-      map.set(category.id, category);
-    });
-    return map;
-  }, [categories]);
-
-  const getCategoryDisplay = (subscription: Subscription) => {
-    if (subscription.categoryId) {
-      const category = categoryMap.get(subscription.categoryId);
-      if (category) {
-        return {
-          name: category.name,
-          color: category.color,
-        };
-      }
-    }
-    return uncategorizedDisplay;
-  };
+  const getCategoryDisplay = useCallback(
+    (subscription: Subscription) =>
+      resolveCategoryDisplay(subscription, categoryMap, uncategorizedDisplay),
+    [categoryMap, uncategorizedDisplay]
+  );
 
   const groupedSubscriptions = useMemo(() => {
-    if (sortBy !== 'name') {
+    if (sortBy !== "name") {
       return [];
     }
 
-    const nameSorted = [...sortedSubscriptions];
-    const groups: Array<{
-      key: string;
-      title: string;
-      color: string;
-      categoryId: number | null;
-      subscriptions: Subscription[];
-      totalMonthly: number;
-    }> = [];
-
-    const orderedCategories = [...categories].sort((a, b) =>
-      a.name.localeCompare(b.name)
+    return buildGroupedSubscriptions(
+      sortedSubscriptions,
+      categories,
+      exchangeRates,
+      userDefaultCurrency,
+      uncategorizedDisplay
     );
-
-    orderedCategories.forEach((category) => {
-      const items = nameSorted.filter((sub) => sub.categoryId === category.id);
-
-      // Calculate total monthly cost for this category
-      const categoryTotal = items.reduce((sum, sub) => {
-        const rate = exchangeRates[sub.currency] || 1;
-        const priceInUserCurrency = sub.price * rate;
-        const cycleMonths = getCycleDurationInMonths(sub.cycle);
-        const durationMonths = cycleMonths > 0 ? cycleMonths : 1;
-        const monthlyCost = priceInUserCurrency / durationMonths;
-        return sum + monthlyCost;
-      }, 0);
-
-      groups.push({
-        key: `category-${category.id}`,
-        title: category.name,
-        color: category.color,
-        categoryId: category.id,
-        subscriptions: items,
-        totalMonthly: categoryTotal,
-      });
-    });
-
-    const uncategorizedItems = nameSorted.filter((sub) => !sub.categoryId);
-
-    // Calculate total monthly cost for uncategorized items
-    const uncategorizedTotal = uncategorizedItems.reduce((sum, sub) => {
-      const rate = exchangeRates[sub.currency] || 1;
-      const priceInUserCurrency = sub.price * rate;
-      const cycleMonths = getCycleDurationInMonths(sub.cycle);
-      const durationMonths = cycleMonths > 0 ? cycleMonths : 1;
-      const monthlyCost = priceInUserCurrency / durationMonths;
-      return sum + monthlyCost;
-    }, 0);
-
-    groups.push({
-      key: 'category-uncategorized',
-      title: uncategorizedDisplay.name,
-      color: uncategorizedDisplay.color,
-      categoryId: null,
-      subscriptions: uncategorizedItems,
-      totalMonthly: uncategorizedTotal,
-    });
-
-    return groups;
-  }, [categories, sortBy, sortedSubscriptions, uncategorizedDisplay, exchangeRates]);
+  }, [
+    sortBy,
+    sortedSubscriptions,
+    categories,
+    exchangeRates,
+    userDefaultCurrency,
+    uncategorizedDisplay,
+  ]);
 
   const handleDragStart = (subscriptionId: number) => {
     setDraggedSubscriptionId(subscriptionId);
@@ -426,19 +568,27 @@ const IndexPage = () => {
     if (draggedSubscriptionId === null) {
       return;
     }
-    const subscription = subscriptions.find((sub) => sub.id === draggedSubscriptionId);
+
+    const subscription = subscriptions.find(
+      (sub) => sub.id === draggedSubscriptionId
+    );
+
     setActiveDropTarget(null);
     setDraggedSubscriptionId(null);
+
     if (!subscription) {
       return;
     }
+
+    const nextCategory = categoryId ?? null;
     const currentCategory = subscription.categoryId ?? null;
-    if (currentCategory === (categoryId ?? null)) {
+    if (currentCategory === nextCategory) {
       return;
     }
+
     await handleEdit({
       ...subscription,
-      categoryId,
+      categoryId: nextCategory,
     });
   };
 

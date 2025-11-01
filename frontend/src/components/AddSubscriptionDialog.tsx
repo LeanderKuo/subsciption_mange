@@ -28,16 +28,18 @@ import {
   BillingCycle,
   PresetBillingCycle,
 } from '../types/subscription';
-import {
-  calculateEndDate,
-  getDefaultCycle,
-  buildCustomCycle,
-  isCustomCycle,
-  isPresetCycle,
-  parseCustomCycle,
-} from '../utils/subscriptionDates';
+import { getDefaultCycle, buildCustomCycle, isPresetCycle } from '../utils/subscriptionDates';
 import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill';
 import { useLocale } from '../i18n/LocaleProvider';
+import {
+  createBlankSubscriptionFormState,
+  createCycleAwareUpdater,
+  deriveCycleState,
+  resolveCycleFromState,
+  sanitizeCustomValue,
+  type CycleMode,
+  type SubscriptionFormStateBase,
+} from '../utils/subscriptionFormState';
 
 interface AddSubscriptionDialogProps {
   onAdd: (payload: SubscriptionInput) => Promise<void> | void;
@@ -45,73 +47,16 @@ interface AddSubscriptionDialogProps {
   categories?: SubscriptionCategory[];
 }
 
-type CycleMode = 'preset' | 'custom';
-
-const defaultCustomUnit: CycleUnit = 'months';
-
-const deriveCycleState = (
-  cycle: BillingCycle
-): { cycleMode: CycleMode; customUnit: CycleUnit; customValue: string } => {
-  if (isCustomCycle(cycle)) {
-    const { unit, amount } = parseCustomCycle(cycle);
-    return {
-      cycleMode: 'custom',
-      customUnit: unit,
-      customValue: String(amount),
-    };
-  }
-
-  return {
-    cycleMode: 'preset',
-    customUnit: defaultCustomUnit,
-    customValue: '1',
-  };
-};
-
-type FormState = {
-  name: string;
-  brand: string;
-  price: string;
-  currency: string;
-  startDate: string;
-  endDate: string;
-  cycle: SubscriptionInput['cycle'];
-  cycleMode: CycleMode;
-  customUnit: CycleUnit;
-  customValue: string;
-  iconUrl: string;
-  autoRenew: boolean;
-  categoryId: number | null;
-};
-
-const createDefaultFormState = (): FormState => {
-  const today = new Date().toISOString().split('T')[0];
-  const cycle = getDefaultCycle();
-  const cycleState = deriveCycleState(cycle);
-  return {
-    name: '',
-    brand: '',
-    price: '',
-    currency: 'TWD',
-    startDate: today,
-    endDate: calculateEndDate(today, cycle),
-    cycle,
-    cycleMode: cycleState.cycleMode,
-    customUnit: cycleState.customUnit,
-    customValue: cycleState.customValue,
-    iconUrl: '',
-    autoRenew: false,
-    categoryId: null,
-  };
-};
+type FormState = SubscriptionFormStateBase;
 
 export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddSubscriptionDialogProps) => {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<FormState>(() => createDefaultFormState());
+  const [form, setForm] = useState<FormState>(createBlankSubscriptionFormState);
   const autoFilledIconRef = useRef<string | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
+  const applyCycleUpdate = createCycleAwareUpdater<FormState>(setForm);
 
   const handleBrandInputChange = (
     _event: SyntheticEvent<Element, Event>,
@@ -163,37 +108,23 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
       const value = event.target.value;
 
       if (field === 'startDate') {
-        setForm((prev) => {
-          const next: FormState = {
-            ...prev,
-            startDate: value,
-          };
-          const autoEndDate = calculateEndDate(value, next.cycle);
-          if (autoEndDate) {
-            next.endDate = autoEndDate;
-          }
-          return next;
-        });
+        applyCycleUpdate((prev) => ({
+          ...prev,
+          startDate: value,
+        }));
         return;
       }
 
       if (field === 'cycle') {
         const cycleValue = (value as BillingCycle) || getDefaultCycle();
         const cycleState = deriveCycleState(cycleValue);
-        setForm((prev) => {
-          const next: FormState = {
-            ...prev,
-            cycle: cycleValue,
-            cycleMode: cycleState.cycleMode,
-            customUnit: cycleState.customUnit,
-            customValue: cycleState.customValue,
-          };
-          const autoEndDate = calculateEndDate(next.startDate, cycleValue);
-          if (autoEndDate) {
-            next.endDate = autoEndDate;
-          }
-          return next;
-        });
+        applyCycleUpdate((prev) => ({
+          ...prev,
+          cycle: cycleValue,
+          cycleMode: cycleState.cycleMode,
+          customUnit: cycleState.customUnit,
+          customValue: cycleState.customValue,
+        }));
         return;
       }
 
@@ -203,32 +134,32 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
       }));
     };
 
-  const applyCycleUpdate = (updater: (prev: FormState) => FormState) => {
-    setForm((prev) => {
-      const next = updater(prev);
-      const autoEndDate = calculateEndDate(next.startDate, next.cycle);
-      if (autoEndDate) {
-        next.endDate = autoEndDate;
-      }
-      return next;
-    });
-  };
-
   const handleCycleModeChange = (_event: ChangeEvent<HTMLInputElement>, value: string) => {
     if (value !== 'preset' && value !== 'custom') {
       return;
     }
 
+    const mode = value as CycleMode;
+
     applyCycleUpdate((prev) => {
-      const next: FormState = { ...prev, cycleMode: value as CycleMode };
-      if (value === 'preset') {
+      if (mode === 'preset') {
         const preset = isPresetCycle(prev.cycle) ? prev.cycle : getDefaultCycle();
-        next.cycle = preset;
-      } else {
-        const amount = Number(prev.customValue) || 1;
-        next.cycle = buildCustomCycle(prev.customUnit, amount);
+        const presetState = deriveCycleState(preset);
+        return {
+          ...prev,
+          cycleMode: mode,
+          cycle: preset,
+          customUnit: presetState.customUnit,
+          customValue: presetState.customValue,
+        };
       }
-      return next;
+
+      const amount = Number(prev.customValue) || 1;
+      return {
+        ...prev,
+        cycleMode: mode,
+        cycle: buildCustomCycle(prev.customUnit, amount),
+      };
     });
   };
 
@@ -242,13 +173,12 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
   };
 
   const handleCustomValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const parsed = Number(event.target.value);
-    const amount = Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : 1;
+    const amount = sanitizeCustomValue(event.target.value);
     applyCycleUpdate((prev) => ({
       ...prev,
       cycleMode: 'custom',
-      customValue: String(amount),
-      cycle: buildCustomCycle(prev.customUnit, amount),
+      customValue: amount,
+      cycle: buildCustomCycle(prev.customUnit, Number(amount)),
     }));
   };
 
@@ -266,10 +196,12 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
   };
 
   const handleSubmit = async () => {
-    const resolvedCycle =
-      form.cycleMode === 'custom'
-        ? buildCustomCycle(form.customUnit, Number(form.customValue) || 1)
-        : (isPresetCycle(form.cycle) ? form.cycle : getDefaultCycle());
+    const resolvedCycle = resolveCycleFromState(
+      form.cycleMode,
+      form.cycle,
+      form.customUnit,
+      form.customValue
+    );
 
     const payload: SubscriptionInput = {
       name: form.name.trim(),
@@ -291,7 +223,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
     await onAdd({
       ...payload,
     });
-    setForm(createDefaultFormState());
+    setForm(createBlankSubscriptionFormState());
     autoFilledIconRef.current = null;
     setSelectedBrand(null);
     brandAutofill.reset();
@@ -306,7 +238,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
   };
   const handleClose = () => {
     setOpen(false);
-    setForm(createDefaultFormState());
+    setForm(createBlankSubscriptionFormState());
     autoFilledIconRef.current = null;
     setSelectedBrand(null);
     brandAutofill.reset();

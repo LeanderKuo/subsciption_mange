@@ -26,8 +26,6 @@ export const useBrandAutofill = (brandValue: string): BrandAutofillState => {
   const [error, setError] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<BrandAutofillResult[]>([]);
   const lastResolvedRef = useRef<string>('');
-  const timeoutRef = useRef<number | null>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
   const { t } = useLocale();
 
   const reset = useCallback(() => {
@@ -37,12 +35,14 @@ export const useBrandAutofill = (brandValue: string): BrandAutofillState => {
   }, []);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      reset();
+      return;
+    }
 
     const trimmed = brandValue.trim();
     if (!trimmed) {
       reset();
-      abortControllerRef.current?.abort();
       return;
     }
 
@@ -50,89 +50,88 @@ export const useBrandAutofill = (brandValue: string): BrandAutofillState => {
       return;
     }
 
-    if (timeoutRef.current !== null) {
-      window.clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-
-    abortControllerRef.current?.abort();
+    let isActive = true;
     const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    const scheduleId = window.setTimeout(() => {
+    const timeoutId = window.setTimeout(async () => {
       setIsLoading(true);
       setError(null);
 
-      searchBrandfetch(trimmed, SEARCH_LIMIT, controller.signal)
-        .then((results) => {
-          if (!results || results.length === 0) {
-            lastResolvedRef.current = trimmed;
-            setSuggestions([]);
-            setError(t('brandAutofill.error.noResults'));
+      try {
+        const results = await searchBrandfetch(
+          trimmed,
+          SEARCH_LIMIT,
+          controller.signal
+        );
+
+        if (!isActive) {
+          return;
+        }
+
+        if (!results || results.length === 0) {
+          lastResolvedRef.current = trimmed;
+          setSuggestions([]);
+          setError(t('brandAutofill.error.noResults'));
+          return;
+        }
+
+        lastResolvedRef.current = trimmed;
+        setSuggestions(
+          results.map((result) => ({
+            ...result,
+            query: trimmed,
+          }))
+        );
+      } catch (err: unknown) {
+        if (!isActive) {
+          return;
+        }
+
+        if (err instanceof Error) {
+          if (err.name === 'AbortError') {
             return;
           }
 
-          lastResolvedRef.current = trimmed;
-          setSuggestions(
-            results.map((result) => ({
-              ...result,
-              query: trimmed,
-            }))
-          );
-        })
-        .catch((err: unknown) => {
-          if (err instanceof Error) {
-            if (err.name === 'AbortError') {
-              return;
-            }
-            if ((err as Error & { code?: number }).code === 403) {
-              const detail = (err as Error & { detail?: string }).detail;
-              console.warn('Brandfetch clientId rejected the request (403).', detail);
-              setError(detail ?? t('brandAutofill.error.invalidClient'));
-              lastResolvedRef.current = trimmed;
-              setSuggestions([]);
-              return;
-            }
-            if ((err as Error & { code?: number }).code === 401) {
-              const detail = (err as Error & { detail?: string }).detail;
-              console.warn('Brandfetch rejected the request (401).', detail);
-              setError(detail ?? t('brandAutofill.error.authFailed'));
-              lastResolvedRef.current = trimmed;
-              setSuggestions([]);
-              return;
-            }
+          const errorWithCode = err as Error & { code?: number; detail?: string };
+          if (errorWithCode.code === 403) {
+            console.warn(
+              'Brandfetch clientId rejected the request (403).',
+              errorWithCode.detail
+            );
+            setError(errorWithCode.detail ?? t('brandAutofill.error.invalidClient'));
+            lastResolvedRef.current = trimmed;
+            setSuggestions([]);
+            return;
           }
-          console.error('Brand suggestions lookup failed', err);
-          setError(t('brandAutofill.error.generic'));
-          lastResolvedRef.current = trimmed;
-          setSuggestions([]);
-        })
-        .finally(() => {
+
+          if (errorWithCode.code === 401) {
+            console.warn(
+              'Brandfetch rejected the request (401).',
+              errorWithCode.detail
+            );
+            setError(errorWithCode.detail ?? t('brandAutofill.error.authFailed'));
+            lastResolvedRef.current = trimmed;
+            setSuggestions([]);
+            return;
+          }
+        }
+
+        console.error('Brand suggestions lookup failed', err);
+        setError(t('brandAutofill.error.generic'));
+        lastResolvedRef.current = trimmed;
+        setSuggestions([]);
+      } finally {
+        if (isActive) {
           setIsLoading(false);
-        });
+        }
+      }
     }, 500);
 
-    timeoutRef.current = scheduleId;
-
     return () => {
-      window.clearTimeout(scheduleId);
-      if (timeoutRef.current === scheduleId) {
-        timeoutRef.current = null;
-      }
+      isActive = false;
+      window.clearTimeout(timeoutId);
       controller.abort();
     };
   }, [brandValue, enabled, reset, t]);
-
-  useEffect(
-    () => () => {
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      abortControllerRef.current?.abort();
-    },
-    []
-  );
 
   return {
     enabled,

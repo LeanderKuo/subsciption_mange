@@ -13,6 +13,12 @@ const presetCycleMap: Record<PresetBillingCycle, { unit: CycleUnit; amount: numb
   '1year': { unit: 'years', amount: 1 },
 };
 
+const presetDurationMap: Record<PresetBillingCycle, { months: number; days: number }> = {
+  '30days': { months: 1, days: 30 },
+  '6months': { months: 6, days: 182 },
+  '1year': { months: 12, days: 365 },
+};
+
 const sanitizeAmount = (amount: number): number => {
   if (!Number.isFinite(amount) || amount <= 0) {
     return 1;
@@ -71,47 +77,43 @@ export const calculateEndDate = (startDate: string, cycle: BillingCycle): string
 
 export const getDefaultCycle = (): PresetBillingCycle => '30days';
 
+const toMonths = (unit: CycleUnit, amount: number): number => {
+  switch (unit) {
+    case 'days':
+      return amount / 30;
+    case 'years':
+      return amount * 12;
+    default:
+      return amount;
+  }
+};
+
+const toDays = (unit: CycleUnit, amount: number): number => {
+  switch (unit) {
+    case 'months':
+      return amount * 30;
+    case 'years':
+      return amount * 365;
+    default:
+      return amount;
+  }
+};
+
 export const getCycleDurationInMonths = (cycle: BillingCycle): number => {
   if (isPresetCycle(cycle)) {
-    switch (cycle) {
-      case '6months':
-        return 6;
-      case '1year':
-        return 12;
-      default:
-        return 1;
-    }
+    return presetDurationMap[cycle]?.months ?? 1;
   }
 
   const { unit, amount } = parseCustomCycle(cycle);
-  if (unit === 'days') {
-    return amount / 30;
-  }
-  if (unit === 'years') {
-    return amount * 12;
-  }
-  return amount;
+  return toMonths(unit, amount);
 };
 
 export const getCycleDurationInDays = (cycle: BillingCycle): number => {
   if (isPresetCycle(cycle)) {
-    switch (cycle) {
-      case '6months':
-        return 182; // approximate half-year
-      case '1year':
-        return 365;
-      default:
-        return 30;
-    }
+    return presetDurationMap[cycle]?.days ?? 30;
   }
   const { unit, amount } = parseCustomCycle(cycle);
-  if (unit === 'months') {
-    return amount * 30;
-  }
-  if (unit === 'years') {
-    return amount * 365;
-  }
-  return amount;
+  return toDays(unit, amount);
 };
 
 export const createDefaultSubscriptionInput = (): SubscriptionInput => {
