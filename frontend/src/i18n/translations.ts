@@ -41,6 +41,11 @@ export const translations: TranslationMap = {
     'landing.nav.faq': 'FAQ',
     'landing.nav.signIn': 'Sign in',
     'landing.nav.join': 'Join for free',
+    'landing.meta.title': 'SubMange – Subscription management software for recurring payments',
+    'landing.meta.description':
+      'Track every subscription, forecast spending, and stay ahead of renewals with SubMange\'s smart subscription management dashboard.',
+    'landing.meta.keywords':
+      'subscription manager,subscription tracking software,recurring billing management,saas spend control,renewal reminders',
 
     /**
      * Dashboard Cards
@@ -220,39 +225,39 @@ export const translations: TranslationMap = {
     /**
      * Landing page
      */
-    'landing.hero.title.line1': 'Take control of your',
-    'landing.hero.title.line2': 'subscription spending',
+    'landing.hero.title.line1': 'Subscription management software',
+    'landing.hero.title.line2': 'built to stop unwanted renewals',
     'landing.hero.subtitle':
-      'Stay focused on growth while we keep every subscription, renewal date, and price change in sync.',
+      'SubMange centralizes every recurring payment so you can monitor spend, forecast annual costs, and catch price hikes before they go live.',
     'landing.hero.helper': 'No credit card required. Cancel anytime.',
     'landing.hero.cta': 'Join for free',
     'landing.hero.card.title': 'Today at a glance',
     'landing.hero.card.session': 'Active session',
-    'landing.hero.card.focus': 'Review upcoming renewals',
+    'landing.hero.card.focus': 'Priority focus today',
     'landing.hero.card.description':
-      'Netflix renews in 3 days. Gemini renews in 1 week. Prepare your monthly budget.',
+      'Review renewal risk, multi-currency totals, and insights designed to keep your subscription budget predictable.',
     'landing.hero.card.upNext': 'Up next',
-    'landing.hero.card.taskOne': 'Confirm ChatGPT plan usage',
-    'landing.hero.card.taskTwo': 'Adjust Spotify family seats',
+    'landing.hero.card.taskOne': 'Audit AI tool usage before renewal',
+    'landing.hero.card.taskTwo': 'Compare music streaming plans for savings',
     'landing.pricing.free': 'Free',
     'landing.pricing.freeDescription': 'Full feature set, free forever',
     'landing.pricing.features.unlimited': 'Unlimited subscription tracking',
     'landing.pricing.features.priceChange': 'Price change management',
     'landing.pricing.features.autoRenew': 'Auto renew tracking',
     'landing.pricing.features.multiCurrency': 'Multi-currency support',
-    'landing.features.title': 'Why choose us',
-    'landing.features.track.title': 'Smart expense tracking',
+    'landing.features.title': 'Why teams choose SubMange',
+    'landing.features.track.title': 'Complete subscription visibility',
     'landing.features.track.description':
-      'Automatically calculate monthly and yearly spending to stay on top of every subscription.',
-    'landing.features.price.title': 'Price change management',
+      'Sync streaming, SaaS, utilities, and memberships to see monthly and annual totals in one dashboard.',
+    'landing.features.price.title': 'Automatic price change alerts',
     'landing.features.price.description':
-      'Track subscription price changes and set effective dates for accurate totals.',
-    'landing.features.renew.title': 'Auto-renew management',
+      'Log historical pricing, track tax adjustments, and receive prompts when a provider increases rates.',
+    'landing.features.renew.title': 'Renewal reminders with context',
     'landing.features.renew.description':
-      'Flag auto-renewing subscriptions so you never miss a renewal date.',
-    'landing.features.security.title': 'Secure by design',
+      'Set renewal cadences, assign owners, and stay ahead of cancellations or plan updates.',
+    'landing.features.security.title': 'Enterprise-grade security',
     'landing.features.security.description':
-      'Enterprise-grade security powered by Supabase with encrypted storage.',
+      'Supabase-backed authentication, row-level security, and encryption keep customer data private.',
     'landing.faq.title': 'Frequently asked questions',
     'landing.faq.free.question': 'Is this service free?',
     'landing.faq.free.answer': 'Yes! We offer a completely free subscription manager.',
@@ -264,9 +269,9 @@ export const translations: TranslationMap = {
     'landing.faq.price.answer': 'Yes. Set effective dates for new prices and we will compute totals automatically.',
     'landing.faq.devices.question': 'Does it work across devices?',
     'landing.faq.devices.answer': 'Yes. Sign in on any device and your data syncs instantly.',
-    'landing.cta.title': 'Start managing your subscriptions',
+    'landing.cta.title': 'Start reducing recurring software waste',
     'landing.cta.description':
-      'Sign up now to use every feature for free. No credit card. No commitment.',
+      'Join finance leads, founders, and creators using SubMange to negotiate better rates and eliminate duplicate subscriptions.',
     'landing.cta.button': 'Start now',
     'footer.copyright': '© 2025 SubMange. All rights reserved.',
     'footer.developer': 'Built by Leander Kuo',
@@ -367,6 +372,11 @@ export const translations: TranslationMap = {
     'landing.nav.faq': 'Preguntas frecuentes',
     'landing.nav.signIn': 'Iniciar sesión',
     'landing.nav.join': 'Únete gratis',
+    'landing.meta.title': 'SubMange – Software de gestión de suscripciones para pagos recurrentes',
+    'landing.meta.description':
+      'Controla todas tus suscripciones, pronostica el gasto y adelántate a las renovaciones con el panel inteligente de SubMange.',
+    'landing.meta.keywords':
+      'gestor de suscripciones,software de seguimiento de suscripciones,control de pagos recurrentes,gestión de gastos saas,recordatorios de renovación',
 
     /**
      * Dashboard Cards
@@ -546,39 +556,39 @@ export const translations: TranslationMap = {
     /**
      * Landing page
      */
-    'landing.hero.title.line1': 'Toma el control de tu',
-    'landing.hero.title.line2': 'gasto en suscripciones',
+    'landing.hero.title.line1': 'Software de gestión de suscripciones',
+    'landing.hero.title.line2': 'creado para frenar las renovaciones no deseadas',
     'landing.hero.subtitle':
-      'Mantente enfocado en crecer mientras mantenemos sincronizadas cada suscripción, fecha de renovación y cambio de precio.',
+      'SubMange centraliza cada pago recurrente para que controles el gasto, proyectes el coste anual y detectes subidas de precio antes de que ocurran.',
     'landing.hero.helper': 'Sin tarjeta de crédito. Cancela cuando quieras.',
     'landing.hero.cta': 'Únete gratis',
     'landing.hero.card.title': 'Resumen de hoy',
     'landing.hero.card.session': 'Sesión activa',
-    'landing.hero.card.focus': 'Revisa las renovaciones próximas',
+    'landing.hero.card.focus': 'Prioridad de hoy',
     'landing.hero.card.description':
-      'Netflix se renueva en 3 días. Gemini se renueva en 1 semana. Prepara tu presupuesto mensual.',
+      'Revisa riesgos de renovación, totales multimoneda y métricas accionables para mantener predecible tu presupuesto de suscripciones.',
     'landing.hero.card.upNext': 'Próximo',
-    'landing.hero.card.taskOne': 'Confirma el uso del plan de ChatGPT',
-    'landing.hero.card.taskTwo': 'Ajusta los asientos de Spotify Familiar',
+    'landing.hero.card.taskOne': 'Audita el uso de herramientas de IA antes de renovar',
+    'landing.hero.card.taskTwo': 'Compara planes de música para ahorrar',
     'landing.pricing.free': 'Gratis',
     'landing.pricing.freeDescription': 'Todas las funciones, gratis para siempre',
     'landing.pricing.features.unlimited': 'Seguimiento ilimitado de suscripciones',
     'landing.pricing.features.priceChange': 'Gestión de cambios de precio',
     'landing.pricing.features.autoRenew': 'Seguimiento de renovaciones automáticas',
     'landing.pricing.features.multiCurrency': 'Compatibilidad multimoneda',
-    'landing.features.title': 'Por qué elegirnos',
-    'landing.features.track.title': 'Seguimiento inteligente de gastos',
+    'landing.features.title': 'Por qué los equipos eligen SubMange',
+    'landing.features.track.title': 'Visibilidad total de suscripciones',
     'landing.features.track.description':
-      'Calculamos automáticamente el gasto mensual y anual para que controles cada suscripción.',
-    'landing.features.price.title': 'Gestión de cambios de precio',
+      'Sincroniza streaming, SaaS, servicios y membresías para ver totales mensuales y anuales en un solo panel.',
+    'landing.features.price.title': 'Alertas automáticas de cambios de precio',
     'landing.features.price.description':
-      'Registra los cambios de precio y define fechas efectivas para totales precisos.',
-    'landing.features.renew.title': 'Gestión de renovación automática',
+      'Registra el historial de precios, sigue impuestos y recibe avisos cuando un proveedor aumenta tarifas.',
+    'landing.features.renew.title': 'Recordatorios de renovación con contexto',
     'landing.features.renew.description':
-      'Marca las suscripciones con renovación automática para no perder ninguna fecha.',
-    'landing.features.security.title': 'Seguridad desde el diseño',
+      'Define cadencias de renovación, asigna responsables y anticípate a cancelaciones o cambios de plan.',
+    'landing.features.security.title': 'Seguridad de nivel empresarial',
     'landing.features.security.description':
-      'Seguridad de nivel empresarial con Supabase y almacenamiento cifrado.',
+      'Autenticación con Supabase, seguridad a nivel de fila y cifrado para proteger tus datos.',
     'landing.faq.title': 'Preguntas frecuentes',
     'landing.faq.free.question': '¿El servicio es gratuito?',
     'landing.faq.free.answer': '¡Sí! Ofrecemos un gestor de suscripciones totalmente gratuito.',
@@ -590,9 +600,9 @@ export const translations: TranslationMap = {
     'landing.faq.price.answer': 'Sí. Define las fechas efectivas de los nuevos precios y calcularemos los totales automáticamente.',
     'landing.faq.devices.question': '¿Funciona en varios dispositivos?',
     'landing.faq.devices.answer': 'Sí. Inicia sesión en cualquier dispositivo y tus datos se sincronizan al instante.',
-    'landing.cta.title': 'Empieza a gestionar tus suscripciones',
+    'landing.cta.title': 'Reduce el desperdicio de software recurrente',
     'landing.cta.description':
-      'Regístrate ahora para usar todas las funciones gratis. Sin tarjeta ni compromisos.',
+      'Únete a líderes financieros, fundadores y creadores que usan SubMange para negociar mejores tarifas y eliminar suscripciones duplicadas.',
     'landing.cta.button': 'Comenzar ahora',
     'footer.copyright': '© 2025 SubMange. Todos los derechos reservados.',
     'footer.developer': 'Creado por Leander Kuo',
@@ -687,6 +697,11 @@ export const translations: TranslationMap = {
     'landing.nav.faq': '常見問題',
     'landing.nav.signIn': '登入',
     'landing.nav.join': '立即註冊',
+    'landing.meta.title': 'SubMange – 訂閱管理軟體，全面掌握每筆續訂',
+    'landing.meta.description':
+      'SubMange 整合所有訂閱支出，協助你監控每月與年度費用、提前預警漲價並避免不必要的自動續約。',
+    'landing.meta.keywords':
+      '訂閱管理,訂閱追蹤工具,固定成本控管,SaaS 支出管理,續訂提醒',
 
     'dashboard.totalMonthly': '總月費',
     'dashboard.totalSubscriptions': '{count} 個服務',
@@ -829,35 +844,35 @@ export const translations: TranslationMap = {
 
     'auth.error.notAuthenticated': '未登入',
 
-    'landing.hero.title.line1': '掌控你的',
-    'landing.hero.title.line2': '訂閱支出',
+    'landing.hero.title.line1': '訂閱管理軟體',
+    'landing.hero.title.line2': '阻止每一次意外續約',
     'landing.hero.subtitle':
-      '專注於成長，交給我們追蹤每項訂閱、續約日期與價格變動。',
+      'SubMange 將所有固定支出集中在同一個儀表板，幫助你掌握費用、預估年度預算，並提前偵測價格調漲。',
     'landing.hero.helper': '不需信用卡，隨時可取消。',
     'landing.hero.cta': '立即註冊使用',
     'landing.hero.card.title': '今日重點',
     'landing.hero.card.session': '目前進行中',
-    'landing.hero.card.focus': '檢視即將到期的訂閱',
+    'landing.hero.card.focus': '今日優先任務',
     'landing.hero.card.description':
-      'Netflix 還有 3 天續約，Gemini 還有 1 週。請預先安排本月預算。',
+      '檢視續訂風險、多幣別總額與可立即行動的洞察，維持訂閱預算穩定。',
     'landing.hero.card.upNext': '下一步',
-    'landing.hero.card.taskOne': '確認 ChatGPT 方案用量',
-    'landing.hero.card.taskTwo': '調整 Spotify 家庭方案成員',
+    'landing.hero.card.taskOne': '續約前審視 AI 工具的實際使用量',
+    'landing.hero.card.taskTwo': '比較音樂串流方案以降低成本',
     'landing.pricing.free': '免費',
     'landing.pricing.freeDescription': '完整功能，永久免費',
     'landing.pricing.features.unlimited': '✓ 無限訂閱追蹤',
     'landing.pricing.features.priceChange': '✓ 價格變動管理',
     'landing.pricing.features.autoRenew': '✓ 自動續訂標記',
     'landing.pricing.features.multiCurrency': '✓ 多幣別支援',
-    'landing.features.title': '功能特色',
-    'landing.features.track.title': '智能費用追蹤',
-    'landing.features.track.description': '自動計算月費、年費，一目了然掌握訂閱開支。',
-    'landing.features.price.title': '價格變動管理',
-    'landing.features.price.description': '追蹤訂閱價格變化，設定生效日期，精準計算總花費。',
-    'landing.features.renew.title': '自動續訂管理',
-    'landing.features.renew.description': '標記自動續訂項目，永遠不會錯過續訂日期。',
-    'landing.features.security.title': '安全可靠',
-    'landing.features.security.description': '基於 Supabase 的企業級安全保障，資料加密存儲。',
+    'landing.features.title': '為什麼團隊選擇 SubMange',
+    'landing.features.track.title': '完整的訂閱可視化',
+    'landing.features.track.description': '同步串流、SaaS、生活帳單與會員，月費與年費一次看懂。',
+    'landing.features.price.title': '自動價格異動通知',
+    'landing.features.price.description': '記錄價格歷史、追蹤稅率調整，供應商一調價立即提醒。',
+    'landing.features.renew.title': '帶情境的續訂提醒',
+    'landing.features.renew.description': '設定續訂週期與負責人，提前安排取消或調整方案。',
+    'landing.features.security.title': '企業等級資安',
+    'landing.features.security.description': '採用 Supabase 認證、資料加密與列級權限，守護每筆資料。',
     'landing.faq.title': '常見問題',
     'landing.faq.free.question': '這個服務是免費的嗎？',
     'landing.faq.free.answer': '是的！我們提供完全免費的訂閱管理服務。',
@@ -869,9 +884,9 @@ export const translations: TranslationMap = {
     'landing.faq.price.answer': '可以！設定新價格的生效日期，系統會自動計算總花費。',
     'landing.faq.devices.question': '支援多個裝置嗎？',
     'landing.faq.devices.answer': '是的！任何裝置登入都會即時同步資料。',
-    'landing.cta.title': '開始管理你的訂閱',
+    'landing.cta.title': '現在開始降低重複的訂閱支出',
     'landing.cta.description':
-      '立即註冊，免費使用所有功能。無需信用卡，無需承諾。',
+      '超前部署的財務與創作者都在使用 SubMange，談到更好的價格、刪除重複的訂閱。',
     'landing.cta.button': '立即開始使用',
     'footer.copyright': '© 2025 SubMange. All rights reserved.',
     'footer.developer': '開發者: Leander Kuo',

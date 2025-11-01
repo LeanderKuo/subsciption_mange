@@ -44,3 +44,14 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## ForkTsChecker 記憶體調整
+
+為避免建置時 TypeScript 型別檢查程式耗盡記憶體，專案預設整合了高記憶體模式：
+
+1. `npm run build` 會呼叫 `scripts/build-with-memory.js`，自動設定  
+   `FORK_TS_CHECKER_MEMORY_LIMIT=12288` 與 `NODE_OPTIONS=--max-old-space-size=4096`。
+2. 若需要微調，修改 `.env` 裡的 `FORK_TS_CHECKER_MEMORY_LIMIT`（單位 MB）或 `NODE_OPTIONS` 後再執行 `npm run build`。
+3. 若仍出現警示，可暫時在命令列覆寫：  
+   `FORK_TS_CHECKER_MEMORY_LIMIT=12288 NODE_OPTIONS=--max-old-space-size=4096 npm run build`
+4. 長期建議：升級 `fork-ts-checker-webpack-plugin`、精簡型別檢查範圍，或考慮遷移至 Vite 等更輕量的建置流程，以根本改善記憶體需求。

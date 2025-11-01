@@ -18,6 +18,20 @@ interface LocaleContextValue {
 }
 
 const LOCALE_STORAGE_KEY = 'subscription-manager.locale';
+const LOCALE_QUERY_PARAM = 'lang';
+
+const allowedLocale = (value: string | null): Locale | null => {
+  if (value === 'en' || value === 'zh-TW' || value === 'es') {
+    return value;
+  }
+  return null;
+};
+
+const localeToHtmlLang: Record<Locale, string> = {
+  en: 'en',
+  'zh-TW': 'zh-Hant-TW',
+  es: 'es',
+};
 
 export const LocaleContext = createContext<LocaleContextValue | undefined>(undefined);
 
@@ -30,9 +44,16 @@ const detectInitialLocale = (): Locale => {
     return 'en';
   }
 
+  const url = new URL(window.location.href);
+  const fromQuery = allowedLocale(url.searchParams.get(LOCALE_QUERY_PARAM));
+  if (fromQuery) {
+    return fromQuery;
+  }
+
   const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-  if (stored === 'en' || stored === 'zh-TW' || stored === 'es') {
-    return stored;
+  const fromStorage = allowedLocale(stored);
+  if (fromStorage) {
+    return fromStorage;
   }
 
   const browserLanguage = window.navigator.language.toLowerCase();
@@ -52,6 +73,15 @@ export const LocaleProvider = ({ children }: LocaleProviderProps) => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+    const url = new URL(window.location.href);
+    if (locale === 'en') {
+      url.searchParams.delete(LOCALE_QUERY_PARAM);
+    } else {
+      url.searchParams.set(LOCALE_QUERY_PARAM, locale);
+    }
+    window.history.replaceState({}, '', url.toString());
+    const htmlLang = localeToHtmlLang[locale] ?? 'en';
+    document.documentElement.setAttribute('lang', htmlLang);
   }, [locale]);
 
   const setLocale = (nextLocale: Locale) => {

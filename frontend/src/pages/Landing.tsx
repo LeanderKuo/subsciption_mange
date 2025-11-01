@@ -20,18 +20,32 @@ import {
   Security,
   TrendingUp,
 } from '@mui/icons-material';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { keyframes } from '@mui/system';
 import { AuthDialog } from '../components/AuthDialog';
 import { useLocale } from '../i18n/LocaleProvider';
+import type { Locale } from '../i18n/translations';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import { useSeo, useStructuredData } from '../hooks/useSeo';
 
 const marqueeAnimation = keyframes`
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 `;
+
+const BASE_URL = 'https://www.submange.com';
+const OG_LOCALE_MAP: Record<Locale, string> = {
+  en: 'en_US',
+  'zh-TW': 'zh_TW',
+  es: 'es_ES',
+};
+const HREF_LANG_MAP: Record<Locale, string> = {
+  en: 'en',
+  'zh-TW': 'zh-Hant-TW',
+  es: 'es',
+};
 
 const Landing = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
@@ -116,9 +130,82 @@ const Landing = () => {
     window.location.reload();
   };
 
-  useEffect(() => {
-    document.title = 'submange - Manage every subscription with clarity';
-  }, []);
+  const canonicalUrl = useMemo(() => {
+    const url = new URL('/', BASE_URL);
+    if (locale !== 'en') {
+      url.searchParams.set('lang', locale);
+    }
+    return url.toString();
+  }, [locale]);
+
+  const keywords = useMemo(() => {
+    const value = t('landing.meta.keywords');
+    return value.split(',').map((keyword) => keyword.trim()).filter(Boolean);
+  }, [t]);
+
+  const seoTitle = t('landing.meta.title');
+  const seoDescription = t('landing.meta.description');
+
+  useSeo({
+    title: seoTitle,
+    description: seoDescription,
+    keywords,
+    canonical: canonicalUrl,
+    ogImage: `${BASE_URL}/og-image.png`,
+    locale: OG_LOCALE_MAP[locale],
+    siteName: 'SubMange',
+    twitterHandle: '@SubMange',
+    alternates: [
+      { href: `${BASE_URL}/`, hrefLang: 'en' },
+      { href: `${BASE_URL}/?lang=zh-TW`, hrefLang: 'zh-Hant-TW' },
+      { href: `${BASE_URL}/?lang=es`, hrefLang: 'es' },
+      { href: `${BASE_URL}/`, hrefLang: 'x-default' },
+    ],
+  });
+
+  const structuredDataEntries = useMemo(() => {
+    const softwareApplication = {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'SubMange',
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      url: canonicalUrl,
+      description: seoDescription,
+      inLanguage: HREF_LANG_MAP[locale],
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'SubMange',
+        url: BASE_URL,
+      },
+    };
+
+    const faqStructuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+    };
+
+    return [
+      { id: 'ld-software-application', data: softwareApplication },
+      { id: `ld-faq-${locale}`, data: faqStructuredData },
+    ];
+  }, [canonicalUrl, faqs, locale, seoDescription]);
+
+  useStructuredData(structuredDataEntries);
 
   const headerRight = (
     <Stack direction="row" spacing={2} alignItems="center">

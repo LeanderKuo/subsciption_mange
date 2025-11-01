@@ -7,16 +7,35 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="submange helps you track every subscription, manage price changes, and keep costs under control."
+      content="Track every subscription, forecast spending, and stay ahead of renewals with SubMange's smart subscription management dashboard."
     />
+    <meta name="keywords" content="subscription manager,subscription tracking software,recurring billing management,saas spend control,renewal reminders" />
+    <meta name="robots" content="index, follow" />
     <meta property="og:title" content="submange - Manage every subscription with clarity" />
     <meta
       property="og:description"
-      content="Stay on top of renewals, prices, and categories for all your subscriptions in one place."
+      content="Track every subscription, forecast spending, and stay ahead of renewals with SubMange's smart subscription management dashboard."
     />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
     <meta property="og:url" content="https://www.submange.com/" />
+    <meta property="og:site_name" content="SubMange" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_TW" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@SubMange" />
+    <meta name="twitter:title" content="submange - Manage every subscription with clarity" />
+    <meta
+      name="twitter:description"
+      content="Track every subscription, forecast spending, and stay ahead of renewals with SubMange's smart subscription management dashboard."
+    />
+    <meta name="twitter:image" content="%PUBLIC_URL%/og-image.png" />
+    <link rel="canonical" href="https://www.submange.com/" />
+    <link rel="alternate" href="https://www.submange.com/" hreflang="en" />
+    <link rel="alternate" href="https://www.submange.com/?lang=zh-TW" hreflang="zh-Hant-TW" />
+    <link rel="alternate" href="https://www.submange.com/?lang=es" hreflang="es" />
+    <link rel="alternate" href="https://www.submange.com/" hreflang="x-default" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       The web app manifest is now injected at runtime to avoid authenticated
@@ -31,7 +50,62 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>submange - Manage every subscription with clarity</title>
+    <title>SubMange – Subscription management software for recurring payments</title>
+    <script type="application/ld+json" id="ld-software-application">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "SubMange",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "url": "https://www.submange.com/",
+        "description": "Track every subscription, forecast spending, and stay ahead of renewals with SubMange's smart subscription management dashboard.",
+        "inLanguage": "en",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "SubMange",
+          "url": "https://www.submange.com/"
+        }
+      }
+    </script>
+    <script type="application/ld+json" id="ld-faq-en">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is this service free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! We offer a completely free subscription manager."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my data safe?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolutely. Supabase provides encrypted storage for all data."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I track price changes?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Set effective dates for new prices and we will compute totals automatically."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
