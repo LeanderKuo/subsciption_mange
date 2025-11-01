@@ -31,13 +31,16 @@ const detectInitialLocale = (): Locale => {
   }
 
   const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-  if (stored === 'en' || stored === 'zh-TW') {
+  if (stored === 'en' || stored === 'zh-TW' || stored === 'es') {
     return stored;
   }
 
   const browserLanguage = window.navigator.language.toLowerCase();
   if (browserLanguage.startsWith('zh')) {
     return 'zh-TW';
+  }
+  if (browserLanguage.startsWith('es')) {
+    return 'es';
   }
 
   return 'en';

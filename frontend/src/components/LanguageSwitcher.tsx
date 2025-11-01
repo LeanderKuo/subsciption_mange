@@ -51,6 +51,7 @@ export const LanguageSwitcher = ({
       <Select value={value} label={t('header.language.label')} onChange={handleChange}>
         <MenuItem value="en">{t('header.language.en')}</MenuItem>
         <MenuItem value="zh-TW">{t('header.language.zh-TW')}</MenuItem>
+        <MenuItem value="es">{t('header.language.es')}</MenuItem>
       </Select>
     </FormControl>
   );

@@ -1,4 +1,4 @@
-export type Locale = 'en' | 'zh-TW';
+export type Locale = 'en' | 'zh-TW' | 'es';
 
 type TranslationMap = Record<Locale, Record<string, string>>;
 
@@ -22,6 +22,7 @@ export const translations: TranslationMap = {
     'header.language.label': 'Language',
     'header.language.en': 'English',
     'header.language.zh-TW': '繁體中文',
+    'header.language.es': 'Español',
     'header.addSubscription': 'Add Subscription',
     'header.manageCategories': 'Manage categories',
     'header.sort': 'Sort',
@@ -328,6 +329,332 @@ export const translations: TranslationMap = {
     'errorBoundary.subtitle': 'An unexpected error occurred. Please try refreshing the page.',
     'errorBoundary.backHome': 'Back to home',
   },
+  es: {
+    /**
+     * Common
+     */
+    'common.confirm': 'Confirmar',
+    'common.cancel': 'Cancelar',
+    'common.delete': 'Eliminar',
+    'common.edit': 'Editar',
+    'common.loading': 'Cargando…',
+    'common.unknownError': 'Ocurrió un problema. Inténtalo de nuevo.',
+
+    /**
+     * Header / Navigation
+     */
+    'header.title': 'SubMange',
+    'header.subtitle': 'Administra cada suscripción con claridad',
+    'header.language.label': 'Idioma',
+    'header.language.en': 'Inglés',
+    'header.language.zh-TW': 'Chino tradicional',
+    'header.language.es': 'Español',
+    'header.addSubscription': 'Agregar suscripción',
+    'header.manageCategories': 'Administrar categorías',
+    'header.sort': 'Ordenar',
+    'header.sort.endDate': 'Fecha de vencimiento',
+    'header.sort.price': 'Costo mensual',
+    'header.sort.name': 'Tipo de suscripción',
+    'header.logout': 'Cerrar sesión',
+    'header.loggedInAs': 'Has iniciado sesión como',
+    'header.menu.settings': 'Configuración personal',
+    'header.menu.logout': 'Cerrar sesión',
+    'header.logoutSuccess': 'Sesión cerrada',
+    'header.logoutSuccessDescription': 'Has cerrado la sesión correctamente.',
+    'header.logoutFailure': 'Error al cerrar sesión',
+    'header.logoutFailureDescription': 'Vuelve a intentarlo más tarde.',
+    'landing.nav.features': 'Funciones',
+    'landing.nav.faq': 'Preguntas frecuentes',
+    'landing.nav.signIn': 'Iniciar sesión',
+    'landing.nav.join': 'Únete gratis',
+
+    /**
+     * Dashboard Cards
+     */
+    'dashboard.totalMonthly': 'Gasto mensual total',
+    'dashboard.totalSubscriptions': '{count} servicios',
+    'dashboard.active': 'Activas',
+    'dashboard.activeDescription': 'Suscripciones en uso',
+    'dashboard.annualEstimate': 'Pronóstico anual',
+    'dashboard.annualEstimateDescription': 'Gasto estimado',
+    'dashboard.allSubscriptions': 'Todas las suscripciones',
+
+    /**
+     * Empty state
+     */
+    'dashboard.empty.title': 'Aún no hay suscripciones',
+    'dashboard.empty.description': 'Haz clic en “Agregar suscripción” para comenzar.',
+
+    /**
+     * Categories
+     */
+    'categories.uncategorized': 'Sin categoría',
+    'categories.dropHint': 'Suelta las suscripciones aquí',
+
+    /**
+     * Notifications
+     */
+    'notifications.genericError': 'Inténtalo de nuevo.',
+    'notifications.create.successTitle': 'Suscripción agregada',
+    'notifications.create.successDescription': 'Se agregó {name}.',
+    'notifications.create.errorTitle': 'No se pudo agregar',
+    'notifications.update.successTitle': 'Suscripción actualizada',
+    'notifications.update.successDescription': 'Se actualizó {name}.',
+    'notifications.update.errorTitle': 'No se pudo actualizar',
+    'notifications.delete.successTitle': 'Suscripción eliminada',
+    'notifications.delete.successDescription': 'La suscripción se ha eliminado.',
+    'notifications.delete.errorTitle': 'No se pudo eliminar',
+
+    'category.notifications.createTitle': 'Categoría agregada',
+    'category.notifications.createSuccess': 'Categoría agregada',
+    'category.notifications.updateTitle': 'Categoría actualizada',
+    'category.notifications.updateSuccess': 'Categoría actualizada',
+    'category.notifications.deleteTitle': 'Categoría eliminada',
+    'category.notifications.deleteSuccess': 'Categoría eliminada.',
+
+    /**
+     * Add Subscription Dialog
+     */
+    'addSubscription.openButton': 'Agregar suscripción',
+    'addSubscription.title': 'Agregar suscripción',
+    'addSubscription.fields.name': 'Nombre del servicio',
+    'addSubscription.fields.brand': 'Marca',
+    'addSubscription.fields.price': 'Precio',
+    'addSubscription.fields.currency': 'Moneda',
+    'addSubscription.fields.startDate': 'Fecha de inicio',
+    'addSubscription.fields.endDate': 'Fecha de finalización',
+    'addSubscription.fields.billingCycle': 'Ciclo de facturación',
+    'addSubscription.cycle.mode.preset': 'Opciones predefinidas',
+    'addSubscription.cycle.mode.custom': 'Intervalo personalizado',
+    'addSubscription.cycle.customValue': 'Duración del intervalo',
+    'addSubscription.cycle.customUnit': 'Unidad del intervalo',
+    'addSubscription.cycle.customUnit.days': 'Días',
+    'addSubscription.cycle.customUnit.months': 'Meses',
+    'addSubscription.cycle.customUnit.years': 'Años',
+    'addSubscription.cycle.helper':
+      'La fecha de fin del próximo ciclo se calculará automáticamente a partir de la fecha de inicio.',
+    'addSubscription.fields.iconUrl': 'URL del ícono (opcional)',
+    'addSubscription.fields.category': 'Categoría de suscripción (opcional)',
+    'addSubscription.fields.category.none': 'Sin categoría',
+    'addSubscription.fields.autoRenew': 'Renovación automática',
+    'addSubscription.submit': 'Agregar',
+    'addSubscription.cancel': 'Cancelar',
+    'addSubscription.brand.searching': 'Buscando…',
+    'addSubscription.brand.noResults': 'No se encontraron marcas relacionadas',
+    'addSubscription.brand.placeholder': 'Ingresa el nombre de la marca',
+
+    /**
+     * Edit Subscription Dialog
+     */
+    'editSubscription.openButton': 'Editar',
+    'editSubscription.title': 'Editar suscripción',
+    'editSubscription.submit': 'Actualizar',
+    'editSubscription.recordPriceChange': 'Registrar cambio de precio',
+    'editSubscription.priceEffectiveDate': 'Fecha de entrada en vigor',
+    'editSubscription.priceChangeHint': 'Define la fecha de entrada en vigor del nuevo precio',
+    'editSubscription.priceChangePreview':
+      'Cambiado de {oldPrice} a {newPrice}',
+
+    /**
+     * Billing cycles
+     */
+    'billingCycle.30days': '30 días',
+    'billingCycle.6months': '6 meses',
+    'billingCycle.1year': '1 año',
+
+    /**
+     * Currency labels
+     */
+    'currency.TWD': 'TWD – Nuevo dólar taiwanés',
+    'currency.USD': 'USD – Dólar estadounidense',
+    'currency.EUR': 'EUR – Euro',
+    'currency.JPY': 'JPY – Yen japonés',
+    'currency.GBP': 'GBP – Libra esterlina',
+    'currency.CNY': 'CNY – Yuan chino',
+
+    /**
+     * Category Management Dialog
+     */
+    'categoryDialog.title': 'Administrar categorías de suscripción',
+    'categoryDialog.empty': 'Aún no hay categorías',
+    'categoryDialog.add': 'Agregar categoría',
+    'categoryDialog.update': 'Actualizar',
+    'categoryDialog.cancel': 'Cancelar',
+    'categoryDialog.deleteConfirm':
+      '¿Seguro que deseas eliminar esta categoría? Las suscripciones vinculadas perderán su categoría.',
+    'categoryDialog.fields.name': 'Nombre de la categoría',
+    'categoryDialog.fields.description': 'Descripción (opcional)',
+    'categoryDialog.fields.color': 'Elige un color',
+    'categoryDialog.fields.customColor': 'Color personalizado',
+    'categoryDialog.currentColor': 'Actual: {color}',
+
+    /**
+     * Subscription card
+     */
+    'subscriptionCard.status.expired': 'Vencida',
+    'subscriptionCard.status.expiringSoon': 'Por vencer',
+    'subscriptionCard.status.active': 'Activa',
+
+    /**
+     * User settings
+     */
+    'settings.title': 'Configuración del perfil',
+    'settings.back': 'Regresar',
+    'settings.section.basic': 'Información básica',
+    'settings.section.account': 'Administración de la cuenta',
+    'settings.section.security': 'Seguridad',
+    'settings.email': 'Correo electrónico',
+    'settings.email.helper': 'Se usa para notificaciones de suscripción',
+    'settings.nickname': 'Apodo',
+    'settings.nickname.helper': 'Se muestra en tu perfil',
+    'settings.defaultCurrency': 'Moneda predeterminada',
+    'settings.defaultCurrency.helper': 'Moneda predeterminada al agregar suscripciones',
+    'settings.defaultLanguage': 'Idioma preferido',
+    'settings.defaultLanguage.helper': 'Idioma usado en toda la aplicación',
+    'settings.save': 'Guardar cambios',
+    'settings.saving': 'Guardando…',
+    'settings.cancel': 'Cancelar',
+    'settings.signOut': 'Cerrar sesión',
+    'settings.loadingError': 'No se pudo cargar el perfil.',
+    'settings.updateSuccess': 'Perfil actualizado',
+    'settings.updateError': 'No se pudo actualizar el perfil.',
+    'settings.loading': 'Cargando perfil…',
+    'settings.password.title': 'Cambiar contraseña',
+    'settings.password.current': 'Contraseña actual',
+    'settings.password.new': 'Nueva contraseña',
+    'settings.password.confirm': 'Confirmar nueva contraseña',
+    'settings.password.submit': 'Actualizar contraseña',
+    'settings.password.successTitle': 'Contraseña actualizada',
+    'settings.password.successDescription': 'Tu contraseña se cambió correctamente.',
+    'settings.password.error.invalidCurrent': 'La contraseña actual es incorrecta.',
+    'settings.password.error.generic': 'No se pudo actualizar la contraseña. Inténtalo de nuevo.',
+    'settings.delete.title': 'Eliminar cuenta',
+    'settings.delete.description': 'Esto cerrará tu sesión y marcará tu cuenta para eliminación. Puedes recuperarla contactando al soporte.',
+    'settings.delete.button': 'Eliminar cuenta',
+    'settings.delete.dialog.title': 'Confirmar eliminación de la cuenta',
+    'settings.delete.dialog.description': 'Escribe DELETE para confirmar. Solo podrás revertirlo contactando al soporte.',
+    'settings.delete.dialog.placeholder': 'Escribe DELETE para confirmar',
+    'settings.delete.dialog.cancel': 'Cancelar',
+    'settings.delete.dialog.confirm': 'Eliminar de forma permanente',
+    'settings.delete.successTitle': 'Cuenta eliminada',
+    'settings.delete.successDescription': 'Tu cuenta ha sido marcada para eliminación.',
+    'settings.delete.errorTitle': 'No se pudo eliminar la cuenta',
+    'settings.delete.errorDescription': 'Inténtalo de nuevo o contacta al soporte.',
+
+    'auth.error.notAuthenticated': 'No has iniciado sesión',
+
+    /**
+     * Landing page
+     */
+    'landing.hero.title.line1': 'Toma el control de tu',
+    'landing.hero.title.line2': 'gasto en suscripciones',
+    'landing.hero.subtitle':
+      'Mantente enfocado en crecer mientras mantenemos sincronizadas cada suscripción, fecha de renovación y cambio de precio.',
+    'landing.hero.helper': 'Sin tarjeta de crédito. Cancela cuando quieras.',
+    'landing.hero.cta': 'Únete gratis',
+    'landing.hero.card.title': 'Resumen de hoy',
+    'landing.hero.card.session': 'Sesión activa',
+    'landing.hero.card.focus': 'Revisa las renovaciones próximas',
+    'landing.hero.card.description':
+      'Netflix se renueva en 3 días. Gemini se renueva en 1 semana. Prepara tu presupuesto mensual.',
+    'landing.hero.card.upNext': 'Próximo',
+    'landing.hero.card.taskOne': 'Confirma el uso del plan de ChatGPT',
+    'landing.hero.card.taskTwo': 'Ajusta los asientos de Spotify Familiar',
+    'landing.pricing.free': 'Gratis',
+    'landing.pricing.freeDescription': 'Todas las funciones, gratis para siempre',
+    'landing.pricing.features.unlimited': 'Seguimiento ilimitado de suscripciones',
+    'landing.pricing.features.priceChange': 'Gestión de cambios de precio',
+    'landing.pricing.features.autoRenew': 'Seguimiento de renovaciones automáticas',
+    'landing.pricing.features.multiCurrency': 'Compatibilidad multimoneda',
+    'landing.features.title': 'Por qué elegirnos',
+    'landing.features.track.title': 'Seguimiento inteligente de gastos',
+    'landing.features.track.description':
+      'Calculamos automáticamente el gasto mensual y anual para que controles cada suscripción.',
+    'landing.features.price.title': 'Gestión de cambios de precio',
+    'landing.features.price.description':
+      'Registra los cambios de precio y define fechas efectivas para totales precisos.',
+    'landing.features.renew.title': 'Gestión de renovación automática',
+    'landing.features.renew.description':
+      'Marca las suscripciones con renovación automática para no perder ninguna fecha.',
+    'landing.features.security.title': 'Seguridad desde el diseño',
+    'landing.features.security.description':
+      'Seguridad de nivel empresarial con Supabase y almacenamiento cifrado.',
+    'landing.faq.title': 'Preguntas frecuentes',
+    'landing.faq.free.question': '¿El servicio es gratuito?',
+    'landing.faq.free.answer': '¡Sí! Ofrecemos un gestor de suscripciones totalmente gratuito.',
+    'landing.faq.security.question': '¿Mis datos están seguros?',
+    'landing.faq.security.answer': 'Por supuesto. Supabase proporciona almacenamiento cifrado para todos los datos.',
+    'landing.faq.supported.question': '¿Qué servicios son compatibles?',
+    'landing.faq.supported.answer': 'Todos: streaming, software y membresías de gimnasio.',
+    'landing.faq.price.question': '¿Puedo controlar los cambios de precio?',
+    'landing.faq.price.answer': 'Sí. Define las fechas efectivas de los nuevos precios y calcularemos los totales automáticamente.',
+    'landing.faq.devices.question': '¿Funciona en varios dispositivos?',
+    'landing.faq.devices.answer': 'Sí. Inicia sesión en cualquier dispositivo y tus datos se sincronizan al instante.',
+    'landing.cta.title': 'Empieza a gestionar tus suscripciones',
+    'landing.cta.description':
+      'Regístrate ahora para usar todas las funciones gratis. Sin tarjeta ni compromisos.',
+    'landing.cta.button': 'Comenzar ahora',
+    'footer.copyright': '© 2025 SubMange. Todos los derechos reservados.',
+    'footer.developer': 'Creado por Leander Kuo',
+    'footer.github': 'Visita mi perfil de GitHub',
+
+    /**
+     * Not Found
+     */
+    'notFound.title': 'Página no encontrada',
+    'notFound.description':
+      'Lo sentimos, la página que buscas no existe o fue movida.',
+    'notFound.back': 'Volver al inicio',
+
+    /**
+     * Brand autofill
+     */
+    'brandAutofill.error.noResults': 'No se encontraron marcas relacionadas',
+    'brandAutofill.error.invalidClient':
+      'El ID de cliente de Brandfetch no es válido o no tiene permisos.',
+    'brandAutofill.error.authFailed': 'Falló la autenticación de Brandfetch.',
+    'brandAutofill.error.generic': 'Se produjo un error al buscar marcas.',
+
+    'auth.dialog.title': 'Gestor de suscripciones',
+    'auth.tabs.signIn': 'Iniciar sesión',
+    'auth.tabs.signUp': 'Registrarse',
+    'auth.fields.email': 'Correo electrónico',
+    'auth.fields.password': 'Contraseña',
+    'auth.fields.confirmPassword': 'Confirmar contraseña',
+    'auth.validation.fillAll': 'Completa todos los campos.',
+    'auth.validation.passwordMismatch': 'Las contraseñas no coinciden.',
+    'auth.validation.passwordLength': 'La contraseña debe tener al menos 6 caracteres.',
+    'auth.signIn.successTitle': 'Sesión iniciada',
+    'auth.signIn.successDescription': '¡Bienvenido de nuevo!',
+    'auth.signIn.error': 'Error al iniciar sesión.',
+    'auth.signUp.successTitle': 'Cuenta creada',
+    'auth.signUp.successDescription': 'Revisa tu correo para confirmar la cuenta.',
+    'auth.signUp.error': 'Error al registrarse.',
+    'auth.oauth.orContinue': 'O continúa con',
+    'auth.oauth.redirectingTitle': 'Redirigiendo',
+    'auth.oauth.redirectingGoogle': 'Abriendo inicio de sesión con Google…',
+    'auth.oauth.redirectingApple': 'Abriendo inicio de sesión con Apple…',
+    'auth.oauth.googleError': 'Error en el inicio de sesión con Google.',
+    'auth.oauth.appleError': 'Error en el inicio de sesión con Apple.',
+    'auth.actions.cancel': 'Cancelar',
+    'auth.actions.signIn': 'Iniciar sesión',
+    'auth.actions.signInLoading': 'Iniciando sesión…',
+    'auth.actions.signUp': 'Registrarse',
+    'auth.actions.signUpLoading': 'Registrándose…',
+    'auth.actions.google': 'Google',
+    'auth.actions.apple': 'Apple',
+    'auth.actions.signOutLoading': 'Cerrando sesión…',
+    'auth.user.fallback': 'Usuario',
+
+    /**
+     * Misc
+     */
+    'error.loadData': 'No se pueden cargar los datos',
+    'error.loadDataHint': 'Verifica el servicio backend o inténtalo más tarde.',
+    'errorBoundary.title': 'Algo salió mal',
+    'errorBoundary.subtitle': 'Ocurrió un error inesperado. Intenta actualizar la página.',
+    'errorBoundary.backHome': 'Volver al inicio',
+  },
   'zh-TW': {
     'common.confirm': '確認',
     'common.cancel': '取消',
@@ -338,8 +665,10 @@ export const translations: TranslationMap = {
 
     'header.title': 'SubMange',
     'header.subtitle': '輕鬆管理你的所有訂閱服務',
+    'header.language.label': '語言',
     'header.language.en': 'English',
     'header.language.zh-TW': '繁體中文',
+    'header.language.es': '西班牙語',
     'header.addSubscription': '新增訂閱',
     'header.manageCategories': '管理類型',
     'header.sort': '排序',
