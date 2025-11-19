@@ -17,7 +17,6 @@ import {
   signIn,
   signUp,
   signInWithGoogle,
-  signInWithApple,
 } from "../services/supabaseService";
 import { useToast } from "../hooks/use-toast";
 import { useLocale } from "../i18n/LocaleProvider";
@@ -260,30 +259,6 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                 },
               }}>
               {t("auth.actions.google")}
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={async () => {
-                try {
-                  await signInWithApple();
-                  toast({
-                    title: t("auth.oauth.redirectingTitle"),
-                    description: t("auth.oauth.redirectingApple"),
-                  });
-                } catch (err: any) {
-                  setError(err.message || t("auth.oauth.appleError"));
-                }
-              }}
-              sx={{
-                minWidth: 120,
-                color: "#000000",
-                borderColor: "#000000",
-                "&:hover": {
-                  backgroundColor: "#f8f9fa",
-                  borderColor: "#000000",
-                },
-              }}>
-              {t("auth.actions.apple")}
             </Button>
           </Box>
         </Box>

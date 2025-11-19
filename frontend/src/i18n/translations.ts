@@ -347,9 +347,7 @@ export const translations: TranslationMap = {
     "auth.oauth.orContinue": "Or continue with",
     "auth.oauth.redirectingTitle": "Redirecting",
     "auth.oauth.redirectingGoogle": "Taking you to Google sign in…",
-    "auth.oauth.redirectingApple": "Taking you to Apple sign in…",
     "auth.oauth.googleError": "Google sign in failed.",
-    "auth.oauth.appleError": "Apple sign in failed.",
     "auth.actions.facebook": "Facebook",
     "auth.oauth.redirectingFacebook": "Taking you to Facebook sign in…",
     "auth.oauth.facebookError": "Facebook sign in failed.",
@@ -359,7 +357,6 @@ export const translations: TranslationMap = {
     "auth.actions.signUp": "Sign up",
     "auth.actions.signUpLoading": "Signing up…",
     "auth.actions.google": "Google",
-    "auth.actions.apple": "Apple",
     "auth.actions.signOutLoading": "Signing out…",
     "auth.user.fallback": "User",
 
@@ -724,9 +721,7 @@ export const translations: TranslationMap = {
     "auth.oauth.orContinue": "O continúa con",
     "auth.oauth.redirectingTitle": "Redirigiendo",
     "auth.oauth.redirectingGoogle": "Abriendo inicio de sesión con Google…",
-    "auth.oauth.redirectingApple": "Abriendo inicio de sesión con Apple…",
     "auth.oauth.googleError": "Error en el inicio de sesión con Google.",
-    "auth.oauth.appleError": "Error en el inicio de sesión con Apple.",
     "auth.actions.facebook": "Facebook",
     "auth.oauth.redirectingFacebook":
       "Abriendo inicio de sesión con Facebook…",
@@ -737,7 +732,6 @@ export const translations: TranslationMap = {
     "auth.actions.signUp": "Registrarse",
     "auth.actions.signUpLoading": "Registrándose…",
     "auth.actions.google": "Google",
-    "auth.actions.apple": "Apple",
     "auth.actions.signOutLoading": "Cerrando sesión…",
     "auth.user.fallback": "Usuario",
 
@@ -1107,9 +1101,7 @@ export const translations: TranslationMap = {
     "auth.oauth.orContinue": "或使用以下方式繼續",
     "auth.oauth.redirectingTitle": "重新導向中",
     "auth.oauth.redirectingGoogle": "正在前往 Google 登入…",
-    "auth.oauth.redirectingApple": "正在前往 Apple 登入…",
     "auth.oauth.googleError": "Google 登入失敗。",
-    "auth.oauth.appleError": "Apple 登入失敗。",
     "auth.actions.facebook": "Facebook",
     "auth.oauth.redirectingFacebook":
       "正在前往 Facebook 登入…",
@@ -1120,7 +1112,6 @@ export const translations: TranslationMap = {
     "auth.actions.signUp": "註冊",
     "auth.actions.signUpLoading": "註冊中…",
     "auth.actions.google": "Google",
-    "auth.actions.apple": "Apple",
     "auth.actions.signOutLoading": "登出中…",
     "auth.user.fallback": "使用者",
 

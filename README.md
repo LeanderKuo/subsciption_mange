@@ -23,7 +23,7 @@
 ### 後端
 - **平台**: Supabase
 - **資料庫**: PostgreSQL
-- **認證**: Supabase Auth (支援 Email/Google/Apple)
+- **認證**: Supabase Auth (支援 Email/Google)
 - **安全**: Row Level Security (RLS)
 
 ## 快速開始
@@ -117,7 +117,7 @@ subscription_mange/
 
 1. 建立 Supabase 專案
 2. 套用資料庫遷移 (migrations)
-3. 設定 Authentication Providers (Email, Google, Apple)
+3. 設定 Authentication Providers (Email, Google)
 4. 設定 RLS Policies (已在 migration 中定義)
 
 ## 開發指南
