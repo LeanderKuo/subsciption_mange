@@ -59,6 +59,69 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
   const [selectedBrand, setSelectedBrand] = useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
+
+  const handleBrandInputChange = (
+    _event: SyntheticEvent<Element, Event>,
+    newInputValue: string,
+    reason: AutocompleteInputChangeReason
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      brand: newInputValue,
+    }));
+
+    if (reason === 'input' || reason === 'clear') {
+      setSelectedBrand(null);
+      autoFilledIconRef.current = null;
+      brandAutofill.reset();
+    }
+  };
+
+  const handleBrandSelect = (
+    _event: unknown,
+    newValue: BrandAutofillResult | string | null
+  ) => {
+    if (!newValue || typeof newValue === 'string') {
+      setSelectedBrand(null);
+      return;
+    }
+
+    setSelectedBrand(newValue);
+
+    setForm((prev) => {
+      const next: FormState = { ...prev };
+      const suggestedBrand = newValue.name ?? newValue.domain ?? prev.brand;
+      next.brand = suggestedBrand;
+
+      if (newValue.iconUrl) {
+        if (!prev.iconUrl || prev.iconUrl === autoFilledIconRef.current) {
+          next.iconUrl = newValue.iconUrl;
+          autoFilledIconRef.current = newValue.iconUrl;
+        }
+      }
+
+      return next;
+    });
+  };
+
+  const handleChange =
+    (field: keyof FormState) =>
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const value = event.target.value;
+
+      if (field === 'startDate') {
+        setForm((prev) => ({
+          ...prev,
+          startDate: value,
+        }));
+        return;
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    };
   const handleBillingPeriodChange = (event: ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
       ...prev,
