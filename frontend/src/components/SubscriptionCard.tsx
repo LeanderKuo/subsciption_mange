@@ -35,6 +35,8 @@ interface SubscriptionCardProps {
   onDragStart?: (subscriptionId: number, event: DragEvent<HTMLDivElement>) => void;
   onDragEnd?: () => void;
   priceDisplayMode?: 'original' | 'monthly';
+  monthlyCost?: number | null;
+  targetCurrency?: string;
 }
 
 export const SubscriptionCard = ({
@@ -49,6 +51,8 @@ export const SubscriptionCard = ({
   onDragStart,
   onDragEnd,
   priceDisplayMode = 'original',
+  monthlyCost,
+  targetCurrency,
 }: SubscriptionCardProps) => {
   const { t } = useLocale();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -102,12 +106,42 @@ export const SubscriptionCard = ({
   };
 
   const renderPrice = () => {
-    if (priceDisplayMode === 'monthly') {
-      const { billingPeriod, customDuration } = parseBillingCycle(subscription.cycle);
-      const monthlyPrice = computeMonthlyCost(subscription.price, billingPeriod, customDuration, subscription.cycle);
-      return `${subscription.currency} ${Math.round(monthlyPrice)} / ${t('billingCycle.month')}`;
+    const originalPriceDisplay = `${subscription.currency} ${subscription.price}`;
+    const { billingPeriod, customDuration } = parseBillingCycle(subscription.cycle);
+    
+    // Calculate cycle label for display (e.g. "/ year", "/ 1.5 years")
+    let cycleLabel = '';
+    if (billingPeriod === 'monthly') cycleLabel = ` / ${t('billingCycle.month')}`;
+    else if (billingPeriod === 'yearly') cycleLabel = ` / ${t('billingCycle.year')}`;
+    else if (billingPeriod === 'half-yearly') cycleLabel = ` / ${t('billingCycle.halfYear')}`;
+    else if (billingPeriod === 'custom' && customDuration) {
+      const parts = [];
+      if (customDuration.years > 0) parts.push(`${customDuration.years} ${t('billingCycle.year')}`);
+      if (customDuration.months > 0) parts.push(`${customDuration.months} ${t('billingCycle.month')}`);
+      cycleLabel = ` / ${parts.join(' ')}`;
     }
-    return `${subscription.currency} ${subscription.price}`;
+
+    const totalCostDisplay = `${originalPriceDisplay}${cycleLabel}`;
+
+    if (monthlyCost !== undefined && monthlyCost !== null && targetCurrency) {
+       return (
+        <Box>
+          <Typography variant="h5" fontWeight={700} color="primary.main">
+            {targetCurrency} {Math.round(monthlyCost)} / {t('billingCycle.month')}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {t('subscriptionCard.total')}: {totalCostDisplay}
+          </Typography>
+        </Box>
+      );
+    }
+
+    // Fallback if monthly cost isn't available (shouldn't happen with correct parent implementation)
+    return (
+        <Typography variant="h5" fontWeight={700} gutterBottom>
+          {totalCostDisplay}
+        </Typography>
+    );
   };
 
   return (
@@ -164,11 +198,9 @@ export const SubscriptionCard = ({
             </Box>
           </Box>
 
-          <Typography variant="h5" fontWeight={700} gutterBottom>
-            {renderPrice()}
-          </Typography>
+          {renderPrice()}
 
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             {format(new Date(subscription.startDate), 'yyyy/MM/dd')} -{' '}
             {format(new Date(subscription.endDate), 'yyyy/MM/dd')}
           </Typography>

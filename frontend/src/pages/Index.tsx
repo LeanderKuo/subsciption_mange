@@ -823,7 +823,7 @@ const IndexPage = () => {
                     ) : (
                       <Grid container spacing={2}>
                         {group.subscriptions.map((subscription) => (
-                          <Grid item xs={12} md={6} lg={4} key={subscription.id}>
+                    <Grid item xs={12} md={6} lg={4} key={subscription.id}>
                             <SubscriptionCard
                               subscription={subscription}
                               onDelete={handleDelete}
@@ -836,6 +836,8 @@ const IndexPage = () => {
                               onDragEnd={handleDragEnd}
                               isDragging={draggedSubscriptionId === subscription.id}
                               priceDisplayMode={priceDisplayMode}
+                              monthlyCost={computeSubscriptionMonthlyCost(subscription, exchangeRates, userDefaultCurrency)}
+                              targetCurrency={userDefaultCurrency}
                             />
                           </Grid>
                         ))}
@@ -860,6 +862,8 @@ const IndexPage = () => {
                         draggable={false}
                         isDragging={false}
                         priceDisplayMode={priceDisplayMode}
+                        monthlyCost={computeSubscriptionMonthlyCost(subscription, exchangeRates, userDefaultCurrency)}
+                        targetCurrency={userDefaultCurrency}
                       />
                     </Grid>
                   );
