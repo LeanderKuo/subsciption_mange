@@ -105,10 +105,19 @@ export const CategoryManagementDialog = ({
     }
   };
 
+  const handleClose = (event: {}, reason: "backdropClick" | "escapeKeyDown") => {
+    if (reason === "backdropClick") return;
+    // Reset form and state when closing the dialog, similar to handleCancel
+    setForm({ name: '', description: '', color: '#000000' });
+    setEditingId(null);
+    setIsAdding(false);
+    onClose(); // Call the original onClose prop
+  };
+
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       maxWidth="sm"
       fullWidth
       PaperProps={{

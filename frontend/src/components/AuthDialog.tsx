@@ -68,7 +68,8 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     setError(null);
   };
 
-  const handleClose = () => {
+  const handleClose = (event?: {}, reason?: "backdropClick" | "escapeKeyDown") => {
+    if (reason === "backdropClick") return;
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -289,7 +290,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
       </DialogContent>
 
       <DialogActions sx={{ px: 3, pb: 3 }}>
-        <Button onClick={handleClose} color="inherit">
+        <Button onClick={() => handleClose({}, "escapeKeyDown")} color="inherit">
           {t("auth.actions.cancel")}
         </Button>
         {tabValue === 0 ? (

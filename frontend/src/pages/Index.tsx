@@ -10,6 +10,8 @@ import {
   Select,
   FormControl,
   InputLabel,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -41,7 +43,7 @@ import { Subscription, SubscriptionInput, SubscriptionCategoryInput, Subscriptio
 import { supabase } from "../services/supabaseClient";
 import { getExchangeRate } from "../services/exchangeRateService";
 import { useLocale } from "../i18n/LocaleProvider";
-import { getCycleDurationInMonths } from "../utils/subscriptionDates";
+import { computeMonthlyCost, parseBillingCycle } from "../utils/billingUtils";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
 import LanguageSwitcher from "../components/LanguageSwitcher";
@@ -79,13 +81,21 @@ const resolveRate = (
 const convertToTargetCurrency = (
   subscription: Subscription,
   rates: Record<string, number>,
-  targetCurrency: string
+  targetCurrency: string,
+  mode: 'original' | 'monthly'
 ) => {
   const rate = resolveRate(subscription.currency, rates, targetCurrency) ?? 1;
-  return subscription.price * rate;
+  
+  let price = subscription.price;
+  if (mode === 'monthly') {
+    const { billingPeriod, customDuration } = parseBillingCycle(subscription.cycle);
+    price = computeMonthlyCost(subscription.price, billingPeriod, customDuration, subscription.cycle);
+  }
+
+  return price * rate;
 };
 
-const computeMonthlyCost = (
+const computeSubscriptionMonthlyCost = (
   subscription: Subscription,
   rates: Record<string, number>,
   targetCurrency: string
@@ -96,9 +106,10 @@ const computeMonthlyCost = (
   }
 
   const effectiveRate = rate ?? 1;
-  const priceInTarget = subscription.price * effectiveRate;
-  const durationMonths = Math.max(1, getCycleDurationInMonths(subscription.cycle));
-  return priceInTarget / durationMonths;
+  const { billingPeriod, customDuration } = parseBillingCycle(subscription.cycle);
+  const monthlyPrice = computeMonthlyCost(subscription.price, billingPeriod, customDuration, subscription.cycle);
+  
+  return monthlyPrice * effectiveRate;
 };
 
 const computeTotalMonthly = (
@@ -107,7 +118,7 @@ const computeTotalMonthly = (
   targetCurrency: string
 ) =>
   subscriptions.reduce((sum, subscription) => {
-    const monthly = computeMonthlyCost(subscription, rates, targetCurrency);
+    const monthly = computeSubscriptionMonthlyCost(subscription, rates, targetCurrency);
     return monthly === null ? sum : sum + monthly;
   }, 0);
 
@@ -123,7 +134,8 @@ const sortSubscriptionsBy = (
   subscriptions: Subscription[],
   sortBy: SortOption,
   rates: Record<string, number>,
-  targetCurrency: string
+  targetCurrency: string,
+  priceDisplayMode: 'original' | 'monthly'
 ) => {
   const list = [...subscriptions];
   switch (sortBy) {
@@ -133,8 +145,8 @@ const sortSubscriptionsBy = (
       );
     case "price":
       return list.sort((a, b) => {
-        const priceA = convertToTargetCurrency(a, rates, targetCurrency);
-        const priceB = convertToTargetCurrency(b, rates, targetCurrency);
+        const priceA = convertToTargetCurrency(a, rates, targetCurrency, priceDisplayMode);
+        const priceB = convertToTargetCurrency(b, rates, targetCurrency, priceDisplayMode);
         return priceB - priceA;
       });
     case "name":
@@ -184,7 +196,7 @@ const buildGroupedSubscriptions = (
   orderedCategories.forEach((category) => {
     const items = subscriptions.filter((sub) => sub.categoryId === category.id);
     const categoryTotal = items.reduce((sum, subscription) => {
-      const monthly = computeMonthlyCost(subscription, rates, targetCurrency);
+      const monthly = computeSubscriptionMonthlyCost(subscription, rates, targetCurrency);
       return monthly === null ? sum : sum + monthly;
     }, 0);
 
@@ -200,7 +212,7 @@ const buildGroupedSubscriptions = (
 
   const uncategorizedItems = subscriptions.filter((sub) => !sub.categoryId);
   const uncategorizedTotal = uncategorizedItems.reduce((sum, subscription) => {
-    const monthly = computeMonthlyCost(subscription, rates, targetCurrency);
+    const monthly = computeSubscriptionMonthlyCost(subscription, rates, targetCurrency);
     return monthly === null ? sum : sum + monthly;
   }, 0);
 
@@ -323,6 +335,7 @@ const IndexPage = () => {
     useUserProfileSnapshot();
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("endDate");
+  const [priceDisplayMode, setPriceDisplayMode] = useState<'original' | 'monthly'>('original');
   const [draggedSubscriptionId, setDraggedSubscriptionId] = useState<number | null>(null);
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
   const { t, locale, setLocale } = useLocale();
@@ -518,9 +531,10 @@ const IndexPage = () => {
         subscriptions,
         sortBy,
         exchangeRates,
-        userDefaultCurrency
+        userDefaultCurrency,
+        priceDisplayMode
       ),
-    [subscriptions, sortBy, exchangeRates, userDefaultCurrency]
+    [subscriptions, sortBy, exchangeRates, userDefaultCurrency, priceDisplayMode]
   );
 
   const categoryMap = useMemo(
@@ -673,6 +687,23 @@ const IndexPage = () => {
               gap={2}>
               <Typography variant="h6">{t("dashboard.allSubscriptions")}</Typography>
               <Stack direction="row" spacing={2} alignItems="center">
+                <ToggleButtonGroup
+                  value={priceDisplayMode}
+                  exclusive
+                  onChange={(e, newMode) => {
+                    if (newMode) setPriceDisplayMode(newMode);
+                  }}
+                  size="small"
+                  sx={{ height: 40 }}
+                >
+                  <ToggleButton value="original">
+                    {t("header.priceMode.original")}
+                  </ToggleButton>
+                  <ToggleButton value="monthly">
+                    {t("header.priceMode.monthly")}
+                  </ToggleButton>
+                </ToggleButtonGroup>
+
                 <Button
                   startIcon={<CategoryIcon />}
                   variant="outlined"
@@ -804,6 +835,7 @@ const IndexPage = () => {
                               onDragStart={(subscriptionId) => handleDragStart(subscriptionId)}
                               onDragEnd={handleDragEnd}
                               isDragging={draggedSubscriptionId === subscription.id}
+                              priceDisplayMode={priceDisplayMode}
                             />
                           </Grid>
                         ))}
@@ -827,6 +859,7 @@ const IndexPage = () => {
                         categoryName={categoryDisplay.name}
                         draggable={false}
                         isDragging={false}
+                        priceDisplayMode={priceDisplayMode}
                       />
                     </Grid>
                   );
@@ -853,3 +886,4 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
+

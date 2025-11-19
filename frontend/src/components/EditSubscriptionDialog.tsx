@@ -1,13 +1,15 @@
+
 import {
   Autocomplete,
   Avatar,
   Button,
   Checkbox,
-  FormControl,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   FormControlLabel,
   FormHelperText,
   FormLabel,
@@ -16,48 +18,67 @@ import {
   RadioGroup,
   Stack,
   TextField,
-  IconButton,
   Typography,
+  IconButton,
+  Box,
 } from '@mui/material';
 import type { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
 import EditIcon from '@mui/icons-material/Edit';
-import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
 import {
   Subscription,
   SubscriptionCategory,
-  BillingCycle,
   CycleUnit,
+  BillingCycle,
   PresetBillingCycle,
 } from '../types/subscription';
-import { buildCustomCycle, isPresetCycle, getDefaultCycle } from '../utils/subscriptionDates';
+import { getDefaultCycle, buildCustomCycle, isPresetCycle } from '../utils/subscriptionDates';
 import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill';
 import { useLocale } from '../i18n/LocaleProvider';
 import {
   createCycleAwareUpdater,
-  createFormStateFromSubscription,
   deriveCycleState,
   resolveCycleFromState,
   sanitizeCustomValue,
   type CycleMode,
   type SubscriptionFormStateBase,
 } from '../utils/subscriptionFormState';
+import { BillingPeriod, parseBillingCycle, serializeBillingCycle } from '../utils/billingUtils';
 
 interface EditSubscriptionDialogProps {
   subscription: Subscription;
-  onSave: (subscription: Subscription) => Promise<void> | void;
+  onSave: (updated: Subscription) => Promise<void> | void;
   categories?: SubscriptionCategory[];
 }
 
 type FormState = SubscriptionFormStateBase & {
-  recordPriceChange: boolean;
-  priceChangeDate: string;
+  billingPeriod: BillingPeriod;
+  customYears: string;
+  customMonths: string;
 };
 
-const toFormState = (subscription: Subscription): FormState => ({
-  ...createFormStateFromSubscription(subscription),
-  recordPriceChange: false,
-  priceChangeDate: new Date().toISOString().split('T')[0],
-});
+const toFormState = (sub: Subscription): FormState => {
+  const { billingPeriod, customDuration } = parseBillingCycle(sub.cycle);
+  return {
+    name: sub.name,
+    brand: sub.brand,
+    price: sub.price.toString(),
+    currency: sub.currency,
+    startDate: sub.startDate,
+    endDate: sub.endDate,
+    cycle: sub.cycle,
+    billingPeriod,
+    customYears: customDuration?.years.toString() ?? '0',
+    customMonths: customDuration?.months.toString() ?? '0',
+    // Legacy fields - kept for compatibility but not used for UI state in new mode
+    cycleMode: 'preset',
+    customUnit: 'months',
+    customValue: '1',
+    iconUrl: sub.iconUrl ?? '',
+    autoRenew: sub.autoRenew ?? false,
+    categoryId: sub.categoryId ?? null,
+  };
+};
 
 export const EditSubscriptionDialog = ({
   subscription,
@@ -67,31 +88,33 @@ export const EditSubscriptionDialog = ({
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(() => toFormState(subscription));
   const [brandTouched, setBrandTouched] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState<BrandAutofillResult | null>(null);
   const autoFilledIconRef = useRef<string | null>(null);
-
-  const brandAutofill = useBrandAutofill(brandTouched ? form.brand : '');
+  const [selectedBrand, setSelectedBrand] = useState<BrandAutofillResult | null>(null);
+  const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
-  const applyCycleUpdate = createCycleAwareUpdater<FormState>(setForm);
+  // const applyCycleUpdate = createCycleAwareUpdater<FormState>(setForm); // Removed as per instruction
+
+  useEffect(() => {
+    if (open) {
+      setForm(toFormState(subscription));
+      setBrandTouched(false);
+      setSelectedBrand(null);
+      autoFilledIconRef.current = null;
+    }
+  }, [open, subscription]);
 
   const handleBrandInputChange = (
     _event: SyntheticEvent<Element, Event>,
     newInputValue: string,
     reason: AutocompleteInputChangeReason
   ) => {
+    setBrandTouched(true);
     setForm((prev) => ({
       ...prev,
       brand: newInputValue,
     }));
 
-    if (reason === 'input') {
-      setBrandTouched(true);
-      setSelectedBrand(null);
-      autoFilledIconRef.current = null;
-      brandAutofill.reset();
-    }
-
-    if (reason === 'clear') {
+    if (reason === 'input' || reason === 'clear') {
       setSelectedBrand(null);
       autoFilledIconRef.current = null;
       brandAutofill.reset();
@@ -132,22 +155,9 @@ export const EditSubscriptionDialog = ({
       const value = event.target.value;
 
       if (field === 'startDate') {
-        applyCycleUpdate((prev) => ({
+        setForm((prev) => ({
           ...prev,
           startDate: value,
-        }));
-        return;
-      }
-
-      if (field === 'cycle') {
-        const cycleValue = (value as BillingCycle) || getDefaultCycle();
-        const cycleState = deriveCycleState(cycleValue);
-        applyCycleUpdate((prev) => ({
-          ...prev,
-          cycle: cycleValue,
-          cycleMode: cycleState.cycleMode,
-          customUnit: cycleState.customUnit,
-          customValue: cycleState.customValue,
         }));
         return;
       }
@@ -158,121 +168,59 @@ export const EditSubscriptionDialog = ({
       }));
     };
 
-  const handleCycleModeChange = (_event: ChangeEvent<HTMLInputElement>, value: string) => {
-    if (value !== 'preset' && value !== 'custom') {
-      return;
-    }
-
-    const mode = value as CycleMode;
-
-    applyCycleUpdate((prev) => {
-      if (mode === 'preset') {
-        const preset = isPresetCycle(prev.cycle) ? prev.cycle : getDefaultCycle();
-        const presetState = deriveCycleState(preset);
-        return {
-          ...prev,
-          cycleMode: mode,
-          cycle: preset,
-          customUnit: presetState.customUnit,
-          customValue: presetState.customValue,
-        };
-      }
-
-      const amount = Number(prev.customValue) || 1;
-      return {
-        ...prev,
-        cycleMode: mode,
-        cycle: buildCustomCycle(prev.customUnit, amount),
-      };
-    });
-  };
-
-  const handlePresetCycleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = event.target.value as PresetBillingCycle;
-    applyCycleUpdate((prev) => ({
+  const handleBillingPeriodChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({
       ...prev,
-      cycleMode: 'preset',
-      cycle: value,
+      billingPeriod: event.target.value as BillingPeriod,
     }));
-  };
-
-  const handleCustomValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const amount = sanitizeCustomValue(event.target.value);
-    applyCycleUpdate((prev) => ({
-      ...prev,
-      cycleMode: 'custom',
-      customValue: amount,
-      cycle: buildCustomCycle(prev.customUnit, Number(amount)),
-    }));
-  };
-
-  const handleCustomUnitChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const unit = event.target.value as CycleUnit;
-    applyCycleUpdate((prev) => {
-      const amount = Number(prev.customValue) || 1;
-      return {
-        ...prev,
-        cycleMode: 'custom',
-        customUnit: unit,
-        cycle: buildCustomCycle(unit, amount),
-      };
-    });
   };
 
   const handleSubmit = async () => {
-    const newPrice = Number(form.price) || 0;
-    const oldPrice = subscription.price;
-    const priceChanged = newPrice !== oldPrice;
+    const customDuration =
+      form.billingPeriod === 'custom'
+        ? {
+            years: Number(form.customYears) || 0,
+            months: Number(form.customMonths) || 0,
+          }
+        : undefined;
 
-    const resolvedCycle = resolveCycleFromState(
-      form.cycleMode,
-      form.cycle,
-      form.customUnit,
-      form.customValue
-    );
+    const resolvedCycle = serializeBillingCycle(form.billingPeriod, customDuration);
 
-    const payload: Subscription = {
+    const updated: Subscription = {
       ...subscription,
       name: form.name.trim(),
       brand: form.brand.trim(),
-      price: newPrice,
+      price: Number(form.price) || 0,
       currency: form.currency,
       startDate: form.startDate,
       endDate: form.endDate,
       cycle: resolvedCycle,
+      // billingPeriod: form.billingPeriod, // Not part of Subscription type
+      // customDuration, // Not part of Subscription type
       iconUrl: form.iconUrl ? form.iconUrl.trim() : null,
       autoRenew: form.autoRenew,
       categoryId: form.categoryId,
     };
 
-    // TODO: If recordPriceChange is true and price changed, create price_changes record
-    // This will be implemented in the service layer
-    if (form.recordPriceChange && priceChanged) {
-      console.log('Price change recorded:', {
-        oldPrice,
-        newPrice,
-        effectiveDate: form.priceChangeDate,
-      });
+    if (!updated.name || !updated.brand) {
+      return;
     }
 
-    await onSave(payload);
+    await onSave(updated);
     setOpen(false);
+  };
+
+  const handleClose = (event: {}, reason: "backdropClick" | "escapeKeyDown") => {
+    if (reason === "backdropClick") return;
+    setOpen(false);
+    setForm(toFormState(subscription));
     setBrandTouched(false);
     setSelectedBrand(null);
     autoFilledIconRef.current = null;
     brandAutofill.reset();
   };
 
-  const handleOpen = () => {
-    setForm(toFormState(subscription));
-    setBrandTouched(false);
-    setSelectedBrand(null);
-    autoFilledIconRef.current = subscription.iconUrl ?? null;
-    brandAutofill.reset();
-    setOpen(true);
-  };
-
-  const handleClose = () => {
+  const handleCancel = () => {
     setOpen(false);
     setForm(toFormState(subscription));
     setBrandTouched(false);
@@ -283,19 +231,17 @@ export const EditSubscriptionDialog = ({
 
   return (
     <>
-      <IconButton
-        size="small"
-        onClick={handleOpen}
-        aria-label={t('editSubscription.openButton')}
-      >
-        <EditIcon fontSize="small" />
-      </IconButton>
+      <Box onClick={() => setOpen(true)} sx={{ cursor: 'pointer', display: 'inline-block' }}>
+        <IconButton size="small">
+          <EditIcon fontSize="small" />
+        </IconButton>
+      </Box>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>{t('editSubscription.title')}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
-              label={t('addSubscription.fields.name')}
+              label={t('editSubscription.fields.name')}
               value={form.name}
               onChange={handleChange('name')}
               fullWidth
@@ -304,12 +250,12 @@ export const EditSubscriptionDialog = ({
             <Autocomplete<BrandAutofillResult, false, false, true>
               freeSolo
               fullWidth
-              options={brandTouched ? brandAutofill.suggestions : []}
+              options={brandAutofill.suggestions}
               value={selectedBrand}
               inputValue={form.brand}
               onInputChange={handleBrandInputChange}
               onChange={handleBrandSelect}
-              loading={brandTouched && brandAutofill.isLoading}
+              loading={brandAutofill.isLoading}
               filterOptions={(options) => options}
               getOptionLabel={(option) =>
                 typeof option === 'string'
@@ -323,13 +269,14 @@ export const EditSubscriptionDialog = ({
                   : t('addSubscription.brand.placeholder')
               }
               renderOption={(props, option) => {
+                const { key, ...optionProps } = props;
                 const displayName = option.name ?? option.domain ?? option.query;
                 const subtitle =
                   option.domain && option.domain !== option.name ? option.domain : null;
                 const initial = displayName ? displayName.charAt(0).toUpperCase() : '?';
 
                 return (
-                  <li {...props}>
+                  <li {...optionProps} key={key ?? option.id}>
                     <Stack direction="row" spacing={1.5} alignItems="center">
                       <Avatar
                         src={option.iconUrl}
@@ -353,11 +300,11 @@ export const EditSubscriptionDialog = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label={t('addSubscription.fields.brand')}
+                  label={t('editSubscription.fields.brand')}
                   required
-                  error={Boolean(brandAutofill.error) && brandTouched}
+                  error={Boolean(brandAutofill.error)}
                   helperText={
-                    brandAutofill.enabled && brandTouched
+                    brandAutofill.enabled
                       ? brandAutofill.error ??
                         (brandAutofill.isLoading ? t('addSubscription.brand.searching') : undefined)
                       : undefined
@@ -367,7 +314,7 @@ export const EditSubscriptionDialog = ({
             />
             <Stack direction="row" spacing={2}>
               <TextField
-                label={t('addSubscription.fields.price')}
+                label={t('editSubscription.fields.price')}
                 type="number"
                 value={form.price}
                 onChange={handleChange('price')}
@@ -375,7 +322,7 @@ export const EditSubscriptionDialog = ({
                 required
               />
               <TextField
-                label={t('addSubscription.fields.currency')}
+                label={t('editSubscription.fields.currency')}
                 select
                 value={form.currency}
                 onChange={handleChange('currency')}
@@ -392,7 +339,7 @@ export const EditSubscriptionDialog = ({
             </Stack>
             <Stack direction="row" spacing={2}>
               <TextField
-                label={t('addSubscription.fields.startDate')}
+                label={t('editSubscription.fields.startDate')}
                 type="date"
                 value={form.startDate}
                 onChange={handleChange('startDate')}
@@ -401,7 +348,7 @@ export const EditSubscriptionDialog = ({
                 required
               />
               <TextField
-                label={t('addSubscription.fields.endDate')}
+                label={t('editSubscription.fields.endDate')}
                 type="date"
                 value={form.endDate}
                 onChange={handleChange('endDate')}
@@ -410,86 +357,90 @@ export const EditSubscriptionDialog = ({
                 required
               />
             </Stack>
+            
             <FormControl component="fieldset" fullWidth>
               <FormLabel>{t('addSubscription.fields.billingCycle')}</FormLabel>
               <RadioGroup
                 row
-                value={form.cycleMode}
-                onChange={handleCycleModeChange}
-                name="billing-cycle-mode"
+                value={form.billingPeriod}
+                onChange={handleBillingPeriodChange}
+                name="billing-period"
               >
                 <FormControlLabel
-                  value="preset"
+                  value="monthly"
                   control={<Radio />}
-                  label={t('addSubscription.cycle.mode.preset')}
+                  label={t('billingCycle.monthly')}
+                />
+                <FormControlLabel
+                  value="half-yearly"
+                  control={<Radio />}
+                  label={t('billingCycle.halfYearly')}
+                />
+                <FormControlLabel
+                  value="yearly"
+                  control={<Radio />}
+                  label={t('billingCycle.yearly')}
                 />
                 <FormControlLabel
                   value="custom"
                   control={<Radio />}
-                  label={t('addSubscription.cycle.mode.custom')}
+                  label={t('billingCycle.custom')}
                 />
               </RadioGroup>
             </FormControl>
-            {form.cycleMode === 'preset' ? (
-              <TextField
-                select
-                value={isPresetCycle(form.cycle) ? form.cycle : getDefaultCycle()}
-                onChange={handlePresetCycleChange}
-                fullWidth
-              >
-                <MenuItem value="30days">{t('billingCycle.30days')}</MenuItem>
-                <MenuItem value="6months">{t('billingCycle.6months')}</MenuItem>
-                <MenuItem value="1year">{t('billingCycle.1year')}</MenuItem>
-              </TextField>
-            ) : (
+
+            {form.billingPeriod === 'custom' && (
               <Stack direction="row" spacing={2}>
                 <TextField
-                  label={t('addSubscription.cycle.customValue')}
+                  label={t('addSubscription.cycle.customUnit.years')}
                   type="number"
-                  value={form.customValue}
-                  onChange={handleCustomValueChange}
+                  value={form.customYears}
+                  onChange={handleChange('customYears')}
                   fullWidth
-                  inputProps={{ min: 1 }}
+                  inputProps={{ min: 0 }}
                 />
                 <TextField
-                  label={t('addSubscription.cycle.customUnit')}
-                  select
-                  value={form.customUnit}
-                  onChange={handleCustomUnitChange}
+                  label={t('addSubscription.cycle.customUnit.months')}
+                  type="number"
+                  value={form.customMonths}
+                  onChange={handleChange('customMonths')}
                   fullWidth
-                >
-                  <MenuItem value="days">{t('addSubscription.cycle.customUnit.days')}</MenuItem>
-                  <MenuItem value="months">{t('addSubscription.cycle.customUnit.months')}</MenuItem>
-                  <MenuItem value="years">{t('addSubscription.cycle.customUnit.years')}</MenuItem>
-                </TextField>
+                  inputProps={{ min: 0 }}
+                />
               </Stack>
             )}
-            <FormHelperText sx={{ color: 'text.secondary', ml: 0.5 }}>
-              {t('addSubscription.cycle.helper')}
-            </FormHelperText>
+
             <TextField
-              label={t('addSubscription.fields.iconUrl')}
+              label={t('editSubscription.fields.iconUrl')}
               value={form.iconUrl}
               onChange={handleChange('iconUrl')}
               fullWidth
               placeholder="https://"
             />
             <TextField
-              label={t('addSubscription.fields.category')}
+              label={t('editSubscription.fields.category')}
               select
               value={form.categoryId ?? ''}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  categoryId: e.target.value ? Number(e.target.value) : null,
-                })
-              }
+              onChange={(e) => setForm({ ...form, categoryId: e.target.value ? Number(e.target.value) : null })}
               fullWidth
             >
               <MenuItem value="">{t('addSubscription.fields.category.none')}</MenuItem>
               {categories.map((category) => (
                 <MenuItem key={category.id} value={category.id}>
-                  {category.name}
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Chip
+                      sx={{
+                        backgroundColor: category.color,
+                        color: '#fff',
+                        width: 16,
+                        height: 16,
+                      }}
+                      label=" "
+                      size="small"
+                      
+                    />
+                    <span>{category.name}</span>
+                  </Stack>
                 </MenuItem>
               ))}
             </TextField>
@@ -501,40 +452,12 @@ export const EditSubscriptionDialog = ({
                   sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
                 />
               }
-              label={t('addSubscription.fields.autoRenew')}
+              label={t('editSubscription.fields.autoRenew')}
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={form.recordPriceChange}
-                  onChange={(e) => setForm({ ...form, recordPriceChange: e.target.checked })}
-                  sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
-                />
-              }
-              label={t('editSubscription.recordPriceChange')}
-            />
-            {form.recordPriceChange && (
-              <TextField
-                label={t('editSubscription.priceEffectiveDate')}
-                type="date"
-                value={form.priceChangeDate}
-                onChange={(e) => setForm({ ...form, priceChangeDate: e.target.value })}
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                helperText={
-                  Number(form.price) !== subscription.price
-                    ? t('editSubscription.priceChangePreview', {
-                        oldPrice: `${subscription.currency} ${subscription.price}`,
-                        newPrice: `${form.currency} ${form.price}`,
-                      })
-                    : t('editSubscription.priceChangeHint')
-                }
-              />
-            )}
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{t('addSubscription.cancel')}</Button>
+          <Button onClick={handleCancel}>{t('editSubscription.cancel')}</Button>
           <Button variant="contained" onClick={handleSubmit}>
             {t('editSubscription.submit')}
           </Button>
