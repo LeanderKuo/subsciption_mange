@@ -125,11 +125,11 @@ export const SubscriptionCard = ({
 
     if (monthlyCost !== undefined && monthlyCost !== null && targetCurrency) {
        return (
-        <Box>
-          <Typography variant="h5" fontWeight={700} color="primary.main">
+        <Box sx={{ mt: 1.5 }}>
+          <Typography variant="h5" fontWeight={700} color="primary.main" sx={{ mb: 0.5 }}>
             {targetCurrency} {Math.round(monthlyCost)} / {t('billingCycle.month')}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.875rem' }}>
             {t('subscriptionCard.total')}: {totalCostDisplay}
           </Typography>
         </Box>
@@ -149,11 +149,17 @@ export const SubscriptionCard = ({
       <Card
         elevation={0}
         sx={{
-          borderRadius: 2,
+          borderRadius: 3,
           border: '2px solid #e5e7eb',
           backgroundColor: '#fff',
           opacity: isDragging ? 0.6 : 1,
           cursor: draggable ? 'grab' : 'default',
+          transition: 'all 0.2s ease-in-out',
+          '&:hover': {
+            borderColor: '#000',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            transform: 'translateY(-2px)',
+          },
         }}
         draggable={draggable}
         onDragStart={(event) => {
@@ -177,6 +183,8 @@ export const SubscriptionCard = ({
                 color: '#fff',
                 fontWeight: 600,
                 mb: 1.5,
+                fontSize: '0.75rem',
+                height: '24px',
               }}
             />
           )}
@@ -206,7 +214,7 @@ export const SubscriptionCard = ({
           </Typography>
           <Box mt={1}>{renderStatusChip()}</Box>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
           <Tooltip title={t('common.edit')}>
             <span>
               <EditSubscriptionDialog
@@ -217,7 +225,16 @@ export const SubscriptionCard = ({
             </span>
           </Tooltip>
           <Tooltip title={t('common.delete')}>
-            <IconButton color="error" onClick={handleDeleteClick} aria-label={t('common.delete')}>
+            <IconButton
+              color="error"
+              onClick={handleDeleteClick}
+              aria-label={t('common.delete')}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(211, 47, 47, 0.08)',
+                },
+              }}
+            >
               <DeleteIcon fontSize="small" />
             </IconButton>
           </Tooltip>

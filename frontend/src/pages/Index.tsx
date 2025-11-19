@@ -682,11 +682,11 @@ const IndexPage = () => {
               direction="row"
               alignItems="center"
               justifyContent="space-between"
-              mb={3}
+              mb={4}
               flexWrap="wrap"
               gap={2}>
-              <Typography variant="h6">{t("dashboard.allSubscriptions")}</Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Typography variant="h5" fontWeight={700}>{t("dashboard.allSubscriptions")}</Typography>
+              <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
                 <ToggleButtonGroup
                   value={priceDisplayMode}
                   exclusive
@@ -694,7 +694,24 @@ const IndexPage = () => {
                     if (newMode) setPriceDisplayMode(newMode);
                   }}
                   size="small"
-                  sx={{ height: 40 }}
+                  sx={{
+                    height: 40,
+                    '& .MuiToggleButton-root': {
+                      borderColor: '#000',
+                      color: '#000',
+                      fontWeight: 600,
+                      '&.Mui-selected': {
+                        backgroundColor: '#000',
+                        color: '#fff',
+                        '&:hover': {
+                          backgroundColor: '#333',
+                        },
+                      },
+                      '&:hover': {
+                        backgroundColor: '#f5f5f5',
+                      },
+                    },
+                  }}
                 >
                   <ToggleButton value="original">
                     {t("header.priceMode.original")}
@@ -771,11 +788,12 @@ const IndexPage = () => {
                     key={group.key}
                     sx={{
                       border: `2px solid ${group.color}`,
-                      borderRadius: 2,
-                      p: 2,
+                      borderRadius: 3,
+                      p: 3,
                       backgroundColor:
                         activeDropTarget === group.key ? 'rgba(0,0,0,0.04)' : '#fff',
                       transition: 'background-color 0.2s ease, border-color 0.2s ease',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
                     }}
                     onDragOver={(event) => {
                       if (draggedSubscriptionId !== null) {
@@ -821,9 +839,9 @@ const IndexPage = () => {
                         {t("categories.dropHint")}
                       </Box>
                     ) : (
-                      <Grid container spacing={2}>
+                      <Grid container spacing={3}>
                         {group.subscriptions.map((subscription) => (
-                    <Grid item xs={12} md={6} lg={4} key={subscription.id}>
+                    <Grid item xs={12} sm={6} md={6} lg={4} key={subscription.id}>
                             <SubscriptionCard
                               subscription={subscription}
                               onDelete={handleDelete}
@@ -847,11 +865,11 @@ const IndexPage = () => {
                 ))}
               </Stack>
             ) : (
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 {sortedSubscriptions.map((subscription) => {
                   const categoryDisplay = getCategoryDisplay(subscription);
                   return (
-                    <Grid item xs={12} md={6} lg={4} key={subscription.id}>
+                    <Grid item xs={12} sm={6} md={6} lg={4} key={subscription.id}>
                       <SubscriptionCard
                         subscription={subscription}
                         onDelete={handleDelete}
