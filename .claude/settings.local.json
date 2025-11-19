@@ -9,7 +9,8 @@
       "Bash(set NODE_OPTIONS=--max-old-space-size=4096)",
       "Bash(npx react-scripts build)",
       "Bash(node -e:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(where:*)"
     ],
     "deny": [],
     "ask": []
