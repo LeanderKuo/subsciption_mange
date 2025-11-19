@@ -118,7 +118,6 @@ export const EditSubscriptionDialog = ({
     }
 
     setSelectedBrand(newValue);
-    setBrandTouched(true);
 
     setForm((prev) => {
       const next: FormState = { ...prev };
