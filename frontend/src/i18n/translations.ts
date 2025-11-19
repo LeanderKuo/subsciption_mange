@@ -273,19 +273,19 @@ export const translations: TranslationMap = {
     "landing.pricing.features.priceChange": "Price change management",
     "landing.pricing.features.autoRenew": "Auto renew tracking",
     "landing.pricing.features.multiCurrency": "Multi-currency support",
-    "landing.features.title": "Why teams choose SubMange",
+    "landing.features.title": "Why choose SubMange",
     "landing.features.track.title": "Complete subscription visibility",
     "landing.features.track.description":
-      "Sync streaming, SaaS, utilities, and memberships to see monthly and annual totals in one dashboard.",
-    "landing.features.price.title": "Automatic price change alerts",
-    "landing.features.price.description":
-      "Log historical pricing, track tax adjustments, and receive prompts when a provider increases rates.",
-    "landing.features.renew.title": "Renewal reminders with context",
-    "landing.features.renew.description":
-      "Set renewal cadences, assign owners, and stay ahead of cancellations or plan updates.",
-    "landing.features.security.title": "Enterprise-grade security",
+      "Track streaming, SaaS, utilities, and memberships to see monthly and annual totals in one dashboard with automatic multi-currency conversion.",
+    "landing.features.category.title": "Custom category management",
+    "landing.features.category.description":
+      "Create personalized categories with color labels to organize your subscriptions and easily manage different types of services.",
+    "landing.features.cycle.title": "Flexible billing cycles",
+    "landing.features.cycle.description":
+      "Support for monthly, semi-annual, yearly, or completely custom billing cycles to precisely track each subscription's renewal date.",
+    "landing.features.security.title": "Secure and private",
     "landing.features.security.description":
-      "Supabase-backed authentication, row-level security, and encryption keep customer data private.",
+      "Supabase authentication, row-level security, and encryption ensure your subscription data stays completely private.",
     "landing.faq.title": "Frequently asked questions",
     "landing.faq.free.question": "Is this service free?",
     "landing.faq.free.answer":
@@ -296,9 +296,9 @@ export const translations: TranslationMap = {
     "landing.faq.supported.question": "Which services are supported?",
     "landing.faq.supported.answer":
       "All types, including streaming, software, and gym memberships.",
-    "landing.faq.price.question": "Can I track price changes?",
+    "landing.faq.price.question": "Can I track my subscription history?",
     "landing.faq.price.answer":
-      "Yes. Set effective dates for new prices and we will compute totals automatically.",
+      "Yes. Edit your subscriptions anytime to update pricing, and the system will automatically recalculate monthly and annual totals.",
     "landing.faq.devices.question": "Does it work across devices?",
     "landing.faq.devices.answer":
       "Yes. Sign in on any device and your data syncs instantly.",
@@ -650,19 +650,19 @@ export const translations: TranslationMap = {
     "landing.pricing.features.autoRenew":
       "Seguimiento de renovaciones automáticas",
     "landing.pricing.features.multiCurrency": "Compatibilidad multimoneda",
-    "landing.features.title": "Por qué los equipos eligen SubMange",
+    "landing.features.title": "Por qué elegir SubMange",
     "landing.features.track.title": "Visibilidad total de suscripciones",
     "landing.features.track.description":
-      "Sincroniza streaming, SaaS, servicios y membresías para ver totales mensuales y anuales en un solo panel.",
-    "landing.features.price.title": "Alertas automáticas de cambios de precio",
-    "landing.features.price.description":
-      "Registra el historial de precios, sigue impuestos y recibe avisos cuando un proveedor aumenta tarifas.",
-    "landing.features.renew.title": "Recordatorios de renovación con contexto",
-    "landing.features.renew.description":
-      "Define cadencias de renovación, asigna responsables y anticípate a cancelaciones o cambios de plan.",
-    "landing.features.security.title": "Seguridad de nivel empresarial",
+      "Rastrea streaming, SaaS, servicios y membresías para ver totales mensuales y anuales en un solo panel con conversión automática de múltiples monedas.",
+    "landing.features.category.title": "Gestión de categorías personalizadas",
+    "landing.features.category.description":
+      "Crea categorías personalizadas con etiquetas de color para organizar tus suscripciones y gestionar fácilmente diferentes tipos de servicios.",
+    "landing.features.cycle.title": "Ciclos de facturación flexibles",
+    "landing.features.cycle.description":
+      "Soporte para ciclos mensuales, semestrales, anuales o completamente personalizados para rastrear con precisión la fecha de renovación de cada suscripción.",
+    "landing.features.security.title": "Seguro y privado",
     "landing.features.security.description":
-      "Autenticación con Supabase, seguridad a nivel de fila y cifrado para proteger tus datos.",
+      "Autenticación Supabase, seguridad a nivel de fila y cifrado garantizan que tus datos de suscripción permanezcan completamente privados.",
     "landing.faq.title": "Preguntas frecuentes",
     "landing.faq.free.question": "¿El servicio es gratuito?",
     "landing.faq.free.answer":
@@ -673,9 +673,9 @@ export const translations: TranslationMap = {
     "landing.faq.supported.question": "¿Qué servicios son compatibles?",
     "landing.faq.supported.answer":
       "Todos: streaming, software y membresías de gimnasio.",
-    "landing.faq.price.question": "¿Puedo controlar los cambios de precio?",
+    "landing.faq.price.question": "¿Puedo rastrear el historial de mis suscripciones?",
     "landing.faq.price.answer":
-      "Sí. Define las fechas efectivas de los nuevos precios y calcularemos los totales automáticamente.",
+      "Sí. Edita tus suscripciones en cualquier momento para actualizar los precios, y el sistema recalculará automáticamente los totales mensuales y anuales.",
     "landing.faq.devices.question": "¿Funciona en varios dispositivos?",
     "landing.faq.devices.answer":
       "Sí. Inicia sesión en cualquier dispositivo y tus datos se sincronizan al instante.",
@@ -785,7 +785,7 @@ export const translations: TranslationMap = {
     "header.logoutSuccessDescription": "您已成功登出。",
     "header.logoutFailure": "登出失敗",
     "header.logoutFailureDescription": "請稍後再試。",
-    "header.priceMode.original": "原始費用",
+    "header.priceMode.original": "總花費",
     "header.priceMode.monthly": "每月費用",
     "landing.nav.features": "功能特色",
     "landing.nav.faq": "常見問題",
@@ -879,7 +879,17 @@ export const translations: TranslationMap = {
      */
     "editSubscription.openButton": "編輯",
     "editSubscription.title": "編輯訂閱",
+    "editSubscription.fields.name": "服務名稱",
+    "editSubscription.fields.brand": "品牌",
+    "editSubscription.fields.price": "價格",
+    "editSubscription.fields.currency": "幣別",
+    "editSubscription.fields.startDate": "開始日期",
+    "editSubscription.fields.endDate": "結束日期",
+    "editSubscription.fields.iconUrl": "圖示 URL(可選)",
+    "editSubscription.fields.category": "訂閱分類(可選)",
+    "editSubscription.fields.autoRenew": "自動續訂",
     "editSubscription.submit": "更新",
+    "editSubscription.cancel": "取消",
     "editSubscription.recordPriceChange": "記錄價格變動",
     "editSubscription.priceEffectiveDate": "價格生效日期",
     "editSubscription.priceChangeHint":
@@ -1023,19 +1033,19 @@ export const translations: TranslationMap = {
     "landing.pricing.features.priceChange": "價格變動管理",
     "landing.pricing.features.autoRenew": "自動續訂追蹤",
     "landing.pricing.features.multiCurrency": "多幣別支援",
-    "landing.features.title": "為什麼團隊選擇 SubMange",
+    "landing.features.title": "為什麼選擇 SubMange",
     "landing.features.track.title": "完整的訂閱可見度",
     "landing.features.track.description":
-      "同步串流、SaaS、公用事業和會籍,在單一儀表板查看每月和年度總額。",
-    "landing.features.price.title": "自動價格變動警示",
-    "landing.features.price.description":
-      "記錄歷史定價、追蹤稅金調整,並在服務商調漲價格時立即收到通知。",
-    "landing.features.renew.title": "帶有情境的續訂提醒",
-    "landing.features.renew.description":
-      "設定續訂週期並指派負責人,在取消或方案調整前保持領先。",
-    "landing.features.security.title": "企業級安全性",
+      "追蹤串流、SaaS、公用事業和會籍,在單一儀表板查看每月和年度總額,支援多幣別自動換算。",
+    "landing.features.category.title": "自訂分類管理",
+    "landing.features.category.description":
+      "建立個人化分類,使用顏色標籤整理訂閱,輕鬆管理不同類型的服務。",
+    "landing.features.cycle.title": "彈性計費週期",
+    "landing.features.cycle.description":
+      "支援每月、半年、年度或完全自訂的計費週期,精確追蹤每個訂閱的續訂日期。",
+    "landing.features.security.title": "安全且私密",
     "landing.features.security.description":
-      "採用 Supabase 認證、資料列層級安全與加密,確保客戶資料隱私。",
+      "採用 Supabase 認證、資料列層級安全與加密,確保您的訂閱資料完全私密。",
     "landing.faq.title": "常見問題",
     "landing.faq.free.question": "這個服務免費嗎?",
     "landing.faq.free.answer":
@@ -1046,9 +1056,9 @@ export const translations: TranslationMap = {
     "landing.faq.supported.question": "支援哪些訂閱服務?",
     "landing.faq.supported.answer":
       "所有類型,包括串流、軟體服務、健身會籍等都支援。",
-    "landing.faq.price.question": "可以追蹤價格變動嗎?",
+    "landing.faq.price.question": "可以追蹤訂閱歷史記錄嗎?",
     "landing.faq.price.answer":
-      "可以!設定新價格的生效日期,系統將自動計算總費用。",
+      "可以!隨時編輯訂閱來更新價格,系統將自動重新計算每月和年度總費用。",
     "landing.faq.devices.question": "支援多個裝置嗎?",
     "landing.faq.devices.answer":
       "是的!在任何裝置登入都會即時同步資料。",

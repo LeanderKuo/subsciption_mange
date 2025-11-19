@@ -15,10 +15,10 @@ import {
 } from '@mui/material';
 import {
   AttachMoney,
+  Category,
   ExpandMore,
-  Notifications,
+  Loop,
   Security,
-  TrendingUp,
 } from '@mui/icons-material';
 import { useMemo, useState } from 'react';
 import { keyframes } from '@mui/system';
@@ -73,14 +73,14 @@ const Landing = () => {
         description: t('landing.features.track.description'),
       },
       {
-        icon: <TrendingUp sx={{ fontSize: 48, color: '#000' }} />,
-        title: t('landing.features.price.title'),
-        description: t('landing.features.price.description'),
+        icon: <Category sx={{ fontSize: 48, color: '#000' }} />,
+        title: t('landing.features.category.title'),
+        description: t('landing.features.category.description'),
       },
       {
-        icon: <Notifications sx={{ fontSize: 48, color: '#000' }} />,
-        title: t('landing.features.renew.title'),
-        description: t('landing.features.renew.description'),
+        icon: <Loop sx={{ fontSize: 48, color: '#000' }} />,
+        title: t('landing.features.cycle.title'),
+        description: t('landing.features.cycle.description'),
       },
       {
         icon: <Security sx={{ fontSize: 48, color: '#000' }} />,
