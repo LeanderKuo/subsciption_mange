@@ -21,7 +21,7 @@ import { useState, type DragEvent } from 'react';
 import { Subscription, SubscriptionCategory } from '../types/subscription';
 import { EditSubscriptionDialog } from './EditSubscriptionDialog';
 import { useLocale } from '../i18n/LocaleProvider';
-import { computeMonthlyCost, parseBillingCycle } from '../utils/billingUtils';
+import { parseBillingCycle } from '../utils/billingUtils';
 
 interface SubscriptionCardProps {
   subscription: Subscription;

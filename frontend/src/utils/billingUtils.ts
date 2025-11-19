@@ -1,4 +1,4 @@
-import { Subscription, BillingCycle, CycleUnit } from "../types/subscription";
+import { BillingCycle, CycleUnit } from "../types/subscription";
 
 export type BillingPeriod = "monthly" | "yearly" | "half-yearly" | "custom";
 

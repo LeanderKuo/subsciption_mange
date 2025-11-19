@@ -11,7 +11,6 @@ import {
   DialogTitle,
   FormControl,
   FormControlLabel,
-  FormHelperText,
   FormLabel,
   MenuItem,
   Radio,
@@ -28,19 +27,10 @@ import { ChangeEvent, SyntheticEvent, useEffect, useRef, useState } from 'react'
 import {
   Subscription,
   SubscriptionCategory,
-  CycleUnit,
-  BillingCycle,
-  PresetBillingCycle,
 } from '../types/subscription';
-import { getDefaultCycle, buildCustomCycle, isPresetCycle } from '../utils/subscriptionDates';
 import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill';
 import { useLocale } from '../i18n/LocaleProvider';
 import {
-  createCycleAwareUpdater,
-  deriveCycleState,
-  resolveCycleFromState,
-  sanitizeCustomValue,
-  type CycleMode,
   type SubscriptionFormStateBase,
 } from '../utils/subscriptionFormState';
 import { BillingPeriod, parseBillingCycle, serializeBillingCycle } from '../utils/billingUtils';
@@ -87,7 +77,6 @@ export const EditSubscriptionDialog = ({
 }: EditSubscriptionDialogProps) => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(() => toFormState(subscription));
-  const [brandTouched, setBrandTouched] = useState(false);
   const autoFilledIconRef = useRef<string | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
@@ -97,7 +86,6 @@ export const EditSubscriptionDialog = ({
   useEffect(() => {
     if (open) {
       setForm(toFormState(subscription));
-      setBrandTouched(false);
       setSelectedBrand(null);
       autoFilledIconRef.current = null;
     }
@@ -108,7 +96,6 @@ export const EditSubscriptionDialog = ({
     newInputValue: string,
     reason: AutocompleteInputChangeReason
   ) => {
-    setBrandTouched(true);
     setForm((prev) => ({
       ...prev,
       brand: newInputValue,
@@ -214,7 +201,6 @@ export const EditSubscriptionDialog = ({
     if (reason === "backdropClick") return;
     setOpen(false);
     setForm(toFormState(subscription));
-    setBrandTouched(false);
     setSelectedBrand(null);
     autoFilledIconRef.current = null;
     brandAutofill.reset();
@@ -223,7 +209,6 @@ export const EditSubscriptionDialog = ({
   const handleCancel = () => {
     setOpen(false);
     setForm(toFormState(subscription));
-    setBrandTouched(false);
     setSelectedBrand(null);
     autoFilledIconRef.current = null;
     brandAutofill.reset();
