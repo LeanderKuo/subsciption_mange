@@ -11,7 +11,7 @@ export const translations: TranslationMap = {
     "common.cancel": "Cancel",
     "common.delete": "Delete",
     "common.edit": "Edit",
-    "common.loading": "Loading�K",
+    "common.loading": "Loading…",
     "common.unknownError": "Something went wrong. Please try again.",
 
     /**
@@ -21,8 +21,8 @@ export const translations: TranslationMap = {
     "header.subtitle": "Manage every subscription with clarity",
     "header.language.label": "Language",
     "header.language.en": "English",
-    "header.language.zh-TW": "�c�餤��",
-    "header.language.es": "Espa?ol",
+    "header.language.zh-TW": "繁體中文",
+    "header.language.es": "Español",
     "header.addSubscription": "Add Subscription",
     "header.manageCategories": "Manage categories",
     "header.sort": "Sort",
@@ -44,7 +44,7 @@ export const translations: TranslationMap = {
     "landing.nav.signIn": "Sign in",
     "landing.nav.join": "Join for free",
     "landing.meta.title":
-      "SubMange �V Subscription management software for recurring payments",
+      "SubMange – Subscription management software for recurring payments",
     "landing.meta.description":
       "Track every subscription, forecast spending, and stay ahead of renewals with SubMange's smart subscription management dashboard.",
     "landing.meta.keywords":
@@ -65,7 +65,8 @@ export const translations: TranslationMap = {
      * Empty state
      */
     "dashboard.empty.title": "No subscriptions yet",
-    "dashboard.empty.description": "Click ��Add subscription�� to get started.",
+    "dashboard.empty.description":
+      "Click \"Add subscription\" to get started.",
 
     /**
      * Categories
@@ -122,7 +123,7 @@ export const translations: TranslationMap = {
     "addSubscription.fields.autoRenew": "Auto renew",
     "addSubscription.submit": "Add",
     "addSubscription.cancel": "Cancel",
-    "addSubscription.brand.searching": "Searching�K",
+    "addSubscription.brand.searching": "Searching…",
     "addSubscription.brand.noResults": "No related brands found",
     "addSubscription.brand.placeholder": "Enter brand name",
 
@@ -156,12 +157,12 @@ export const translations: TranslationMap = {
     /**
      * Currency labels
      */
-    "currency.TWD": "TWD �V New Taiwan Dollar",
-    "currency.USD": "USD �V US Dollar",
-    "currency.EUR": "EUR �V Euro",
-    "currency.JPY": "JPY �V Japanese Yen",
-    "currency.GBP": "GBP �V British Pound",
-    "currency.CNY": "CNY �V Chinese Yuan",
+    "currency.TWD": "TWD – New Taiwan Dollar",
+    "currency.USD": "USD – US Dollar",
+    "currency.EUR": "EUR – Euro",
+    "currency.JPY": "JPY – Japanese Yen",
+    "currency.GBP": "GBP – British Pound",
+    "currency.CNY": "CNY – Chinese Yuan",
 
     /**
      * Category Management Dialog
@@ -212,13 +213,13 @@ export const translations: TranslationMap = {
     "settings.defaultLanguage": "Preferred language",
     "settings.defaultLanguage.helper": "Language used throughout the app",
     "settings.save": "Save changes",
-    "settings.saving": "Saving�K",
+    "settings.saving": "Saving…",
     "settings.cancel": "Cancel",
     "settings.signOut": "Sign out",
     "settings.loadingError": "Failed to load profile.",
     "settings.updateSuccess": "Profile updated",
     "settings.updateError": "Failed to update profile.",
-    "settings.loading": "Loading profile�K",
+    "settings.loading": "Loading profile…",
     "settings.password.title": "Change password",
     "settings.password.current": "Current password",
     "settings.password.new": "New password",
@@ -305,7 +306,7 @@ export const translations: TranslationMap = {
     "landing.cta.description":
       "Join finance leads, founders, and creators using SubMange to negotiate better rates and eliminate duplicate subscriptions.",
     "landing.cta.button": "Start now",
-    "footer.copyright": "? 2025 SubMange. All rights reserved.",
+    "footer.copyright": "© 2025 SubMange. All rights reserved.",
     "footer.developer": "Built by Leander Kuo",
     "footer.github": "Visit my GitHub profile",
 
@@ -345,21 +346,21 @@ export const translations: TranslationMap = {
     "auth.signUp.error": "Sign up failed.",
     "auth.oauth.orContinue": "Or continue with",
     "auth.oauth.redirectingTitle": "Redirecting",
-    "auth.oauth.redirectingGoogle": "Taking you to Google sign in�K",
-    "auth.oauth.redirectingApple": "Taking you to Apple sign in�K",
+    "auth.oauth.redirectingGoogle": "Taking you to Google sign in…",
+    "auth.oauth.redirectingApple": "Taking you to Apple sign in…",
     "auth.oauth.googleError": "Google sign in failed.",
     "auth.oauth.appleError": "Apple sign in failed.",
     "auth.actions.facebook": "Facebook",
-    "auth.oauth.redirectingFacebook": "Taking you to Facebook sign in�K",
+    "auth.oauth.redirectingFacebook": "Taking you to Facebook sign in…",
     "auth.oauth.facebookError": "Facebook sign in failed.",
     "auth.actions.cancel": "Cancel",
     "auth.actions.signIn": "Sign in",
-    "auth.actions.signInLoading": "Signing in�K",
+    "auth.actions.signInLoading": "Signing in…",
     "auth.actions.signUp": "Sign up",
-    "auth.actions.signUpLoading": "Signing up�K",
+    "auth.actions.signUpLoading": "Signing up…",
     "auth.actions.google": "Google",
     "auth.actions.apple": "Apple",
-    "auth.actions.signOutLoading": "Signing out�K",
+    "auth.actions.signOutLoading": "Signing out…",
     "auth.user.fallback": "User",
 
     /**
@@ -381,44 +382,44 @@ export const translations: TranslationMap = {
     "common.cancel": "Cancelar",
     "common.delete": "Eliminar",
     "common.edit": "Editar",
-    "common.loading": "Cargando�K",
-    "common.unknownError": "Ocurri? un problema. Int?ntalo de nuevo.",
+    "common.loading": "Cargando…",
+    "common.unknownError": "Ocurrió un problema. Inténtalo de nuevo.",
 
     /**
      * Header / Navigation
      */
     "header.title": "SubMange",
-    "header.subtitle": "Administra cada suscripci?n con claridad",
+    "header.subtitle": "Administra cada suscripción con claridad",
     "header.language.label": "Idioma",
-    "header.language.en": "Ingl?s",
-    "header.language.zh-TW": "Chino tradicional",
-    "header.language.es": "Espa?ol",
-    "header.addSubscription": "Agregar suscripci?n",
-    "header.manageCategories": "Administrar categor?as",
+    "header.language.en": "English",
+    "header.language.zh-TW": "繁體中文",
+    "header.language.es": "Español",
+    "header.addSubscription": "Agregar suscripción",
+    "header.manageCategories": "Administrar categorías",
     "header.sort": "Ordenar",
     "header.sort.endDate": "Fecha de vencimiento",
     "header.sort.price": "Costo mensual",
-    "header.sort.name": "Tipo de suscripci?n",
-    "header.logout": "Cerrar sesi?n",
-    "header.loggedInAs": "Has iniciado sesi?n como",
-    "header.menu.settings": "Configuraci?n personal",
-    "header.menu.logout": "Cerrar sesi?n",
-    "header.logoutSuccess": "Sesi?n cerrada",
-    "header.logoutSuccessDescription": "Has cerrado la sesi?n correctamente.",
-    "header.logoutFailure": "Error al cerrar sesi?n",
-    "header.logoutFailureDescription": "Vuelve a intentarlo m?s tarde.",
+    "header.sort.name": "Tipo de suscripción",
+    "header.logout": "Cerrar sesión",
+    "header.loggedInAs": "Has iniciado sesión como",
+    "header.menu.settings": "Configuración personal",
+    "header.menu.logout": "Cerrar sesión",
+    "header.logoutSuccess": "Sesión cerrada",
+    "header.logoutSuccessDescription": "Has cerrado la sesión correctamente.",
+    "header.logoutFailure": "Error al cerrar sesión",
+    "header.logoutFailureDescription": "Vuelve a intentarlo más tarde.",
     "header.priceMode.original": "Original",
     "header.priceMode.monthly": "Mensual",
     "landing.nav.features": "Funciones",
     "landing.nav.faq": "Preguntas frecuentes",
-    "landing.nav.signIn": "Iniciar sesi?n",
-    "landing.nav.join": "?nete gratis",
+    "landing.nav.signIn": "Iniciar sesión",
+    "landing.nav.join": "Únete gratis",
     "landing.meta.title":
-      "SubMange �V Software de gesti?n de suscripciones para pagos recurrentes",
+      "SubMange – Software de gestión de suscripciones para pagos recurrentes",
     "landing.meta.description":
-      "Controla todas tus suscripciones, pronostica el gasto y adel?ntate a las renovaciones con el panel inteligente de SubMange.",
+      "Controla todas tus suscripciones, pronostica el gasto y adelántate a las renovaciones con el panel inteligente de SubMange.",
     "landing.meta.keywords":
-      "gestor de suscripciones,software de seguimiento de suscripciones,control de pagos recurrentes,gesti?n de gastos saas,recordatorios de renovaci?n",
+      "gestor de suscripciones,software de seguimiento de suscripciones,control de pagos recurrentes,gestión de gastos saas,recordatorios de renovación",
 
     /**
      * Dashboard Cards
@@ -427,73 +428,73 @@ export const translations: TranslationMap = {
     "dashboard.totalSubscriptions": "{count} servicios",
     "dashboard.active": "Activas",
     "dashboard.activeDescription": "Suscripciones en uso",
-    "dashboard.annualEstimate": "Pron?stico anual",
+    "dashboard.annualEstimate": "Pronóstico anual",
     "dashboard.annualEstimateDescription": "Gasto estimado",
     "dashboard.allSubscriptions": "Todas las suscripciones",
 
     /**
      * Empty state
      */
-    "dashboard.empty.title": "A?n no hay suscripciones",
+    "dashboard.empty.title": "Aún no hay suscripciones",
     "dashboard.empty.description":
-      "Haz clic en ��Agregar suscripci?n�� para comenzar.",
+      "Haz clic en \"Agregar suscripción\" para comenzar.",
 
     /**
      * Categories
      */
-    "categories.uncategorized": "Sin categor?a",
-    "categories.dropHint": "Suelta las suscripciones aqu?",
+    "categories.uncategorized": "Sin categoría",
+    "categories.dropHint": "Suelta las suscripciones aquí",
 
     /**
      * Notifications
      */
-    "notifications.genericError": "Int?ntalo de nuevo.",
-    "notifications.create.successTitle": "Suscripci?n agregada",
-    "notifications.create.successDescription": "Se agreg? {name}.",
+    "notifications.genericError": "Inténtalo de nuevo.",
+    "notifications.create.successTitle": "Suscripción agregada",
+    "notifications.create.successDescription": "Se agregó {name}.",
     "notifications.create.errorTitle": "No se pudo agregar",
-    "notifications.update.successTitle": "Suscripci?n actualizada",
-    "notifications.update.successDescription": "Se actualiz? {name}.",
+    "notifications.update.successTitle": "Suscripción actualizada",
+    "notifications.update.successDescription": "Se actualizó {name}.",
     "notifications.update.errorTitle": "No se pudo actualizar",
-    "notifications.delete.successTitle": "Suscripci?n eliminada",
+    "notifications.delete.successTitle": "Suscripción eliminada",
     "notifications.delete.successDescription":
-      "La suscripci?n se ha eliminado.",
+      "La suscripción se ha eliminado.",
     "notifications.delete.errorTitle": "No se pudo eliminar",
 
-    "category.notifications.createTitle": "Categor?a agregada",
-    "category.notifications.createSuccess": "Categor?a agregada",
-    "category.notifications.updateTitle": "Categor?a actualizada",
-    "category.notifications.updateSuccess": "Categor?a actualizada",
-    "category.notifications.deleteTitle": "Categor?a eliminada",
-    "category.notifications.deleteSuccess": "Categor?a eliminada.",
+    "category.notifications.createTitle": "Categoría agregada",
+    "category.notifications.createSuccess": "Categoría agregada",
+    "category.notifications.updateTitle": "Categoría actualizada",
+    "category.notifications.updateSuccess": "Categoría actualizada",
+    "category.notifications.deleteTitle": "Categoría eliminada",
+    "category.notifications.deleteSuccess": "Categoría eliminada.",
 
     /**
      * Add Subscription Dialog
      */
-    "addSubscription.openButton": "Agregar suscripci?n",
-    "addSubscription.title": "Agregar suscripci?n",
+    "addSubscription.openButton": "Agregar suscripción",
+    "addSubscription.title": "Agregar suscripción",
     "addSubscription.fields.name": "Nombre del servicio",
     "addSubscription.fields.brand": "Marca",
     "addSubscription.fields.price": "Precio",
     "addSubscription.fields.currency": "Moneda",
     "addSubscription.fields.startDate": "Fecha de inicio",
-    "addSubscription.fields.endDate": "Fecha de finalizaci?n",
-    "addSubscription.fields.billingCycle": "Ciclo de facturaci?n",
+    "addSubscription.fields.endDate": "Fecha de finalización",
+    "addSubscription.fields.billingCycle": "Ciclo de facturación",
     "addSubscription.cycle.mode.preset": "Opciones predefinidas",
     "addSubscription.cycle.mode.custom": "Intervalo personalizado",
-    "addSubscription.cycle.customValue": "Duraci?n del intervalo",
+    "addSubscription.cycle.customValue": "Duración del intervalo",
     "addSubscription.cycle.customUnit": "Unidad del intervalo",
-    "addSubscription.cycle.customUnit.days": "D?as",
+    "addSubscription.cycle.customUnit.days": "Días",
     "addSubscription.cycle.customUnit.months": "Meses",
-    "addSubscription.cycle.customUnit.years": "A?os",
+    "addSubscription.cycle.customUnit.years": "Años",
     "addSubscription.cycle.helper":
-      "La fecha de fin del pr?ximo ciclo se calcular? autom?ticamente a partir de la fecha de inicio.",
-    "addSubscription.fields.iconUrl": "URL del ?cono (opcional)",
-    "addSubscription.fields.category": "Categor?a de suscripci?n (opcional)",
-    "addSubscription.fields.category.none": "Sin categor?a",
-    "addSubscription.fields.autoRenew": "Renovaci?n autom?tica",
+      "La fecha de fin del próximo ciclo se calculará automáticamente a partir de la fecha de inicio.",
+    "addSubscription.fields.iconUrl": "URL del ícono (opcional)",
+    "addSubscription.fields.category": "Categoría de suscripción (opcional)",
+    "addSubscription.fields.category.none": "Sin categoría",
+    "addSubscription.fields.autoRenew": "Renovación automática",
     "addSubscription.submit": "Agregar",
     "addSubscription.cancel": "Cancelar",
-    "addSubscription.brand.searching": "Buscando�K",
+    "addSubscription.brand.searching": "Buscando…",
     "addSubscription.brand.noResults": "No se encontraron marcas relacionadas",
     "addSubscription.brand.placeholder": "Ingresa el nombre de la marca",
 
@@ -501,7 +502,7 @@ export const translations: TranslationMap = {
      * Edit Subscription Dialog
      */
     "editSubscription.openButton": "Editar",
-    "editSubscription.title": "Editar suscripci?n",
+    "editSubscription.title": "Editar suscripción",
     "editSubscription.submit": "Actualizar",
     "editSubscription.recordPriceChange": "Registrar cambio de precio",
     "editSubscription.priceEffectiveDate": "Fecha de entrada en vigor",
@@ -513,12 +514,12 @@ export const translations: TranslationMap = {
     /**
      * Billing cycles
      */
-    "billingCycle.30days": "30 d?as",
+    "billingCycle.30days": "30 días",
     "billingCycle.6months": "6 meses",
-    "billingCycle.1year": "1 a?o",
+    "billingCycle.1year": "1 año",
     "billingCycle.month": "mes",
-    "billingCycle.year": "a?o",
-    "billingCycle.halfYear": "medio a?o",
+    "billingCycle.year": "año",
+    "billingCycle.halfYear": "medio año",
     "billingCycle.monthly": "Mensual",
     "billingCycle.halfYearly": "Semestral",
     "billingCycle.yearly": "Anual",
@@ -527,25 +528,25 @@ export const translations: TranslationMap = {
     /**
      * Currency labels
      */
-    "currency.TWD": "TWD �V Nuevo d?lar taiwan?s",
-    "currency.USD": "USD �V D?lar estadounidense",
-    "currency.EUR": "EUR �V Euro",
-    "currency.JPY": "JPY �V Yen japon?s",
-    "currency.GBP": "GBP �V Libra esterlina",
-    "currency.CNY": "CNY �V Yuan chino",
+    "currency.TWD": "TWD – Nuevo dólar taiwanés",
+    "currency.USD": "USD – Dólar estadounidense",
+    "currency.EUR": "EUR – Euro",
+    "currency.JPY": "JPY – Yen japonés",
+    "currency.GBP": "GBP – Libra esterlina",
+    "currency.CNY": "CNY – Yuan chino",
 
     /**
      * Category Management Dialog
      */
-    "categoryDialog.title": "Administrar categor?as de suscripci?n",
-    "categoryDialog.empty": "A?n no hay categor?as",
-    "categoryDialog.add": "Agregar categor?a",
+    "categoryDialog.title": "Administrar categorías de suscripción",
+    "categoryDialog.empty": "Aún no hay categorías",
+    "categoryDialog.add": "Agregar categoría",
     "categoryDialog.update": "Actualizar",
     "categoryDialog.cancel": "Cancelar",
     "categoryDialog.deleteConfirm":
-      "?Seguro que deseas eliminar esta categor?a? Las suscripciones vinculadas perder?n su categor?a.",
-    "categoryDialog.fields.name": "Nombre de la categor?a",
-    "categoryDialog.fields.description": "Descripci?n (opcional)",
+      "¿Seguro que deseas eliminar esta categoría? Las suscripciones vinculadas perderán su categoría.",
+    "categoryDialog.fields.name": "Nombre de la categoría",
+    "categoryDialog.fields.description": "Descripción (opcional)",
     "categoryDialog.fields.color": "Elige un color",
     "categoryDialog.fields.customColor": "Color personalizado",
     "categoryDialog.currentColor": "Actual: {color}",
@@ -561,137 +562,137 @@ export const translations: TranslationMap = {
     /**
      * Delete subscription
      */
-    "deleteSubscription.confirmTitle": "?Eliminar suscripci?n?",
+    "deleteSubscription.confirmTitle": "¿Eliminar suscripción?",
     "deleteSubscription.confirmMessage":
-      "?Seguro que deseas eliminar {name}? Esta acci?n no se puede deshacer.",
+      "¿Seguro que deseas eliminar {name}? Esta acción no se puede deshacer.",
 
     /**
      * User settings
      */
-    "settings.title": "Configuraci?n del perfil",
+    "settings.title": "Configuración del perfil",
     "settings.back": "Regresar",
-    "settings.section.basic": "Informaci?n b?sica",
-    "settings.section.account": "Administraci?n de la cuenta",
+    "settings.section.basic": "Información básica",
+    "settings.section.account": "Administración de la cuenta",
     "settings.section.security": "Seguridad",
-    "settings.email": "Correo electr?nico",
-    "settings.email.helper": "Se usa para notificaciones de suscripci?n",
+    "settings.email": "Correo electrónico",
+    "settings.email.helper": "Se usa para notificaciones de suscripción",
     "settings.nickname": "Apodo",
     "settings.nickname.helper": "Se muestra en tu perfil",
     "settings.defaultCurrency": "Moneda predeterminada",
     "settings.defaultCurrency.helper":
       "Moneda predeterminada al agregar suscripciones",
     "settings.defaultLanguage": "Idioma preferido",
-    "settings.defaultLanguage.helper": "Idioma usado en toda la aplicaci?n",
+    "settings.defaultLanguage.helper": "Idioma usado en toda la aplicación",
     "settings.save": "Guardar cambios",
-    "settings.saving": "Guardando�K",
+    "settings.saving": "Guardando…",
     "settings.cancel": "Cancelar",
-    "settings.signOut": "Cerrar sesi?n",
+    "settings.signOut": "Cerrar sesión",
     "settings.loadingError": "No se pudo cargar el perfil.",
     "settings.updateSuccess": "Perfil actualizado",
     "settings.updateError": "No se pudo actualizar el perfil.",
-    "settings.loading": "Cargando perfil�K",
-    "settings.password.title": "Cambiar contrase?a",
-    "settings.password.current": "Contrase?a actual",
-    "settings.password.new": "Nueva contrase?a",
-    "settings.password.confirm": "Confirmar nueva contrase?a",
-    "settings.password.submit": "Actualizar contrase?a",
-    "settings.password.successTitle": "Contrase?a actualizada",
+    "settings.loading": "Cargando perfil…",
+    "settings.password.title": "Cambiar contraseña",
+    "settings.password.current": "Contraseña actual",
+    "settings.password.new": "Nueva contraseña",
+    "settings.password.confirm": "Confirmar nueva contraseña",
+    "settings.password.submit": "Actualizar contraseña",
+    "settings.password.successTitle": "Contraseña actualizada",
     "settings.password.successDescription":
-      "Tu contrase?a se cambi? correctamente.",
+      "Tu contraseña se cambió correctamente.",
     "settings.password.error.invalidCurrent":
-      "La contrase?a actual es incorrecta.",
+      "La contraseña actual es incorrecta.",
     "settings.password.error.generic":
-      "No se pudo actualizar la contrase?a. Int?ntalo de nuevo.",
+      "No se pudo actualizar la contraseña. Inténtalo de nuevo.",
     "settings.delete.title": "Eliminar cuenta",
     "settings.delete.description":
-      "Esto cerrar? tu sesi?n y marcar? tu cuenta para eliminaci?n. Puedes recuperarla contactando al soporte.",
+      "Esto cerrará tu sesión y marcará tu cuenta para eliminación. Puedes recuperarla contactando al soporte.",
     "settings.delete.button": "Eliminar cuenta",
-    "settings.delete.dialog.title": "Confirmar eliminaci?n de la cuenta",
+    "settings.delete.dialog.title": "Confirmar eliminación de la cuenta",
     "settings.delete.dialog.description":
-      "Escribe DELETE para confirmar. Solo podr?s revertirlo contactando al soporte.",
+      "Escribe DELETE para confirmar. Solo podrás revertirlo contactando al soporte.",
     "settings.delete.dialog.placeholder": "Escribe DELETE para confirmar",
     "settings.delete.dialog.cancel": "Cancelar",
     "settings.delete.dialog.confirm": "Eliminar de forma permanente",
     "settings.delete.successTitle": "Cuenta eliminada",
     "settings.delete.successDescription":
-      "Tu cuenta ha sido marcada para eliminaci?n.",
+      "Tu cuenta ha sido marcada para eliminación.",
     "settings.delete.errorTitle": "No se pudo eliminar la cuenta",
     "settings.delete.errorDescription":
-      "Int?ntalo de nuevo o contacta al soporte.",
+      "Inténtalo de nuevo o contacta al soporte.",
 
-    "auth.error.notAuthenticated": "No has iniciado sesi?n",
+    "auth.error.notAuthenticated": "No has iniciado sesión",
 
     /**
      * Landing page
      */
-    "landing.hero.title.line1": "Software de gesti?n de suscripciones",
+    "landing.hero.title.line1": "Software de gestión de suscripciones",
     "landing.hero.title.line2":
       "creado para frenar las renovaciones no deseadas",
     "landing.hero.subtitle":
       "SubMange centraliza cada pago recurrente para que controles el gasto, proyectes el coste anual y detectes subidas de precio antes de que ocurran.",
-    "landing.hero.helper": "Sin tarjeta de cr?dito. Cancela cuando quieras.",
-    "landing.hero.cta": "?nete gratis",
+    "landing.hero.helper": "Sin tarjeta de crédito. Cancela cuando quieras.",
+    "landing.hero.cta": "Únete gratis",
     "landing.hero.card.title": "Resumen de hoy",
-    "landing.hero.card.session": "Sesi?n activa",
+    "landing.hero.card.session": "Sesión activa",
     "landing.hero.card.focus": "Prioridad de hoy",
     "landing.hero.card.description":
-      "Revisa riesgos de renovaci?n, totales multimoneda y m?tricas accionables para mantener predecible tu presupuesto de suscripciones.",
-    "landing.hero.card.upNext": "Pr?ximo",
+      "Revisa riesgos de renovación, totales multimoneda y métricas accionables para mantener predecible tu presupuesto de suscripciones.",
+    "landing.hero.card.upNext": "Próximo",
     "landing.hero.card.taskOne":
       "Audita el uso de herramientas de IA antes de renovar",
-    "landing.hero.card.taskTwo": "Compara planes de m?sica para ahorrar",
+    "landing.hero.card.taskTwo": "Compara planes de música para ahorrar",
     "landing.pricing.free": "Gratis",
     "landing.pricing.freeDescription":
       "Todas las funciones, gratis para siempre",
     "landing.pricing.features.unlimited":
       "Seguimiento ilimitado de suscripciones",
-    "landing.pricing.features.priceChange": "Gesti?n de cambios de precio",
+    "landing.pricing.features.priceChange": "Gestión de cambios de precio",
     "landing.pricing.features.autoRenew":
-      "Seguimiento de renovaciones autom?ticas",
+      "Seguimiento de renovaciones automáticas",
     "landing.pricing.features.multiCurrency": "Compatibilidad multimoneda",
-    "landing.features.title": "Por qu? los equipos eligen SubMange",
+    "landing.features.title": "Por qué los equipos eligen SubMange",
     "landing.features.track.title": "Visibilidad total de suscripciones",
     "landing.features.track.description":
-      "Sincroniza streaming, SaaS, servicios y membres?as para ver totales mensuales y anuales en un solo panel.",
-    "landing.features.price.title": "Alertas autom?ticas de cambios de precio",
+      "Sincroniza streaming, SaaS, servicios y membresías para ver totales mensuales y anuales en un solo panel.",
+    "landing.features.price.title": "Alertas automáticas de cambios de precio",
     "landing.features.price.description":
       "Registra el historial de precios, sigue impuestos y recibe avisos cuando un proveedor aumenta tarifas.",
-    "landing.features.renew.title": "Recordatorios de renovaci?n con contexto",
+    "landing.features.renew.title": "Recordatorios de renovación con contexto",
     "landing.features.renew.description":
-      "Define cadencias de renovaci?n, asigna responsables y antic?pate a cancelaciones o cambios de plan.",
+      "Define cadencias de renovación, asigna responsables y anticípate a cancelaciones o cambios de plan.",
     "landing.features.security.title": "Seguridad de nivel empresarial",
     "landing.features.security.description":
-      "Autenticaci?n con Supabase, seguridad a nivel de fila y cifrado para proteger tus datos.",
+      "Autenticación con Supabase, seguridad a nivel de fila y cifrado para proteger tus datos.",
     "landing.faq.title": "Preguntas frecuentes",
-    "landing.faq.free.question": "?El servicio es gratuito?",
+    "landing.faq.free.question": "¿El servicio es gratuito?",
     "landing.faq.free.answer":
-      "?S?! Ofrecemos un gestor de suscripciones totalmente gratuito.",
-    "landing.faq.security.question": "?Mis datos est?n seguros?",
+      "¡Sí! Ofrecemos un gestor de suscripciones totalmente gratuito.",
+    "landing.faq.security.question": "¿Mis datos están seguros?",
     "landing.faq.security.answer":
       "Por supuesto. Supabase proporciona almacenamiento cifrado para todos los datos.",
-    "landing.faq.supported.question": "?Qu? servicios son compatibles?",
+    "landing.faq.supported.question": "¿Qué servicios son compatibles?",
     "landing.faq.supported.answer":
-      "Todos: streaming, software y membres?as de gimnasio.",
-    "landing.faq.price.question": "?Puedo controlar los cambios de precio?",
+      "Todos: streaming, software y membresías de gimnasio.",
+    "landing.faq.price.question": "¿Puedo controlar los cambios de precio?",
     "landing.faq.price.answer":
-      "S?. Define las fechas efectivas de los nuevos precios y calcularemos los totales autom?ticamente.",
-    "landing.faq.devices.question": "?Funciona en varios dispositivos?",
+      "Sí. Define las fechas efectivas de los nuevos precios y calcularemos los totales automáticamente.",
+    "landing.faq.devices.question": "¿Funciona en varios dispositivos?",
     "landing.faq.devices.answer":
-      "S?. Inicia sesi?n en cualquier dispositivo y tus datos se sincronizan al instante.",
+      "Sí. Inicia sesión en cualquier dispositivo y tus datos se sincronizan al instante.",
     "landing.cta.title": "Reduce el desperdicio de software recurrente",
     "landing.cta.description":
-      "?nete a l?deres financieros, fundadores y creadores que usan SubMange para negociar mejores tarifas y eliminar suscripciones duplicadas.",
+      "Únete a líderes financieros, fundadores y creadores que usan SubMange para negociar mejores tarifas y eliminar suscripciones duplicadas.",
     "landing.cta.button": "Comenzar ahora",
-    "footer.copyright": "? 2025 SubMange. Todos los derechos reservados.",
+    "footer.copyright": "© 2025 SubMange. Todos los derechos reservados.",
     "footer.developer": "Creado por Leander Kuo",
     "footer.github": "Visita mi perfil de GitHub",
 
     /**
      * Not Found
      */
-    "notFound.title": "P?gina no encontrada",
+    "notFound.title": "Página no encontrada",
     "notFound.description":
-      "Lo sentimos, la p?gina que buscas no existe o fue movida.",
+      "Lo sentimos, la página que buscas no existe o fue movida.",
     "notFound.back": "Volver al inicio",
 
     /**
@@ -699,354 +700,429 @@ export const translations: TranslationMap = {
      */
     "brandAutofill.error.noResults": "No se encontraron marcas relacionadas",
     "brandAutofill.error.invalidClient":
-      "El ID de cliente de Brandfetch no es v?lido o no tiene permisos.",
-    "brandAutofill.error.authFailed": "Fall? la autenticaci?n de Brandfetch.",
+      "El ID de cliente de Brandfetch no es válido o no tiene permisos.",
+    "brandAutofill.error.authFailed": "Falló la autenticación de Brandfetch.",
     "brandAutofill.error.generic": "Se produjo un error al buscar marcas.",
 
     "auth.dialog.title": "Gestor de suscripciones",
-    "auth.tabs.signIn": "Iniciar sesi?n",
+    "auth.tabs.signIn": "Iniciar sesión",
     "auth.tabs.signUp": "Registrarse",
-    "auth.fields.email": "Correo electr?nico",
-    "auth.fields.password": "Contrase?a",
-    "auth.fields.confirmPassword": "Confirmar contrase?a",
+    "auth.fields.email": "Correo electrónico",
+    "auth.fields.password": "Contraseña",
+    "auth.fields.confirmPassword": "Confirmar contraseña",
     "auth.validation.fillAll": "Completa todos los campos.",
-    "auth.validation.passwordMismatch": "Las contrase?as no coinciden.",
+    "auth.validation.passwordMismatch": "Las contraseñas no coinciden.",
     "auth.validation.passwordLength":
-      "La contrase?a debe tener al menos 6 caracteres.",
-    "auth.signIn.successTitle": "Sesi?n iniciada",
-    "auth.signIn.successDescription": "?Bienvenido de nuevo!",
-    "auth.signIn.error": "Error al iniciar sesi?n.",
+      "La contraseña debe tener al menos 6 caracteres.",
+    "auth.signIn.successTitle": "Sesión iniciada",
+    "auth.signIn.successDescription": "¡Bienvenido de nuevo!",
+    "auth.signIn.error": "Error al iniciar sesión.",
     "auth.signUp.successTitle": "Cuenta creada",
     "auth.signUp.successDescription":
       "Revisa tu correo para confirmar la cuenta.",
     "auth.signUp.error": "Error al registrarse.",
-    "auth.oauth.orContinue": "O contin?a con",
+    "auth.oauth.orContinue": "O continúa con",
     "auth.oauth.redirectingTitle": "Redirigiendo",
-    "auth.oauth.redirectingGoogle": "Abriendo inicio de sesi?n con Google�K",
-    "auth.oauth.redirectingApple": "Abriendo inicio de sesi?n con Apple�K",
-    "auth.oauth.googleError": "Error en el inicio de sesi?n con Google.",
-    "auth.oauth.appleError": "Error en el inicio de sesi?n con Apple.",
+    "auth.oauth.redirectingGoogle": "Abriendo inicio de sesión con Google…",
+    "auth.oauth.redirectingApple": "Abriendo inicio de sesión con Apple…",
+    "auth.oauth.googleError": "Error en el inicio de sesión con Google.",
+    "auth.oauth.appleError": "Error en el inicio de sesión con Apple.",
     "auth.actions.facebook": "Facebook",
-    "auth.oauth.redirectingFacebook": "Abriendo inicio de sesi?n con Facebook�K",
-    "auth.oauth.facebookError": "Error en el inicio de sesi?n con Facebook.",
+    "auth.oauth.redirectingFacebook":
+      "Abriendo inicio de sesión con Facebook…",
+    "auth.oauth.facebookError": "Error en el inicio de sesión con Facebook.",
     "auth.actions.cancel": "Cancelar",
-    "auth.actions.signIn": "Iniciar sesi?n",
-    "auth.actions.signInLoading": "Iniciando sesi?n�K",
+    "auth.actions.signIn": "Iniciar sesión",
+    "auth.actions.signInLoading": "Iniciando sesión…",
     "auth.actions.signUp": "Registrarse",
-    "auth.actions.signUpLoading": "Registr?ndose�K",
+    "auth.actions.signUpLoading": "Registrándose…",
     "auth.actions.google": "Google",
     "auth.actions.apple": "Apple",
-    "auth.actions.signOutLoading": "Cerrando sesi?n�K",
+    "auth.actions.signOutLoading": "Cerrando sesión…",
     "auth.user.fallback": "Usuario",
 
     /**
      * Misc
      */
     "error.loadData": "No se pueden cargar los datos",
-    "error.loadDataHint": "Verifica el servicio backend o int?ntalo m?s tarde.",
-    "errorBoundary.title": "Algo sali? mal",
+    "error.loadDataHint": "Verifica el servicio backend o inténtalo más tarde.",
+    "errorBoundary.title": "Algo salió mal",
     "errorBoundary.subtitle":
-      "Ocurri? un error inesperado. Intenta actualizar la p?gina.",
+      "Ocurrió un error inesperado. Intenta actualizar la página.",
     "errorBoundary.backHome": "Volver al inicio",
   },
   "zh-TW": {
-    "common.confirm": "�T�{",
-    "common.cancel": "����",
-    "common.delete": "�R��",
-    "common.edit": "�s��",
-    "common.loading": "���J���K",
-    "common.unknownError": "�o�Ϳ��~�A�еy��A�աC",
+    /**
+     * Common
+     */
+    "common.confirm": "確認",
+    "common.cancel": "取消",
+    "common.delete": "刪除",
+    "common.edit": "編輯",
+    "common.loading": "載入中…",
+    "common.unknownError": "發生錯誤,請稍後再試。",
 
+    /**
+     * Header / Navigation
+     */
     "header.title": "SubMange",
-    "header.subtitle": "���P�޲z�A���Ҧ��q�\�A��",
-    "header.language.label": "�y��",
+    "header.subtitle": "清晰管理每一個訂閱服務",
+    "header.language.label": "語言",
     "header.language.en": "English",
-    "header.language.zh-TW": "�c�餤��",
-    "header.language.es": "��Z���y",
+    "header.language.zh-TW": "繁體中文",
+    "header.language.es": "Español",
     "header.addSubscription": "新增訂閱",
-    "header.manageCategories": "�޲z����",
-    "header.sort": "�Ƨ�",
-    "header.sort.endDate": "������",
-    "header.sort.price": "��O����",
-    "header.sort.name": "�q�\����",
-    "header.logout": "�n�X",
-    "header.loggedInAs": "�n�J��",
-    "header.menu.settings": "�ӤH�]�w",
-    "header.menu.logout": "�n�X",
-    "header.logoutSuccess": "�w�n�X",
-    "header.logoutSuccessDescription": "�z�w���\�n�X",
-    "header.logoutFailure": "�n�X����",
-    "header.logoutFailureDescription": "�еy��A��",
-    "header.priceMode.original": "�쭫��O",
-    "header.priceMode.monthly": "��O����",
-    "landing.nav.features": "�\�श��",
-    "landing.nav.faq": "�`�����D",
-    "landing.nav.signIn": "�n�J",
-    "landing.nav.join": "�ߧY���U",
-    "landing.meta.title": "SubMange �V �q�\�޲z�n��A�����x���C����q",
+    "header.manageCategories": "管理分類",
+    "header.sort": "排序",
+    "header.sort.endDate": "到期日",
+    "header.sort.price": "每月費用",
+    "header.sort.name": "訂閱類型",
+    "header.logout": "登出",
+    "header.loggedInAs": "已登入為",
+    "header.menu.settings": "個人設定",
+    "header.menu.logout": "登出",
+    "header.logoutSuccess": "已登出",
+    "header.logoutSuccessDescription": "您已成功登出。",
+    "header.logoutFailure": "登出失敗",
+    "header.logoutFailureDescription": "請稍後再試。",
+    "header.priceMode.original": "原始費用",
+    "header.priceMode.monthly": "每月費用",
+    "landing.nav.features": "功能特色",
+    "landing.nav.faq": "常見問題",
+    "landing.nav.signIn": "登入",
+    "landing.nav.join": "免費加入",
+    "landing.meta.title":
+      "SubMange — 管理定期付款的訂閱管理軟體",
     "landing.meta.description":
-      "SubMange ��X�Ҧ��q�\��X�A��U�A�ʱ��C��P�~�׶O�ΡB���e�wĵ�������קK�����n���۰�����C",
+      "使用 SubMange 的智慧訂閱管理儀表板,追蹤每個訂閱、預測支出,並在續訂前保持領先。",
     "landing.meta.keywords":
-      "�q�\�޲z,�q�\�l�ܤu��,�T�w��������,SaaS ��X�޲z,��q����",
+      "訂閱管理,訂閱追蹤軟體,定期帳單管理,SaaS 支出控制,續訂提醒",
 
-    "dashboard.totalMonthly": "�`��O",
-    "dashboard.totalSubscriptions": "{count} �ӪA��",
-    "dashboard.active": "�ϥΤ�",
-    "dashboard.activeDescription": "�ӭq�\�A��",
-    "dashboard.annualEstimate": "�~�׹w��",
-    "dashboard.annualEstimateDescription": "�w����O",
+    /**
+     * Dashboard Cards
+     */
+    "dashboard.totalMonthly": "每月總計",
+    "dashboard.totalSubscriptions": "{count} 個服務",
+    "dashboard.active": "使用中",
+    "dashboard.activeDescription": "使用中的訂閱",
+    "dashboard.annualEstimate": "年度預測",
+    "dashboard.annualEstimateDescription": "預計支出",
     "dashboard.allSubscriptions": "所有訂閱",
 
-    "dashboard.empty.title": "尚未新增任何訂閱",
-    "dashboard.empty.description": "�I���u�s�W�q�\�v�}�l�޲z�A���q�\�A��",
+    /**
+     * Empty state
+     */
+    "dashboard.empty.title": "尚無任何訂閱",
+    "dashboard.empty.description":
+      "點擊「新增訂閱」開始管理您的訂閱服務。",
 
-    "categories.uncategorized": "������",
-    "categories.dropHint": "�즲�q�\�ܦ�����",
+    /**
+     * Categories
+     */
+    "categories.uncategorized": "未分類",
+    "categories.dropHint": "拖放訂閱至此處",
 
-    "notifications.genericError": "�еy��A�դ@���C",
-    "notifications.create.successTitle": "新增成功",
-    "notifications.create.successDescription": "已新增 {name} 訂閱",
-    "notifications.create.errorTitle": "�s�W����",
-    "notifications.update.successTitle": "更新成功",
-    "notifications.update.successDescription": "已更新 {name} 訂閱",
-    "notifications.update.errorTitle": "��s����",
-    "notifications.delete.successTitle": "刪除成功",
-    "notifications.delete.successDescription": "�q�\�w�R���C",
-    "notifications.delete.errorTitle": "�R������",
+    /**
+     * Notifications
+     */
+    "notifications.genericError": "請稍後再試一次。",
+    "notifications.create.successTitle": "已新增訂閱",
+    "notifications.create.successDescription": "已新增 {name}。",
+    "notifications.create.errorTitle": "新增失敗",
+    "notifications.update.successTitle": "已更新訂閱",
+    "notifications.update.successDescription": "已更新 {name}。",
+    "notifications.update.errorTitle": "更新失敗",
+    "notifications.delete.successTitle": "已刪除訂閱",
+    "notifications.delete.successDescription": "訂閱已移除。",
+    "notifications.delete.errorTitle": "刪除失敗",
 
-    "category.notifications.createTitle": "新增成功",
-    "category.notifications.createSuccess": "�����w�s�W�C",
-    "category.notifications.updateTitle": "更新成功",
-    "category.notifications.updateSuccess": "�����w��s�C",
-    "category.notifications.deleteTitle": "刪除成功",
-    "category.notifications.deleteSuccess": "�����w�R���C",
+    "category.notifications.createTitle": "已新增分類",
+    "category.notifications.createSuccess": "分類已新增。",
+    "category.notifications.updateTitle": "已更新分類",
+    "category.notifications.updateSuccess": "分類已更新。",
+    "category.notifications.deleteTitle": "已刪除分類",
+    "category.notifications.deleteSuccess": "分類已移除。",
 
+    /**
+     * Add Subscription Dialog
+     */
     "addSubscription.openButton": "新增訂閱",
-    "addSubscription.title": "�s�W�q�\�A��",
-    "addSubscription.fields.name": "�A�ȦW��",
-    "addSubscription.fields.brand": "�~�P",
-    "addSubscription.fields.price": "����",
-    "addSubscription.fields.currency": "�f��",
-    "addSubscription.fields.startDate": "�}�l���",
-    "addSubscription.fields.endDate": "�������",
-    "addSubscription.fields.billingCycle": "�p��P��",
-    "addSubscription.cycle.mode.preset": "�w�]�P��",
-    "addSubscription.cycle.mode.custom": "�ۭq�P��",
-    "addSubscription.cycle.customValue": "�P������",
-    "addSubscription.cycle.customUnit": "�P�����",
-    "addSubscription.cycle.customUnit.days": "��",
-    "addSubscription.cycle.customUnit.months": "��",
-    "addSubscription.cycle.customUnit.years": "�~",
-    "addSubscription.cycle.helper": "�t�η|�̶}�l����۰ʭp��U�@���g���C",
-    "addSubscription.fields.iconUrl": "Icon URL�]���^",
-    "addSubscription.fields.category": "�q�\�����]���^",
-    "addSubscription.fields.category.none": "�L����",
-    "addSubscription.fields.autoRenew": "�۰���q",
-    "addSubscription.submit": "�s�W",
-    "addSubscription.cancel": "����",
-    "addSubscription.brand.searching": "�j�M�~�P���K",
-    "addSubscription.brand.noResults": "�䤣������~�P",
-    "addSubscription.brand.placeholder": "�п�J�~�P�W��",
+    "addSubscription.title": "新增訂閱",
+    "addSubscription.fields.name": "服務名稱",
+    "addSubscription.fields.brand": "品牌",
+    "addSubscription.fields.price": "價格",
+    "addSubscription.fields.currency": "幣別",
+    "addSubscription.fields.startDate": "開始日期",
+    "addSubscription.fields.endDate": "結束日期",
+    "addSubscription.fields.billingCycle": "計費週期",
+    "addSubscription.cycle.mode.preset": "預設週期",
+    "addSubscription.cycle.mode.custom": "自訂週期",
+    "addSubscription.cycle.customValue": "週期長度",
+    "addSubscription.cycle.customUnit": "週期單位",
+    "addSubscription.cycle.customUnit.days": "天",
+    "addSubscription.cycle.customUnit.months": "月",
+    "addSubscription.cycle.customUnit.years": "年",
+    "addSubscription.cycle.helper":
+      "系統將從開始日期自動計算下一個週期結束日期。",
+    "addSubscription.fields.iconUrl": "圖示 URL(可選)",
+    "addSubscription.fields.category": "訂閱分類(可選)",
+    "addSubscription.fields.category.none": "無分類",
+    "addSubscription.fields.autoRenew": "自動續訂",
+    "addSubscription.submit": "新增",
+    "addSubscription.cancel": "取消",
+    "addSubscription.brand.searching": "搜尋品牌中…",
+    "addSubscription.brand.noResults": "找不到相關品牌",
+    "addSubscription.brand.placeholder": "輸入品牌名稱",
 
-    "editSubscription.openButton": "�s��",
-    "editSubscription.title": "�s��q�\�A��",
-    "editSubscription.submit": "��s",
-    "editSubscription.recordPriceChange": "�O�������ܰ�",
-    "editSubscription.priceEffectiveDate": "����ͮĤ��",
-    "editSubscription.priceChangeHint": "�]�w�����ܰʪ��ͮĤ��",
-    "editSubscription.priceChangePreview": "�q {oldPrice} �ܧ� {newPrice}",
+    /**
+     * Edit Subscription Dialog
+     */
+    "editSubscription.openButton": "編輯",
+    "editSubscription.title": "編輯訂閱",
+    "editSubscription.submit": "更新",
+    "editSubscription.recordPriceChange": "記錄價格變動",
+    "editSubscription.priceEffectiveDate": "價格生效日期",
+    "editSubscription.priceChangeHint":
+      "設定價格變動的生效日期",
+    "editSubscription.priceChangePreview":
+      "從 {oldPrice} 變更為 {newPrice}",
 
-    "billingCycle.30days": "30��",
-    "billingCycle.6months": "6�Ӥ�",
-    "billingCycle.1year": "1�~",
-    "billingCycle.month": "��",
-    "billingCycle.year": "�~",
-    "billingCycle.halfYear": "�b�~",
-    "billingCycle.monthly": "����",
-    "billingCycle.halfYearly": "�b�~",
-    "billingCycle.yearly": "�~�I",
-    "billingCycle.custom": "�ۭq",
+    /**
+     * Billing cycles
+     */
+    "billingCycle.30days": "30 天",
+    "billingCycle.6months": "6 個月",
+    "billingCycle.1year": "1 年",
+    "billingCycle.month": "月",
+    "billingCycle.year": "年",
+    "billingCycle.halfYear": "半年",
+    "billingCycle.monthly": "每月",
+    "billingCycle.halfYearly": "半年",
+    "billingCycle.yearly": "每年",
+    "billingCycle.custom": "自訂",
 
-    "currency.TWD": "TWD - �s�x��",
-    "currency.USD": "USD - ����",
-    "currency.EUR": "EUR - �ڤ�",
-    "currency.JPY": "JPY - ���",
-    "currency.GBP": "GBP - �^��",
-    "currency.CNY": "CNY - �H����",
+    /**
+     * Currency labels
+     */
+    "currency.TWD": "TWD — 新台幣",
+    "currency.USD": "USD — 美元",
+    "currency.EUR": "EUR — 歐元",
+    "currency.JPY": "JPY — 日圓",
+    "currency.GBP": "GBP — 英鎊",
+    "currency.CNY": "CNY — 人民幣",
 
-    "categoryDialog.title": "�޲z�q�\����",
-    "categoryDialog.empty": "�|���إߥ�������",
-    "categoryDialog.add": "�s�W����",
-    "categoryDialog.update": "��s",
-    "categoryDialog.cancel": "����",
+    /**
+     * Category Management Dialog
+     */
+    "categoryDialog.title": "管理訂閱分類",
+    "categoryDialog.empty": "尚未建立任何分類",
+    "categoryDialog.add": "新增分類",
+    "categoryDialog.update": "更新",
+    "categoryDialog.cancel": "取消",
     "categoryDialog.deleteConfirm":
-      "�T�w�n�R���������ܡH�����q�\�������N�Q�����C",
-    "categoryDialog.fields.name": "�����W��",
-    "categoryDialog.fields.description": "�y�z�]���^",
-    "categoryDialog.fields.color": "����C��",
-    "categoryDialog.fields.customColor": "�ۭq�C��",
-    "categoryDialog.currentColor": "���e�C��G{color}",
+      "確定要刪除此分類嗎?已連結的訂閱將失去其分類。",
+    "categoryDialog.fields.name": "分類名稱",
+    "categoryDialog.fields.description": "描述(可選)",
+    "categoryDialog.fields.color": "選擇顏色",
+    "categoryDialog.fields.customColor": "自訂顏色",
+    "categoryDialog.currentColor": "目前顏色:{color}",
 
-    "subscriptionCard.status.expired": "�w�L��",
-    "subscriptionCard.status.expiringSoon": "�Y�N���",
-    "subscriptionCard.status.active": "�ϥΤ�",
-    "subscriptionCard.total": "�`�p",
+    /**
+     * Subscription card
+     */
+    "subscriptionCard.status.expired": "已過期",
+    "subscriptionCard.status.expiringSoon": "即將到期",
+    "subscriptionCard.status.active": "使用中",
+    "subscriptionCard.total": "總計",
 
     /**
      * Delete subscription
      */
-    "deleteSubscription.confirmTitle": "�R���q�\�H",
+    "deleteSubscription.confirmTitle": "刪除訂閱?",
     "deleteSubscription.confirmMessage":
-      "�T�w�n�R�� {name} �ܡH���ާ@�L�k�_��C",
+      "確定要刪除 {name} 嗎?此操作無法復原。",
 
-    "settings.title": "�ӤH�]�w",
-    "settings.back": "��^",
-    "settings.section.basic": "�򥻸��",
-    "settings.section.account": "�b���޲z",
-    "settings.section.security": "�w����",
-    "settings.email": "Email",
-    "settings.email.helper": "�Ω󱵦��q�\�q��",
-    "settings.nickname": "�ʺ�",
-    "settings.nickname.helper": "��ܦb�ӤH��Ƥ�",
-    "settings.defaultCurrency": "�w�]���O",
-    "settings.defaultCurrency.helper": "�s�W�q�\�ɪ��w�]�f��",
-    "settings.defaultLanguage": "���n�y��",
-    "settings.defaultLanguage.helper": "�t����ܪ��y��",
-    "settings.save": "�x�s�ܧ�",
-    "settings.saving": "�x�s���K",
-    "settings.cancel": "����",
-    "settings.signOut": "�n�X",
-    "settings.loadingError": "���J�ӤH��ƥ��ѡC",
-    "settings.updateSuccess": "�ӤH��Ƥw��s",
-    "settings.updateError": "��s�ӤH��ƥ��ѡC",
-    "settings.loading": "���J�ӤH��Ƥ��K",
-    "settings.password.title": "�ܧ�K�X",
-    "settings.password.current": "�ثe�K�X",
-    "settings.password.new": "�s�K�X",
-    "settings.password.confirm": "�T�{�s�K�X",
-    "settings.password.submit": "��s�K�X",
-    "settings.password.successTitle": "�K�X�w��s",
-    "settings.password.successDescription": "�z���K�X�w���\�ܧ�C",
-    "settings.password.error.invalidCurrent": "�ثe�K�X��J���~�C",
-    "settings.password.error.generic": "�L�k��s�K�X�A�еy��A�աC",
-    "settings.delete.title": "�R���b��",
+    /**
+     * User settings
+     */
+    "settings.title": "個人資料設定",
+    "settings.back": "返回",
+    "settings.section.basic": "基本資訊",
+    "settings.section.account": "帳戶管理",
+    "settings.section.security": "安全性設定",
+    "settings.email": "電子郵件",
+    "settings.email.helper": "用於接收訂閱通知",
+    "settings.nickname": "暱稱",
+    "settings.nickname.helper": "顯示在個人資料中",
+    "settings.defaultCurrency": "預設幣別",
+    "settings.defaultCurrency.helper":
+      "新增訂閱時的預設幣別",
+    "settings.defaultLanguage": "偏好語言",
+    "settings.defaultLanguage.helper": "系統顯示的語言",
+    "settings.save": "儲存變更",
+    "settings.saving": "儲存中…",
+    "settings.cancel": "取消",
+    "settings.signOut": "登出",
+    "settings.loadingError": "無法載入個人資料。",
+    "settings.updateSuccess": "個人資料已更新",
+    "settings.updateError": "無法更新個人資料。",
+    "settings.loading": "載入個人資料中…",
+    "settings.password.title": "變更密碼",
+    "settings.password.current": "目前密碼",
+    "settings.password.new": "新密碼",
+    "settings.password.confirm": "確認新密碼",
+    "settings.password.submit": "更新密碼",
+    "settings.password.successTitle": "密碼已更新",
+    "settings.password.successDescription":
+      "您的密碼已成功變更。",
+    "settings.password.error.invalidCurrent":
+      "目前密碼輸入錯誤。",
+    "settings.password.error.generic":
+      "無法更新密碼,請稍後再試。",
+    "settings.delete.title": "刪除帳戶",
     "settings.delete.description":
-      "�o�N�n�X�üаO�z���b�����w�R���C�Y�ݴ_��A���p���ȪA�C",
-    "settings.delete.button": "�R���b��",
-    "settings.delete.dialog.title": "�T�{�R���b��",
+      "這將登出並標記您的帳戶待刪除。若需復原,請聯絡客服。",
+    "settings.delete.button": "刪除帳戶",
+    "settings.delete.dialog.title": "確認刪除帳戶",
     "settings.delete.dialog.description":
-      "��J DELETE �H�T�{�C���ާ@�ȯ�z�L�p���ȪA�_��C",
-    "settings.delete.dialog.placeholder": "��J DELETE �H�T�{",
-    "settings.delete.dialog.cancel": "����",
-    "settings.delete.dialog.confirm": "�ä[�R��",
-    "settings.delete.successTitle": "�b���w�R��",
-    "settings.delete.successDescription": "�z���b���w�аO���R���C",
-    "settings.delete.errorTitle": "�L�k�R���b��",
-    "settings.delete.errorDescription": "�еy��A�թ��p���ȪA�C",
+      "輸入 DELETE 以確認。此操作僅能透過聯絡客服復原。",
+    "settings.delete.dialog.placeholder": "輸入 DELETE 以確認",
+    "settings.delete.dialog.cancel": "取消",
+    "settings.delete.dialog.confirm": "永久刪除",
+    "settings.delete.successTitle": "帳戶已刪除",
+    "settings.delete.successDescription":
+      "您的帳戶已標記待刪除。",
+    "settings.delete.errorTitle": "無法刪除帳戶",
+    "settings.delete.errorDescription":
+      "請稍後再試或聯絡客服。",
 
-    "auth.error.notAuthenticated": "���n�J",
+    "auth.error.notAuthenticated": "未登入",
 
-    "landing.hero.title.line1": "�q�\�޲z�n��",
-    "landing.hero.title.line2": "����C�@���N�~���",
+    /**
+     * Landing page
+     */
+    "landing.hero.title.line1": "訂閱管理軟體",
+    "landing.hero.title.line2": "專為阻止不必要的續訂而生",
     "landing.hero.subtitle":
-      "SubMange �N�Ҧ��T�w��X�����b�P�@�ӻ����O�A���U�A�x���O�ΡB�w���~�׹w��A�ô��e��������պ��C",
-    "landing.hero.helper": "���ݫH�Υd�A�H�ɥi�����C",
-    "landing.hero.cta": "�ߧY���U�ϥ�",
-    "landing.hero.card.title": "���魫�I",
-    "landing.hero.card.session": "�ثe�i�椤",
-    "landing.hero.card.focus": "�����u������",
+      "SubMange 集中管理每筆定期付款,讓您監控支出、預測年度成本,並在價格調漲前提前預警。",
+    "landing.hero.helper": "無需信用卡,隨時可取消。",
+    "landing.hero.cta": "免費加入",
+    "landing.hero.card.title": "今日概覽",
+    "landing.hero.card.session": "使用中的工作階段",
+    "landing.hero.card.focus": "今日優先事項",
     "landing.hero.card.description":
-      "�˵���q���I�B�h���O�`�B�P�i�ߧY��ʪ��}��A�����q�\�w��í�w�C",
-    "landing.hero.card.upNext": "�U�@�B",
-    "landing.hero.card.taskOne": "����e�f�� AI �u�㪺��ڨϥζq",
-    "landing.hero.card.taskTwo": "������֦�y��ץH���C����",
-    "landing.pricing.free": "�K�O",
-    "landing.pricing.freeDescription": "����\��A�ä[�K�O",
-    "landing.pricing.features.unlimited": "? �L���q�\�l��",
-    "landing.pricing.features.priceChange": "? �����ܰʺ޲z",
-    "landing.pricing.features.autoRenew": "? �۰���q�аO",
-    "landing.pricing.features.multiCurrency": "? �h���O�䴩",
-    "landing.features.title": "������ζ���� SubMange",
-    "landing.features.track.title": "���㪺�q�\�i����",
+      "檢視續訂風險、多幣別總額,以及可採取行動的洞察,讓您的訂閱預算保持可預測性。",
+    "landing.hero.card.upNext": "下一步",
+    "landing.hero.card.taskOne":
+      "在續訂前審核 AI 工具的實際使用量",
+    "landing.hero.card.taskTwo":
+      "比較音樂串流方案以節省費用",
+    "landing.pricing.free": "免費",
+    "landing.pricing.freeDescription": "完整功能,永久免費",
+    "landing.pricing.features.unlimited": "無限訂閱追蹤",
+    "landing.pricing.features.priceChange": "價格變動管理",
+    "landing.pricing.features.autoRenew": "自動續訂追蹤",
+    "landing.pricing.features.multiCurrency": "多幣別支援",
+    "landing.features.title": "為什麼團隊選擇 SubMange",
+    "landing.features.track.title": "完整的訂閱可見度",
     "landing.features.track.description":
-      "�P�B��y�BSaaS�B�ͬ��b��P�|���A��O�P�~�O�@�������C",
-    "landing.features.price.title": "�۰ʻ��沧�ʳq��",
+      "同步串流、SaaS、公用事業和會籍,在單一儀表板查看每月和年度總額。",
+    "landing.features.price.title": "自動價格變動警示",
     "landing.features.price.description":
-      "�O��������v�B�l�ܵ|�v�վ�A�����Ӥ@�ջ��ߧY�����C",
-    "landing.features.renew.title": "�a���Ҫ���q����",
+      "記錄歷史定價、追蹤稅金調整,並在服務商調漲價格時立即收到通知。",
+    "landing.features.renew.title": "帶有情境的續訂提醒",
     "landing.features.renew.description":
-      "�]�w��q�g���P�t�d�H�A���e�w�ƨ����νվ��סC",
-    "landing.features.security.title": "���~���Ÿ�w",
+      "設定續訂週期並指派負責人,在取消或方案調整前保持領先。",
+    "landing.features.security.title": "企業級安全性",
     "landing.features.security.description":
-      "�ĥ� Supabase �{�ҡB��ƥ[�K�P�C���v���A�u�@�C����ơC",
-    "landing.faq.title": "�`�����D",
-    "landing.faq.free.question": "�o�ӪA�ȬO�K�O���ܡH",
-    "landing.faq.free.answer": "�O���I�ڭ̴��ѧ����K�O���q�\�޲z�A�ȡC",
-    "landing.faq.security.question": "�ڪ���Ʀw���ܡH",
-    "landing.faq.security.answer": "����w���I��ƬҸg�[�K�å� Supabase ���ޡC",
-    "landing.faq.supported.question": "�䴩���ǭq�\�A�ȡH",
+      "採用 Supabase 認證、資料列層級安全與加密,確保客戶資料隱私。",
+    "landing.faq.title": "常見問題",
+    "landing.faq.free.question": "這個服務免費嗎?",
+    "landing.faq.free.answer":
+      "是的!我們提供完全免費的訂閱管理服務。",
+    "landing.faq.security.question": "我的資料安全嗎?",
+    "landing.faq.security.answer":
+      "絕對安全!所有資料都經過加密並由 Supabase 託管。",
+    "landing.faq.supported.question": "支援哪些訂閱服務?",
     "landing.faq.supported.answer":
-      "��y�C��B�n��A�ȡB�����|�����U���������䴩�C",
-    "landing.faq.price.question": "�i�H�l�ܻ����ܰʶܡH",
+      "所有類型,包括串流、軟體服務、健身會籍等都支援。",
+    "landing.faq.price.question": "可以追蹤價格變動嗎?",
     "landing.faq.price.answer":
-      "�i�H�I�]�w�s���檺�ͮĤ���A�t�η|�۰ʭp���`��O�C",
-    "landing.faq.devices.question": "�䴩�h�Ӹ˸m�ܡH",
-    "landing.faq.devices.answer": "�O���I����˸m�n�J���|�Y�ɦP�B��ơC",
-    "landing.cta.title": "�{�b�}�l���C���ƪ��q�\��X",
+      "可以!設定新價格的生效日期,系統將自動計算總費用。",
+    "landing.faq.devices.question": "支援多個裝置嗎?",
+    "landing.faq.devices.answer":
+      "是的!在任何裝置登入都會即時同步資料。",
+    "landing.cta.title":
+      "現在開始減少重複的訂閱支出",
     "landing.cta.description":
-      "�W�e���p���]�ȻP�Ч@�̳��b�ϥ� SubMange�A�ͨ��n������B�R�����ƪ��q�\�C",
-    "landing.cta.button": "�ߧY�}�l�ϥ�",
-    "footer.copyright": "? 2025 SubMange. All rights reserved.",
-    "footer.developer": "�}�o��: Leander Kuo",
-    "footer.github": "�b GitHub �W�d�ݭӤH����",
+      "加入財務長、創辦人與創作者的行列,使用 SubMange 協商更優惠的價格並消除重複的訂閱。",
+    "landing.cta.button": "立即開始",
+    "footer.copyright": "© 2025 SubMange. 保留所有權利。",
+    "footer.developer": "開發者:Leander Kuo",
+    "footer.github": "在 GitHub 上查看個人資料",
 
-    "notFound.title": "�䤣�쭶��",
-    "notFound.description": "��p�A�z�q�����������s�b�Τw�Q�����C",
-    "notFound.back": "�^�쭺��",
+    /**
+     * Not Found
+     */
+    "notFound.title": "找不到頁面",
+    "notFound.description":
+      "抱歉,您尋找的頁面不存在或已被移動。",
+    "notFound.back": "返回首頁",
 
-    "brandAutofill.error.noResults": "�䤣������~�P",
-    "brandAutofill.error.invalidClient": "Brandfetch clientId �L�ĩ��v������",
-    "brandAutofill.error.authFailed": "Brandfetch ���ҥ���",
-    "brandAutofill.error.generic": "�~�P�j�M�o�Ϳ��~",
+    /**
+     * Brand autofill
+     */
+    "brandAutofill.error.noResults": "找不到相關品牌",
+    "brandAutofill.error.invalidClient":
+      "Brandfetch 客戶端 ID 無效或缺少權限。",
+    "brandAutofill.error.authFailed": "Brandfetch 認證失敗。",
+    "brandAutofill.error.generic": "搜尋品牌時發生錯誤。",
 
-    "auth.dialog.title": "�q�\�޲z���x",
-    "auth.tabs.signIn": "�n�J",
-    "auth.tabs.signUp": "���U",
-    "auth.fields.email": "�q�l�l��",
-    "auth.fields.password": "�K�X",
-    "auth.fields.confirmPassword": "�T�{�K�X",
-    "auth.validation.fillAll": "�ж�g�Ҧ����",
-    "auth.validation.passwordMismatch": "�K�X�T�{���ǰt",
-    "auth.validation.passwordLength": "�K�X�ܤֻݭn6�Ӧr��",
-    "auth.signIn.successTitle": "登入成功",
-    "auth.signIn.successDescription": "�w��^�ӡI",
-    "auth.signIn.error": "�n�J����",
-    "auth.signUp.successTitle": "註冊成功",
-    "auth.signUp.successDescription": "���ˬd�z���l��H�T�{�b��",
-    "auth.signUp.error": "���U����",
-    "auth.oauth.orContinue": "�ΨϥΥH�U�覡�~��",
-    "auth.oauth.redirectingTitle": "���s�ɦV��",
-    "auth.oauth.redirectingGoogle": "���b�e�� Google �n�J...",
-    "auth.oauth.redirectingApple": "���b�e�� Apple �n�J...",
-    "auth.oauth.googleError": "Google �n�J����",
-    "auth.oauth.appleError": "Apple �n�J����",
+    "auth.dialog.title": "訂閱管理平台",
+    "auth.tabs.signIn": "登入",
+    "auth.tabs.signUp": "註冊",
+    "auth.fields.email": "電子郵件",
+    "auth.fields.password": "密碼",
+    "auth.fields.confirmPassword": "確認密碼",
+    "auth.validation.fillAll": "請填寫所有欄位。",
+    "auth.validation.passwordMismatch": "密碼確認不相符。",
+    "auth.validation.passwordLength": "密碼至少需要 6 個字元。",
+    "auth.signIn.successTitle": "已成功登入",
+    "auth.signIn.successDescription": "歡迎回來!",
+    "auth.signIn.error": "登入失敗。",
+    "auth.signUp.successTitle": "帳戶已建立",
+    "auth.signUp.successDescription":
+      "請檢查您的電子郵件以確認帳戶。",
+    "auth.signUp.error": "註冊失敗。",
+    "auth.oauth.orContinue": "或使用以下方式繼續",
+    "auth.oauth.redirectingTitle": "重新導向中",
+    "auth.oauth.redirectingGoogle": "正在前往 Google 登入…",
+    "auth.oauth.redirectingApple": "正在前往 Apple 登入…",
+    "auth.oauth.googleError": "Google 登入失敗。",
+    "auth.oauth.appleError": "Apple 登入失敗。",
     "auth.actions.facebook": "Facebook",
-    "auth.oauth.redirectingFacebook": "���b�e�� Facebook �n�J...",
-    "auth.oauth.facebookError": "Facebook �n�J����",
-    "auth.actions.cancel": "����",
-    "auth.actions.signIn": "�n�J",
-    "auth.actions.signInLoading": "�n�J��...",
-    "auth.actions.signUp": "���U",
-    "auth.actions.signUpLoading": "���U��...",
+    "auth.oauth.redirectingFacebook":
+      "正在前往 Facebook 登入…",
+    "auth.oauth.facebookError": "Facebook 登入失敗。",
+    "auth.actions.cancel": "取消",
+    "auth.actions.signIn": "登入",
+    "auth.actions.signInLoading": "登入中…",
+    "auth.actions.signUp": "註冊",
+    "auth.actions.signUpLoading": "註冊中…",
     "auth.actions.google": "Google",
     "auth.actions.apple": "Apple",
-    "auth.actions.signOutLoading": "�n�X��...",
-    "auth.user.fallback": "�Τ�",
+    "auth.actions.signOutLoading": "登出中…",
+    "auth.user.fallback": "使用者",
 
-    "error.loadData": "�L�k���J���",
-    "error.loadDataHint": "�нT�{��ݪA�ȬO�_�ҰʡA�εy��A�աC",
-    "errorBoundary.title": "�V�|�I�o�ͤF�@�ǰ��D",
-    "errorBoundary.subtitle": "�ڭ̹J��F�@�ӷN�~���~�C�й��խ��s��z�����C",
-    "errorBoundary.backHome": "��^����",
+    /**
+     * Misc
+     */
+    "error.loadData": "無法載入資料",
+    "error.loadDataHint":
+      "請確認後端服務是否啟動,或稍後再試。",
+    "errorBoundary.title": "糟糕!發生了一些問題",
+    "errorBoundary.subtitle":
+      "我們遇到了一個意外錯誤。請嘗試重新整理您的頁面。",
+    "errorBoundary.backHome": "返回首頁",
   },
 };
