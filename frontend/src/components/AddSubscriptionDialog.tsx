@@ -24,20 +24,11 @@ import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
 import {
   SubscriptionInput,
   SubscriptionCategory,
-  CycleUnit,
-  BillingCycle,
-  PresetBillingCycle,
 } from '../types/subscription';
-import { getDefaultCycle, buildCustomCycle, isPresetCycle } from '../utils/subscriptionDates';
 import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill';
 import { useLocale } from '../i18n/LocaleProvider';
 import {
   createBlankSubscriptionFormState,
-  createCycleAwareUpdater,
-  deriveCycleState,
-  resolveCycleFromState,
-  sanitizeCustomValue,
-  type CycleMode,
   type SubscriptionFormStateBase,
 } from '../utils/subscriptionFormState';
 import { BillingPeriod, serializeBillingCycle } from '../utils/billingUtils';
@@ -68,133 +59,6 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
   const [selectedBrand, setSelectedBrand] = useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
-  // Legacy updater for other fields, but we handle cycle manually now
-  const applyCycleUpdate = createCycleAwareUpdater<FormState>(setForm);
-
-  const handleBrandInputChange = (
-    _event: SyntheticEvent<Element, Event>,
-    newInputValue: string,
-    reason: AutocompleteInputChangeReason
-  ) => {
-    setForm((prev) => ({
-      ...prev,
-      brand: newInputValue,
-    }));
-
-    if (reason === 'input' || reason === 'clear') {
-      setSelectedBrand(null);
-      autoFilledIconRef.current = null;
-      brandAutofill.reset();
-    }
-  };
-
-  const handleBrandSelect = (
-    _event: unknown,
-    newValue: BrandAutofillResult | string | null
-  ) => {
-    if (!newValue || typeof newValue === 'string') {
-      setSelectedBrand(null);
-      return;
-    }
-
-    setSelectedBrand(newValue);
-
-    setForm((prev) => {
-      const next: FormState = { ...prev };
-      const suggestedBrand = newValue.name ?? newValue.domain ?? prev.brand;
-      next.brand = suggestedBrand;
-
-      if (newValue.iconUrl) {
-        if (!prev.iconUrl || prev.iconUrl === autoFilledIconRef.current) {
-          next.iconUrl = newValue.iconUrl;
-          autoFilledIconRef.current = newValue.iconUrl;
-        }
-      }
-
-      return next;
-    });
-  };
-
-  const handleChange =
-    (field: keyof FormState) =>
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const value = event.target.value;
-
-      if (field === 'startDate') {
-        setForm((prev) => ({
-          ...prev,
-          startDate: value,
-        }));
-        return;
-      }
-
-      setForm((prev) => ({
-        ...prev,
-        [field]: value,
-      }));
-    };
-
-  const handleCycleModeChange = (_event: ChangeEvent<HTMLInputElement>, value: string) => {
-    if (value !== 'preset' && value !== 'custom') {
-      return;
-    }
-
-    const mode = value as CycleMode;
-
-    applyCycleUpdate((prev) => {
-      if (mode === 'preset') {
-        const preset = isPresetCycle(prev.cycle) ? prev.cycle : getDefaultCycle();
-        const presetState = deriveCycleState(preset);
-        return {
-          ...prev,
-          cycleMode: mode,
-          cycle: preset,
-          customUnit: presetState.customUnit,
-          customValue: presetState.customValue,
-        };
-      }
-
-      const amount = Number(prev.customValue) || 1;
-      return {
-        ...prev,
-        cycleMode: mode,
-        cycle: buildCustomCycle(prev.customUnit, amount),
-      };
-    });
-  };
-
-  const handlePresetCycleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = event.target.value as PresetBillingCycle;
-    applyCycleUpdate((prev) => ({
-      ...prev,
-      cycleMode: 'preset',
-      cycle: value,
-    }));
-  };
-
-  const handleCustomValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const amount = sanitizeCustomValue(event.target.value);
-    applyCycleUpdate((prev) => ({
-      ...prev,
-      cycleMode: 'custom',
-      customValue: amount,
-      cycle: buildCustomCycle(prev.customUnit, Number(amount)),
-    }));
-  };
-
-  const handleCustomUnitChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const unit = event.target.value as CycleUnit;
-    applyCycleUpdate((prev) => {
-      const amount = Number(prev.customValue) || 1;
-      return {
-        ...prev,
-        cycleMode: 'custom',
-        customUnit: unit,
-        cycle: buildCustomCycle(unit, amount),
-      };
-    });
-  };
-
   const handleBillingPeriodChange = (event: ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
       ...prev,
