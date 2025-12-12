@@ -54,12 +54,21 @@ const Landing = () => {
   const marqueeItems = useMemo(
     () => [
       { name: "Netflix", bg: "#000000", text: "#E50914" },
-      { name: "Claude", bg: "#FFFFFF", text: "#D97757", border: "#D97757" },
-      { name: "YouTube Premium", bg: "#FF0000", text: "#FFFFFF" },
-      { name: "ChatGPT", bg: "#FFFFFF", text: "#10A37F", border: "#10A37F" },
+      {
+        name: "YouTube Premium",
+        bg: "#FFFFFF",
+        text: "#282828",
+        border: "#FF0000",
+      },
       { name: "Spotify", bg: "#000000", text: "#1DB954" },
-      { name: "Gemini", bg: "#FFFFFF", text: "#4285F4", border: "#4285F4" },
+      { name: "ChatGPT", bg: "#FFFFFF", text: "#000000", border: "#000000" },
       { name: "Adobe Creative Cloud", bg: "#FF0000", text: "#FFFFFF" },
+      { name: "Claude", bg: "#FFFFFF", text: "#D97757", border: "#D97757" },
+      {
+        name: "Gemini",
+        bg: "linear-gradient(135deg, #4E89FF 0%, #ff8ab4 100%)",
+        text: "#FFFFFF",
+      },
       { name: "Notion", bg: "#FFFFFF", text: "#000000", border: "#000000" },
       { name: "GitHub", bg: "#181717", text: "#FFFFFF" },
       {
