@@ -18,7 +18,7 @@ export const translations: TranslationMap = {
      * Header / Navigation
      */
     "header.title": "SubMange",
-    "header.subtitle": "Manage every subscription with clarity",
+    "header.subtitle": "Track every subscription, cut the waste",
     "header.language.label": "Language",
     "header.language.en": "English",
     "header.language.zh-TW": "繁體中文",
@@ -48,7 +48,7 @@ export const translations: TranslationMap = {
     "landing.meta.description":
       "Track every subscription, forecast spending, and stay ahead of renewals with SubMange's smart subscription management dashboard.",
     "landing.meta.keywords":
-      "subscription manager,subscription tracking software,recurring billing management,saas spend control,renewal reminders",
+      "subscription manager, subscription tracker, recurring payment management, SaaS spending control, renewal reminders, cancel unwanted subscriptions",
 
     /**
      * Dashboard Cards
@@ -57,16 +57,15 @@ export const translations: TranslationMap = {
     "dashboard.totalSubscriptions": "{count} services",
     "dashboard.active": "Active",
     "dashboard.activeDescription": "Subscriptions in use",
-    "dashboard.annualEstimate": "Annual forecast",
-    "dashboard.annualEstimateDescription": "Projected spending",
+    "dashboard.annualEstimate": "Annual estimate",
+    "dashboard.annualEstimateDescription": "Projected yearly spending",
     "dashboard.allSubscriptions": "All subscriptions",
 
     /**
      * Empty state
      */
     "dashboard.empty.title": "No subscriptions yet",
-    "dashboard.empty.description":
-      "Click \"Add subscription\" to get started.",
+    "dashboard.empty.description": 'Click "Add subscription" to get started.',
 
     /**
      * Categories
@@ -265,8 +264,8 @@ export const translations: TranslationMap = {
     "landing.hero.card.description":
       "Review renewal risk, multi-currency totals, and insights designed to keep your subscription budget predictable.",
     "landing.hero.card.upNext": "Up next",
-    "landing.hero.card.taskOne": "Audit AI tool usage before renewal",
-    "landing.hero.card.taskTwo": "Compare music streaming plans for savings",
+    "landing.hero.card.taskOne": "Review AI tool costs before renewal",
+    "landing.hero.card.taskTwo": "Compare streaming plans for savings",
     "landing.pricing.free": "Free",
     "landing.pricing.freeDescription": "Full feature set, free forever",
     "landing.pricing.features.unlimited": "Unlimited subscription tracking",
@@ -304,7 +303,7 @@ export const translations: TranslationMap = {
       "Yes. Sign in on any device and your data syncs instantly.",
     "landing.cta.title": "Start reducing recurring software waste",
     "landing.cta.description":
-      "Join finance leads, founders, and creators using SubMange to negotiate better rates and eliminate duplicate subscriptions.",
+      "Join thousands of users who use SubMange to track spending, catch price hikes, and eliminate duplicate subscriptions.",
     "landing.cta.button": "Start now",
     "footer.copyright": "© 2025 SubMange. All rights reserved.",
     "footer.developer": "Built by Leander Kuo",
@@ -386,7 +385,7 @@ export const translations: TranslationMap = {
      * Header / Navigation
      */
     "header.title": "SubMange",
-    "header.subtitle": "Administra cada suscripción con claridad",
+    "header.subtitle": "Rastrea cada suscripción, elimina el desperdicio",
     "header.language.label": "Idioma",
     "header.language.en": "English",
     "header.language.zh-TW": "繁體中文",
@@ -434,7 +433,7 @@ export const translations: TranslationMap = {
      */
     "dashboard.empty.title": "Aún no hay suscripciones",
     "dashboard.empty.description":
-      "Haz clic en \"Agregar suscripción\" para comenzar.",
+      'Haz clic en "Agregar suscripción" para comenzar.',
 
     /**
      * Categories
@@ -670,7 +669,8 @@ export const translations: TranslationMap = {
     "landing.faq.supported.question": "¿Qué servicios son compatibles?",
     "landing.faq.supported.answer":
       "Todos: streaming, software y membresías de gimnasio.",
-    "landing.faq.price.question": "¿Puedo rastrear el historial de mis suscripciones?",
+    "landing.faq.price.question":
+      "¿Puedo rastrear el historial de mis suscripciones?",
     "landing.faq.price.answer":
       "Sí. Edita tus suscripciones en cualquier momento para actualizar los precios, y el sistema recalculará automáticamente los totales mensuales y anuales.",
     "landing.faq.devices.question": "¿Funciona en varios dispositivos?",
@@ -678,7 +678,7 @@ export const translations: TranslationMap = {
       "Sí. Inicia sesión en cualquier dispositivo y tus datos se sincronizan al instante.",
     "landing.cta.title": "Reduce el desperdicio de software recurrente",
     "landing.cta.description":
-      "Únete a líderes financieros, fundadores y creadores que usan SubMange para negociar mejores tarifas y eliminar suscripciones duplicadas.",
+      "Únete a miles de usuarios que usan SubMange para rastrear gastos, detectar subidas de precio y eliminar suscripciones duplicadas.",
     "landing.cta.button": "Comenzar ahora",
     "footer.copyright": "© 2025 SubMange. Todos los derechos reservados.",
     "footer.developer": "Creado por Leander Kuo",
@@ -723,8 +723,7 @@ export const translations: TranslationMap = {
     "auth.oauth.redirectingGoogle": "Abriendo inicio de sesión con Google…",
     "auth.oauth.googleError": "Error en el inicio de sesión con Google.",
     "auth.actions.facebook": "Facebook",
-    "auth.oauth.redirectingFacebook":
-      "Abriendo inicio de sesión con Facebook…",
+    "auth.oauth.redirectingFacebook": "Abriendo inicio de sesión con Facebook…",
     "auth.oauth.facebookError": "Error en el inicio de sesión con Facebook.",
     "auth.actions.cancel": "Cancelar",
     "auth.actions.signIn": "Iniciar sesión",
@@ -760,7 +759,7 @@ export const translations: TranslationMap = {
      * Header / Navigation
      */
     "header.title": "SubMange",
-    "header.subtitle": "清晰管理每一個訂閱服務",
+    "header.subtitle": "追蹤每一個訂閱，減少浪費",
     "header.language.label": "語言",
     "header.language.en": "English",
     "header.language.zh-TW": "繁體中文",
@@ -785,10 +784,9 @@ export const translations: TranslationMap = {
     "landing.nav.faq": "常見問題",
     "landing.nav.signIn": "登入",
     "landing.nav.join": "免費加入",
-    "landing.meta.title":
-      "SubMange — 管理定期付款的訂閱管理軟體",
+    "landing.meta.title": "SubMange — 管理定期付款的訂閱管理軟體",
     "landing.meta.description":
-      "使用 SubMange 的智慧訂閱管理儀表板,追蹤每個訂閱、預測支出,並在續訂前保持領先。",
+      "使用 SubMange 的智慧訂閱管理儀表板,追蹤每個訂閱、預測支出,並在續訂前確認支出。",
     "landing.meta.keywords":
       "訂閱管理,訂閱追蹤軟體,定期帳單管理,SaaS 支出控制,續訂提醒",
 
@@ -807,8 +805,7 @@ export const translations: TranslationMap = {
      * Empty state
      */
     "dashboard.empty.title": "尚無任何訂閱",
-    "dashboard.empty.description":
-      "點擊「新增訂閱」開始管理您的訂閱服務。",
+    "dashboard.empty.description": "點擊「新增訂閱」開始管理您的訂閱服務。",
 
     /**
      * Categories
@@ -856,8 +853,7 @@ export const translations: TranslationMap = {
     "addSubscription.cycle.customUnit.days": "天",
     "addSubscription.cycle.customUnit.months": "月",
     "addSubscription.cycle.customUnit.years": "年",
-    "addSubscription.cycle.helper":
-      "系統將從開始日期自動計算下一個週期結束日期。",
+    "addSubscription.cycle.helper": "系統會自動幫你計算下次續訂日期。",
     "addSubscription.fields.iconUrl": "圖示 URL(可選)",
     "addSubscription.fields.category": "訂閱分類(可選)",
     "addSubscription.fields.category.none": "無分類",
@@ -886,10 +882,8 @@ export const translations: TranslationMap = {
     "editSubscription.cancel": "取消",
     "editSubscription.recordPriceChange": "記錄價格變動",
     "editSubscription.priceEffectiveDate": "價格生效日期",
-    "editSubscription.priceChangeHint":
-      "設定價格變動的生效日期",
-    "editSubscription.priceChangePreview":
-      "從 {oldPrice} 變更為 {newPrice}",
+    "editSubscription.priceChangeHint": "設定價格變動的生效日期",
+    "editSubscription.priceChangePreview": "從 {oldPrice} 變更為 {newPrice}",
 
     /**
      * Billing cycles
@@ -924,7 +918,7 @@ export const translations: TranslationMap = {
     "categoryDialog.update": "更新",
     "categoryDialog.cancel": "取消",
     "categoryDialog.deleteConfirm":
-      "確定要刪除此分類嗎?已連結的訂閱將失去其分類。",
+      "確定要刪除這個分類嗎？已連結的訂閱會變成未分類狀態。",
     "categoryDialog.fields.name": "分類名稱",
     "categoryDialog.fields.description": "描述(可選)",
     "categoryDialog.fields.color": "選擇顏色",
@@ -959,8 +953,7 @@ export const translations: TranslationMap = {
     "settings.nickname": "暱稱",
     "settings.nickname.helper": "顯示在個人資料中",
     "settings.defaultCurrency": "預設幣別",
-    "settings.defaultCurrency.helper":
-      "新增訂閱時的預設幣別",
+    "settings.defaultCurrency.helper": "新增訂閱時的預設幣別",
     "settings.defaultLanguage": "偏好語言",
     "settings.defaultLanguage.helper": "系統顯示的語言",
     "settings.save": "儲存變更",
@@ -977,12 +970,9 @@ export const translations: TranslationMap = {
     "settings.password.confirm": "確認新密碼",
     "settings.password.submit": "更新密碼",
     "settings.password.successTitle": "密碼已更新",
-    "settings.password.successDescription":
-      "您的密碼已成功變更。",
-    "settings.password.error.invalidCurrent":
-      "目前密碼輸入錯誤。",
-    "settings.password.error.generic":
-      "無法更新密碼,請稍後再試。",
+    "settings.password.successDescription": "密碼已更新完成！",
+    "settings.password.error.invalidCurrent": "目前密碼輸入錯誤。",
+    "settings.password.error.generic": "暫時無法更新密碼，請稍後再試。",
     "settings.delete.title": "刪除帳戶",
     "settings.delete.description":
       "這將登出並標記您的帳戶待刪除。若需復原,請聯絡客服。",
@@ -994,11 +984,9 @@ export const translations: TranslationMap = {
     "settings.delete.dialog.cancel": "取消",
     "settings.delete.dialog.confirm": "永久刪除",
     "settings.delete.successTitle": "帳戶已刪除",
-    "settings.delete.successDescription":
-      "您的帳戶已標記待刪除。",
+    "settings.delete.successDescription": "您的帳戶已標記待刪除。",
     "settings.delete.errorTitle": "無法刪除帳戶",
-    "settings.delete.errorDescription":
-      "請稍後再試或聯絡客服。",
+    "settings.delete.errorDescription": "請稍後再試或聯絡客服。",
 
     "auth.error.notAuthenticated": "未登入",
 
@@ -1008,58 +996,53 @@ export const translations: TranslationMap = {
     "landing.hero.title.line1": "訂閱管理軟體",
     "landing.hero.title.line2": "專為阻止不必要的續訂而生",
     "landing.hero.subtitle":
-      "SubMange 集中管理每筆定期付款,讓您監控支出、預測年度成本,並在價格調漲前提前預警。",
-    "landing.hero.helper": "無需信用卡,隨時可取消。",
+      "SubMange 讓你一目了然所有定期付款，掌握支出趨勢、預測年度花費，並在價格調漲前及時採取行動。",
+    "landing.hero.helper": "完全免費，隨時可取消。",
     "landing.hero.cta": "免費加入",
     "landing.hero.card.title": "今日概覽",
     "landing.hero.card.session": "使用中的工作階段",
     "landing.hero.card.focus": "今日優先事項",
     "landing.hero.card.description":
-      "檢視續訂風險、多幣別總額,以及可採取行動的洞察,讓您的訂閱預算保持可預測性。",
+      "快速檢視續訂風險、多幣別總額，以及哪些訂閱可能是不必要的支出。",
     "landing.hero.card.upNext": "下一步",
-    "landing.hero.card.taskOne":
-      "在續訂前審核 AI 工具的實際使用量",
-    "landing.hero.card.taskTwo":
-      "比較音樂串流方案以節省費用",
+    "landing.hero.card.taskOne": "續訂前檢視 AI 工具的實際花費",
+    "landing.hero.card.taskTwo": "比較各平台方案，找到更划算的選擇",
     "landing.pricing.free": "免費",
     "landing.pricing.freeDescription": "完整功能,永久免費",
-    "landing.pricing.features.unlimited": "無限訂閱追蹤",
+    "landing.pricing.features.unlimited": "無限數量訂閱追蹤",
     "landing.pricing.features.priceChange": "價格變動管理",
     "landing.pricing.features.autoRenew": "自動續訂追蹤",
     "landing.pricing.features.multiCurrency": "多幣別支援",
     "landing.features.title": "為什麼選擇 SubMange",
     "landing.features.track.title": "完整的訂閱可見度",
     "landing.features.track.description":
-      "追蹤串流、SaaS、公用事業和會籍,在單一儀表板查看每月和年度總額,支援多幣別自動換算。",
+      "統一追蹤串流、SaaS 工具與會籍，在單一儀表板查看每月與年度總額，自動處理多幣別換算。",
     "landing.features.category.title": "自訂分類管理",
     "landing.features.category.description":
-      "建立個人化分類,使用顏色標籤整理訂閱,輕鬆管理不同類型的服務。",
+      "建立專屬分類，用顏色標籤讓訂閱一目了然，管理起來更輕鬆。",
     "landing.features.cycle.title": "彈性計費週期",
     "landing.features.cycle.description":
-      "支援每月、半年、年度或完全自訂的計費週期,精確追蹤每個訂閱的續訂日期。",
+      "支援每月、半年、年度或完全自訂的計費週期，讓你精準掌握每個訂閱的續訂時間。",
     "landing.features.security.title": "安全且私密",
     "landing.features.security.description":
-      "採用 Supabase 認證、資料列層級安全與加密,確保您的訂閱資料完全私密。",
+      "採用 Supabase 認證與資料列層級安全，你的訂閱資料只有你看得到。",
     "landing.faq.title": "常見問題",
     "landing.faq.free.question": "這個服務免費嗎?",
-    "landing.faq.free.answer":
-      "是的!我們提供完全免費的訂閱管理服務。",
+    "landing.faq.free.answer": "當然！所有功能完全免費使用。",
     "landing.faq.security.question": "我的資料安全嗎?",
     "landing.faq.security.answer":
-      "絕對安全!所有資料都經過加密並由 Supabase 託管。",
+      "放心！所有資料都經過加密並安全儲存在 Supabase 上。",
     "landing.faq.supported.question": "支援哪些訂閱服務?",
     "landing.faq.supported.answer":
-      "所有類型,包括串流、軟體服務、健身會籍等都支援。",
+      "串流、軟體服務、健身會籍……任何定期付款的服務都可以追蹤。",
     "landing.faq.price.question": "可以追蹤訂閱歷史記錄嗎?",
     "landing.faq.price.answer":
-      "可以!隨時編輯訂閱來更新價格,系統將自動重新計算每月和年度總費用。",
+      "當然可以！隨時編輯訂閱來更新價格，系統會自動重新計算每月和年度總費用。",
     "landing.faq.devices.question": "支援多個裝置嗎?",
-    "landing.faq.devices.answer":
-      "是的!在任何裝置登入都會即時同步資料。",
-    "landing.cta.title":
-      "現在開始減少重複的訂閱支出",
+    "landing.faq.devices.answer": "沒問題！在任何裝置登入，資料都會即時同步。",
+    "landing.cta.title": "現在開始，讓訂閱支出不再失控",
     "landing.cta.description":
-      "加入財務長、創辦人與創作者的行列,使用 SubMange 協商更優惠的價格並消除重複的訂閱。",
+      "加入我們，用 SubMange 輕鬆管理每一筆訂閱，告別重複扣款與隱藏花費。",
     "landing.cta.button": "立即開始",
     "footer.copyright": "© 2025 SubMange. 保留所有權利。",
     "footer.developer": "開發者:Leander Kuo",
@@ -1069,8 +1052,7 @@ export const translations: TranslationMap = {
      * Not Found
      */
     "notFound.title": "找不到頁面",
-    "notFound.description":
-      "抱歉,您尋找的頁面不存在或已被移動。",
+    "notFound.description": "抱歉,您尋找的頁面不存在或已被移動。",
     "notFound.back": "返回首頁",
 
     /**
@@ -1092,19 +1074,17 @@ export const translations: TranslationMap = {
     "auth.validation.passwordMismatch": "密碼確認不相符。",
     "auth.validation.passwordLength": "密碼至少需要 6 個字元。",
     "auth.signIn.successTitle": "已成功登入",
-    "auth.signIn.successDescription": "歡迎回來!",
+    "auth.signIn.successDescription": "歡迎回來！",
     "auth.signIn.error": "登入失敗。",
     "auth.signUp.successTitle": "帳戶已建立",
-    "auth.signUp.successDescription":
-      "請檢查您的電子郵件以確認帳戶。",
+    "auth.signUp.successDescription": "請檢查你的電子郵件以完成帳戶驗證。",
     "auth.signUp.error": "註冊失敗。",
     "auth.oauth.orContinue": "或使用以下方式繼續",
     "auth.oauth.redirectingTitle": "重新導向中",
     "auth.oauth.redirectingGoogle": "正在前往 Google 登入…",
     "auth.oauth.googleError": "Google 登入失敗。",
     "auth.actions.facebook": "Facebook",
-    "auth.oauth.redirectingFacebook":
-      "正在前往 Facebook 登入…",
+    "auth.oauth.redirectingFacebook": "正在前往 Facebook 登入…",
     "auth.oauth.facebookError": "Facebook 登入失敗。",
     "auth.actions.cancel": "取消",
     "auth.actions.signIn": "登入",
@@ -1119,11 +1099,10 @@ export const translations: TranslationMap = {
      * Misc
      */
     "error.loadData": "無法載入資料",
-    "error.loadDataHint":
-      "請確認後端服務是否啟動,或稍後再試。",
-    "errorBoundary.title": "糟糕!發生了一些問題",
+    "error.loadDataHint": "請確認網路連線正常，或稍後再試。",
+    "errorBoundary.title": "糟糕！出了點問題",
     "errorBoundary.subtitle":
-      "我們遇到了一個意外錯誤。請嘗試重新整理您的頁面。",
+      "我們遇到了一個意外狀況，請重新整理頁面再試一次。",
     "errorBoundary.backHome": "返回首頁",
   },
 };

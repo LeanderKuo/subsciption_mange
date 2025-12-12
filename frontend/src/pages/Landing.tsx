@@ -59,7 +59,7 @@ const Landing = () => {
       { name: "ChatGPT", color: "#74AA9C" },
       { name: "Gemini", color: "linear-gradient(45deg, #4E87F6, #AF4EBD)" },
       { name: "Adobe Creative Cloud", color: "#DA2F0F" },
-      { name: "Notion", color: "#ffffff" },
+      { name: "Notion", color: "#000000" },
       { name: "Canva", color: "#00C4CC" },
     ],
     []
@@ -366,7 +366,7 @@ const Landing = () => {
               <Box
                 sx={{
                   borderRadius: 999,
-                  background: "rgba(255, 255, 255, 0.05)",
+                  background: "#ffffff",
                   overflow: "hidden",
                   border: "1px solid rgba(255, 255, 255, 0.1)",
                   backdropFilter: "blur(10px)",
@@ -387,7 +387,7 @@ const Landing = () => {
                       key={`${item.name}-${index}`}
                       label={item.name}
                       sx={{
-                        backgroundColor: "rgba(0,0,0,0.5)",
+                        backgroundColor: "transparent",
                         color:
                           typeof item.color === "string" &&
                           item.color.includes("gradient")
