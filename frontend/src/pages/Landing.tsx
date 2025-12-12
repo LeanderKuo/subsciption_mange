@@ -53,16 +53,20 @@ const Landing = () => {
 
   const marqueeItems = useMemo(
     () => [
-      { name: "Netflix", color: "#E50914" },
-      { name: "Spotify", color: "#1DB954" },
-      { name: "YouTube Premium", color: "#FF0000" },
-      { name: "ChatGPT", color: "#10A37F" },
-      { name: "Claude", color: "#D97757" },
-      { name: "Gemini", color: "#4285F4" },
-      { name: "GitHub", color: "#181717" },
-      { name: "Adobe Creative Cloud", color: "#FF0000" },
-      { name: "Notion", color: "#000000" },
-      { name: "Canva", color: "#00C4CC" },
+      { name: "Netflix", bg: "#000000", text: "#E50914" },
+      { name: "Spotify", bg: "#000000", text: "#1DB954" },
+      { name: "YouTube Premium", bg: "#FF0000", text: "#FFFFFF" },
+      { name: "Claude", bg: "#FFFFFF", text: "#D97757", border: "#D97757" },
+      { name: "ChatGPT", bg: "#FFFFFF", text: "#10A37F", border: "#10A37F" },
+      { name: "Gemini", bg: "#FFFFFF", text: "#4285F4", border: "#4285F4" },
+      { name: "GitHub", bg: "#181717", text: "#FFFFFF" },
+      { name: "Adobe Creative Cloud", bg: "#FF0000", text: "#FFFFFF" },
+      { name: "Notion", bg: "#FFFFFF", text: "#000000", border: "#000000" },
+      {
+        name: "Canva",
+        bg: "linear-gradient(135deg, #00C4CC 0%, #7D2AE8 100%)",
+        text: "#FFFFFF",
+      },
     ],
     []
   );
@@ -389,27 +393,21 @@ const Landing = () => {
                       key={`${item.name}-${index}`}
                       label={item.name}
                       sx={{
-                        backgroundColor: "transparent",
-                        color:
-                          typeof item.color === "string" &&
-                          item.color.includes("gradient")
-                            ? "#fff"
-                            : item.color,
-                        background:
-                          typeof item.color === "string" &&
-                          item.color.includes("gradient")
-                            ? item.color
-                            : undefined,
-                        border:
-                          typeof item.color === "string" &&
-                          item.color.includes("gradient")
-                            ? "none"
-                            : `1px solid ${item.color}`,
+                        backgroundColor: item.bg,
+                        color: item.text,
+                        border: item.border
+                          ? `1px solid ${item.border}`
+                          : "none",
                         fontWeight: 600,
                         borderRadius: 999,
                         px: 1.5,
                         "& .MuiChip-label": {
                           color: "inherit",
+                          px: 1,
+                        },
+                        "&:hover": {
+                          backgroundColor: item.bg,
+                          opacity: 0.9,
                         },
                       }}
                     />
