@@ -1,45 +1,85 @@
-import { CssBaseline, ThemeProvider, createTheme, CircularProgress, Box } from '@mui/material';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
-import { supabase } from './services/supabaseClient';
-import IndexPage from './pages/Index';
-import NotFoundPage from './pages/NotFound';
-import LandingPage from './pages/Landing';
-import UserSettings from './pages/UserSettings';
-import { ToastProvider } from './components/ToastProvider';
-import ErrorBoundary from './components/ErrorBoundary';
-import { LocaleProvider } from './i18n/LocaleProvider';
+import {
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+  CircularProgress,
+  Box,
+} from "@mui/material";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
+import { supabase } from "./services/supabaseClient";
+import IndexPage from "./pages/Index";
+import NotFoundPage from "./pages/NotFound";
+import LandingPage from "./pages/Landing";
+import UserSettings from "./pages/UserSettings";
+import { ToastProvider } from "./components/ToastProvider";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { LocaleProvider } from "./i18n/LocaleProvider";
 
 const queryClient = new QueryClient();
 
-// Uber-style theme: Black and White with high contrast
+// Open Screen style theme: Dark Mode with Mint Green Accent
 const theme = createTheme({
   palette: {
-    primary: { main: "#000000" },
-    secondary: { main: "#ffffff" },
-    background: { default: "#ffffff", paper: "#f9f9f9" },
-    text: { primary: "#000000", secondary: "#666666" },
+    mode: "dark",
+    primary: {
+      main: "#34b27b", // Mint Green
+      contrastText: "#000000",
+    },
+    secondary: {
+      main: "#ffffff",
+    },
+    background: {
+      default: "#000000",
+      paper: "#0a0a0a",
+    },
+    text: {
+      primary: "#ffffff",
+      secondary: "rgba(255, 255, 255, 0.7)",
+    },
   },
   typography: {
     fontFamily:
       '"Inter", "Noto Sans TC", "Roboto", "Helvetica", "Arial", sans-serif',
     fontWeightBold: 700,
+    h1: { fontWeight: 700 },
+    h2: { fontWeight: 700 },
+    h3: { fontWeight: 700 },
+    button: { fontWeight: 600, textTransform: "none" },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
+          borderRadius: "999px", // Pill shape
           textTransform: "none",
-          borderRadius: "8px",
           fontWeight: 600,
+          padding: "10px 24px",
         },
         contained: {
-          backgroundColor: "#000",
-          color: "#fff",
+          backgroundImage: "linear-gradient(45deg, #34b27b 30%, #2dd4bf 90%)",
+          color: "#000000",
+          boxShadow: "0 3px 5px 2px rgba(52, 178, 123, .3)",
           "&:hover": {
-            backgroundColor: "#333",
+            backgroundImage: "linear-gradient(45deg, #2ea16f 30%, #25b3a1 90%)",
+            boxShadow: "0 3px 5px 2px rgba(52, 178, 123, .5)",
+          },
+        },
+        outlined: {
+          borderColor: "rgba(255, 255, 255, 0.2)",
+          color: "#ffffff",
+          "&:hover": {
+            borderColor: "#34b27b",
+            backgroundColor: "rgba(52, 178, 123, 0.1)",
+          },
+        },
+        text: {
+          color: "#ffffff",
+          "&:hover": {
+            color: "#34b27b",
+            backgroundColor: "transparent",
           },
         },
       },
@@ -47,8 +87,43 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: "12px",
-          border: "1px solid #e0e0e0",
+          borderRadius: "16px",
+          background: "rgba(255, 255, 255, 0.03)", // Glass morphism base
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          boxShadow: "none",
+          transition:
+            "transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
+          "&:hover": {
+            borderColor: "rgba(52, 178, 123, 0.5)",
+            boxShadow: "0 10px 40px -10px rgba(52, 178, 123, 0.2)",
+          },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: "none", // Remove default MUI paper gradients in dark mode
+        },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          background: "rgba(0, 0, 0, 0.8)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          boxShadow: "none",
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: "16px",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          background: "#0a0a0a",
         },
       },
     },
@@ -67,12 +142,12 @@ const App = () => {
     });
 
     // Subscribe to auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
 
     return () => subscription.unsubscribe();
   }, []);
@@ -85,14 +160,14 @@ const App = () => {
         <LocaleProvider>
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              minHeight: '100vh',
-              backgroundColor: '#fff',
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "100vh",
+              backgroundColor: "#fff",
             }}
           >
-            <CircularProgress size={60} sx={{ color: '#000' }} />
+            <CircularProgress size={60} sx={{ color: "#000" }} />
           </Box>
         </LocaleProvider>
       </ThemeProvider>

@@ -14,14 +14,14 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { differenceInDays, format } from 'date-fns';
-import { useState, type DragEvent } from 'react';
-import { Subscription, SubscriptionCategory } from '../types/subscription';
-import { EditSubscriptionDialog } from './EditSubscriptionDialog';
-import { useLocale } from '../i18n/LocaleProvider';
-import { parseBillingCycle } from '../utils/billingUtils';
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { differenceInDays, format } from "date-fns";
+import { useState, type DragEvent } from "react";
+import { Subscription, SubscriptionCategory } from "../types/subscription";
+import { EditSubscriptionDialog } from "./EditSubscriptionDialog";
+import { useLocale } from "../i18n/LocaleProvider";
+import { parseBillingCycle } from "../utils/billingUtils";
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -32,9 +32,12 @@ interface SubscriptionCardProps {
   categoryColor?: string;
   draggable?: boolean;
   isDragging?: boolean;
-  onDragStart?: (subscriptionId: number, event: DragEvent<HTMLDivElement>) => void;
+  onDragStart?: (
+    subscriptionId: number,
+    event: DragEvent<HTMLDivElement>
+  ) => void;
   onDragEnd?: () => void;
-  priceDisplayMode?: 'original' | 'monthly';
+  priceDisplayMode?: "original" | "monthly";
   monthlyCost?: number | null;
   targetCurrency?: string;
 }
@@ -50,13 +53,13 @@ export const SubscriptionCard = ({
   isDragging = false,
   onDragStart,
   onDragEnd,
-  priceDisplayMode = 'original',
+  priceDisplayMode = "original",
   monthlyCost,
   targetCurrency,
 }: SubscriptionCardProps) => {
   const { t } = useLocale();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  
+
   const handleDeleteClick = () => {
     setDeleteDialogOpen(true);
   };
@@ -70,7 +73,7 @@ export const SubscriptionCard = ({
     setDeleteDialogOpen(false);
   };
 
-  const chipColor = categoryColor ?? '#6b7280';
+  const chipColor = categoryColor ?? "#6b7280";
 
   const renderStatusChip = () => {
     const days = differenceInDays(new Date(subscription.endDate), new Date());
@@ -78,7 +81,7 @@ export const SubscriptionCard = ({
     if (days < 0) {
       return (
         <Chip
-          label={t('subscriptionCard.status.expired')}
+          label={t("subscriptionCard.status.expired")}
           color="error"
           size="small"
           variant="outlined"
@@ -88,7 +91,7 @@ export const SubscriptionCard = ({
     if (days <= 7) {
       return (
         <Chip
-          label={t('subscriptionCard.status.expiringSoon')}
+          label={t("subscriptionCard.status.expiringSoon")}
           color="warning"
           size="small"
           variant="outlined"
@@ -97,7 +100,7 @@ export const SubscriptionCard = ({
     }
     return (
       <Chip
-        label={t('subscriptionCard.status.active')}
+        label={t("subscriptionCard.status.active")}
         color="success"
         size="small"
         variant="outlined"
@@ -107,30 +110,47 @@ export const SubscriptionCard = ({
 
   const renderPrice = () => {
     const originalPriceDisplay = `${subscription.currency} ${subscription.price}`;
-    const { billingPeriod, customDuration } = parseBillingCycle(subscription.cycle);
-    
+    const { billingPeriod, customDuration } = parseBillingCycle(
+      subscription.cycle
+    );
+
     // Calculate cycle label for display (e.g. "/ year", "/ 1.5 years")
-    let cycleLabel = '';
-    if (billingPeriod === 'monthly') cycleLabel = ` / ${t('billingCycle.month')}`;
-    else if (billingPeriod === 'yearly') cycleLabel = ` / ${t('billingCycle.year')}`;
-    else if (billingPeriod === 'half-yearly') cycleLabel = ` / ${t('billingCycle.halfYear')}`;
-    else if (billingPeriod === 'custom' && customDuration) {
+    let cycleLabel = "";
+    if (billingPeriod === "monthly")
+      cycleLabel = ` / ${t("billingCycle.month")}`;
+    else if (billingPeriod === "yearly")
+      cycleLabel = ` / ${t("billingCycle.year")}`;
+    else if (billingPeriod === "half-yearly")
+      cycleLabel = ` / ${t("billingCycle.halfYear")}`;
+    else if (billingPeriod === "custom" && customDuration) {
       const parts = [];
-      if (customDuration.years > 0) parts.push(`${customDuration.years} ${t('billingCycle.year')}`);
-      if (customDuration.months > 0) parts.push(`${customDuration.months} ${t('billingCycle.month')}`);
-      cycleLabel = ` / ${parts.join(' ')}`;
+      if (customDuration.years > 0)
+        parts.push(`${customDuration.years} ${t("billingCycle.year")}`);
+      if (customDuration.months > 0)
+        parts.push(`${customDuration.months} ${t("billingCycle.month")}`);
+      cycleLabel = ` / ${parts.join(" ")}`;
     }
 
     const totalCostDisplay = `${originalPriceDisplay}${cycleLabel}`;
 
     if (monthlyCost !== undefined && monthlyCost !== null && targetCurrency) {
-       return (
+      return (
         <Box sx={{ mt: 1.5 }}>
-          <Typography variant="h5" fontWeight={700} color="primary.main" sx={{ mb: 0.5 }}>
-            {targetCurrency} {Math.round(monthlyCost)} / {t('billingCycle.month')}
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            color="primary.main"
+            sx={{ mb: 0.5 }}
+          >
+            {targetCurrency} {Math.round(monthlyCost)} /{" "}
+            {t("billingCycle.month")}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.875rem' }}>
-            {t('subscriptionCard.total')}: {totalCostDisplay}
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontSize: "0.875rem" }}
+          >
+            {t("subscriptionCard.total")}: {totalCostDisplay}
           </Typography>
         </Box>
       );
@@ -138,9 +158,9 @@ export const SubscriptionCard = ({
 
     // Fallback if monthly cost isn't available (shouldn't happen with correct parent implementation)
     return (
-        <Typography variant="h5" fontWeight={700} gutterBottom>
-          {totalCostDisplay}
-        </Typography>
+      <Typography variant="h5" fontWeight={700} gutterBottom>
+        {totalCostDisplay}
+      </Typography>
     );
   };
 
@@ -149,23 +169,24 @@ export const SubscriptionCard = ({
       <Card
         elevation={0}
         sx={{
-          borderRadius: 3,
-          border: '2px solid #e5e7eb',
-          backgroundColor: '#fff',
+          borderRadius: 4,
+          background: "rgba(255, 255, 255, 0.03)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(20px)",
           opacity: isDragging ? 0.6 : 1,
-          cursor: draggable ? 'grab' : 'default',
-          transition: 'all 0.2s ease-in-out',
-          '&:hover': {
-            borderColor: '#000',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-            transform: 'translateY(-2px)',
+          cursor: draggable ? "grab" : "default",
+          transition: "all 0.3s ease-in-out",
+          "&:hover": {
+            borderColor: "primary.main",
+            boxShadow: "0 10px 30px -10px rgba(52, 178, 123, 0.3)",
+            transform: "translateY(-4px)",
           },
         }}
         draggable={draggable}
         onDragStart={(event) => {
           if (!draggable) return;
-          event.dataTransfer.setData('text/plain', String(subscription.id));
-          event.dataTransfer.effectAllowed = 'move';
+          event.dataTransfer.setData("text/plain", String(subscription.id));
+          event.dataTransfer.effectAllowed = "move";
           onDragStart?.(subscription.id, event);
         }}
         onDragEnd={() => {
@@ -180,11 +201,11 @@ export const SubscriptionCard = ({
               size="small"
               sx={{
                 backgroundColor: chipColor,
-                color: '#fff',
+                color: "#fff",
                 fontWeight: 600,
                 mb: 1.5,
-                fontSize: '0.75rem',
-                height: '24px',
+                fontSize: "0.75rem",
+                height: "24px",
               }}
             />
           )}
@@ -209,13 +230,13 @@ export const SubscriptionCard = ({
           {renderPrice()}
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            {format(new Date(subscription.startDate), 'yyyy/MM/dd')} -{' '}
-            {format(new Date(subscription.endDate), 'yyyy/MM/dd')}
+            {format(new Date(subscription.startDate), "yyyy/MM/dd")} -{" "}
+            {format(new Date(subscription.endDate), "yyyy/MM/dd")}
           </Typography>
           <Box mt={1}>{renderStatusChip()}</Box>
         </CardContent>
         <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
-          <Tooltip title={t('common.edit')}>
+          <Tooltip title={t("common.edit")}>
             <span>
               <EditSubscriptionDialog
                 subscription={subscription}
@@ -224,14 +245,14 @@ export const SubscriptionCard = ({
               />
             </span>
           </Tooltip>
-          <Tooltip title={t('common.delete')}>
+          <Tooltip title={t("common.delete")}>
             <IconButton
               color="error"
               onClick={handleDeleteClick}
-              aria-label={t('common.delete')}
+              aria-label={t("common.delete")}
               sx={{
-                '&:hover': {
-                  backgroundColor: 'rgba(211, 47, 47, 0.08)',
+                "&:hover": {
+                  backgroundColor: "rgba(211, 47, 47, 0.08)",
                 },
               }}
             >
@@ -248,17 +269,19 @@ export const SubscriptionCard = ({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {t('deleteSubscription.confirmTitle')}
+          {t("deleteSubscription.confirmTitle")}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {t('deleteSubscription.confirmMessage', { name: subscription.name })}
+            {t("deleteSubscription.confirmMessage", {
+              name: subscription.name,
+            })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelDelete}>{t('common.cancel')}</Button>
+          <Button onClick={handleCancelDelete}>{t("common.cancel")}</Button>
           <Button onClick={handleConfirmDelete} color="error" autoFocus>
-            {t('common.delete')}
+            {t("common.delete")}
           </Button>
         </DialogActions>
       </Dialog>

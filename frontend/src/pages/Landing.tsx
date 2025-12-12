@@ -12,39 +12,39 @@ import {
   Paper,
   Stack,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 import {
   AttachMoney,
   Category,
   ExpandMore,
   Loop,
   Security,
-} from '@mui/icons-material';
-import { useMemo, useState } from 'react';
-import { keyframes } from '@mui/system';
-import { AuthDialog } from '../components/AuthDialog';
-import { useLocale } from '../i18n/LocaleProvider';
-import type { Locale } from '../i18n/translations';
-import SiteHeader from '../components/SiteHeader';
-import SiteFooter from '../components/SiteFooter';
-import LanguageSwitcher from '../components/LanguageSwitcher';
-import { useSeo, useStructuredData } from '../hooks/useSeo';
+} from "@mui/icons-material";
+import { useMemo, useState } from "react";
+import { keyframes } from "@mui/system";
+import { AuthDialog } from "../components/AuthDialog";
+import { useLocale } from "../i18n/LocaleProvider";
+import type { Locale } from "../i18n/translations";
+import SiteHeader from "../components/SiteHeader";
+import SiteFooter from "../components/SiteFooter";
+import LanguageSwitcher from "../components/LanguageSwitcher";
+import { useSeo, useStructuredData } from "../hooks/useSeo";
 
 const marqueeAnimation = keyframes`
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 `;
 
-const BASE_URL = 'https://www.submange.com';
+const BASE_URL = "https://www.submange.com";
 const OG_LOCALE_MAP: Record<Locale, string> = {
-  en: 'en_US',
-  'zh-TW': 'zh_TW',
-  es: 'es_ES',
+  en: "en_US",
+  "zh-TW": "zh_TW",
+  es: "es_ES",
 };
 const HREF_LANG_MAP: Record<Locale, string> = {
-  en: 'en',
-  'zh-TW': 'zh-Hant-TW',
-  es: 'es',
+  en: "en",
+  "zh-TW": "zh-Hant-TW",
+  es: "es",
 };
 
 const Landing = () => {
@@ -53,14 +53,14 @@ const Landing = () => {
 
   const marqueeItems = useMemo(
     () => [
-      'Netflix',
-      'Spotify',
-      'YouTube Premium',
-      'ChatGPT',
-      'Gemini',
-      'Adobe Creative Cloud',
-      'Notion',
-      'Canva',
+      { name: "Netflix", color: "#E50914" },
+      { name: "Spotify", color: "#1DB954" },
+      { name: "YouTube Premium", color: "#FF0000" },
+      { name: "ChatGPT", color: "#74AA9C" },
+      { name: "Gemini", color: "linear-gradient(45deg, #4E87F6, #AF4EBD)" },
+      { name: "Adobe Creative Cloud", color: "#DA2F0F" },
+      { name: "Notion", color: "#ffffff" },
+      { name: "Canva", color: "#00C4CC" },
     ],
     []
   );
@@ -68,24 +68,24 @@ const Landing = () => {
   const features = useMemo(
     () => [
       {
-        icon: <AttachMoney sx={{ fontSize: 48, color: '#000' }} />,
-        title: t('landing.features.track.title'),
-        description: t('landing.features.track.description'),
+        icon: <AttachMoney sx={{ fontSize: 48, color: "#34b27b" }} />,
+        title: t("landing.features.track.title"),
+        description: t("landing.features.track.description"),
       },
       {
-        icon: <Category sx={{ fontSize: 48, color: '#000' }} />,
-        title: t('landing.features.category.title'),
-        description: t('landing.features.category.description'),
+        icon: <Category sx={{ fontSize: 48, color: "#34b27b" }} />,
+        title: t("landing.features.category.title"),
+        description: t("landing.features.category.description"),
       },
       {
-        icon: <Loop sx={{ fontSize: 48, color: '#000' }} />,
-        title: t('landing.features.cycle.title'),
-        description: t('landing.features.cycle.description'),
+        icon: <Loop sx={{ fontSize: 48, color: "#34b27b" }} />,
+        title: t("landing.features.cycle.title"),
+        description: t("landing.features.cycle.description"),
       },
       {
-        icon: <Security sx={{ fontSize: 48, color: '#000' }} />,
-        title: t('landing.features.security.title'),
-        description: t('landing.features.security.description'),
+        icon: <Security sx={{ fontSize: 48, color: "#34b27b" }} />,
+        title: t("landing.features.security.title"),
+        description: t("landing.features.security.description"),
       },
     ],
     [t]
@@ -94,24 +94,24 @@ const Landing = () => {
   const faqs = useMemo(
     () => [
       {
-        question: t('landing.faq.free.question'),
-        answer: t('landing.faq.free.answer'),
+        question: t("landing.faq.free.question"),
+        answer: t("landing.faq.free.answer"),
       },
       {
-        question: t('landing.faq.security.question'),
-        answer: t('landing.faq.security.answer'),
+        question: t("landing.faq.security.question"),
+        answer: t("landing.faq.security.answer"),
       },
       {
-        question: t('landing.faq.supported.question'),
-        answer: t('landing.faq.supported.answer'),
+        question: t("landing.faq.supported.question"),
+        answer: t("landing.faq.supported.answer"),
       },
       {
-        question: t('landing.faq.price.question'),
-        answer: t('landing.faq.price.answer'),
+        question: t("landing.faq.price.question"),
+        answer: t("landing.faq.price.answer"),
       },
       {
-        question: t('landing.faq.devices.question'),
-        answer: t('landing.faq.devices.answer'),
+        question: t("landing.faq.devices.question"),
+        answer: t("landing.faq.devices.answer"),
       },
     ],
     [t]
@@ -119,8 +119,8 @@ const Landing = () => {
 
   const navLinks = useMemo(
     () => [
-      { label: t('landing.nav.features'), href: '#features' },
-      { label: t('landing.nav.faq'), href: '#faq' },
+      { label: t("landing.nav.features"), href: "#features" },
+      { label: t("landing.nav.faq"), href: "#faq" },
     ],
     [t]
   );
@@ -131,20 +131,23 @@ const Landing = () => {
   };
 
   const canonicalUrl = useMemo(() => {
-    const url = new URL('/', BASE_URL);
-    if (locale !== 'en') {
-      url.searchParams.set('lang', locale);
+    const url = new URL("/", BASE_URL);
+    if (locale !== "en") {
+      url.searchParams.set("lang", locale);
     }
     return url.toString();
   }, [locale]);
 
   const keywords = useMemo(() => {
-    const value = t('landing.meta.keywords');
-    return value.split(',').map((keyword) => keyword.trim()).filter(Boolean);
+    const value = t("landing.meta.keywords");
+    return value
+      .split(",")
+      .map((keyword) => keyword.trim())
+      .filter(Boolean);
   }, [t]);
 
-  const seoTitle = t('landing.meta.title');
-  const seoDescription = t('landing.meta.description');
+  const seoTitle = t("landing.meta.title");
+  const seoDescription = t("landing.meta.description");
 
   useSeo({
     title: seoTitle,
@@ -153,54 +156,54 @@ const Landing = () => {
     canonical: canonicalUrl,
     ogImage: `${BASE_URL}/og-image.png`,
     locale: OG_LOCALE_MAP[locale],
-    siteName: 'SubMange',
-    twitterHandle: '@SubMange',
+    siteName: "SubMange",
+    twitterHandle: "@SubMange",
     alternates: [
-      { href: `${BASE_URL}/`, hrefLang: 'en' },
-      { href: `${BASE_URL}/?lang=zh-TW`, hrefLang: 'zh-Hant-TW' },
-      { href: `${BASE_URL}/?lang=es`, hrefLang: 'es' },
-      { href: `${BASE_URL}/`, hrefLang: 'x-default' },
+      { href: `${BASE_URL}/`, hrefLang: "en" },
+      { href: `${BASE_URL}/?lang=zh-TW`, hrefLang: "zh-Hant-TW" },
+      { href: `${BASE_URL}/?lang=es`, hrefLang: "es" },
+      { href: `${BASE_URL}/`, hrefLang: "x-default" },
     ],
   });
 
   const structuredDataEntries = useMemo(() => {
     const softwareApplication = {
-      '@context': 'https://schema.org',
-      '@type': 'SoftwareApplication',
-      name: 'SubMange',
-      applicationCategory: 'FinanceApplication',
-      operatingSystem: 'Web',
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "SubMange",
+      applicationCategory: "FinanceApplication",
+      operatingSystem: "Web",
       url: canonicalUrl,
       description: seoDescription,
       inLanguage: HREF_LANG_MAP[locale],
       offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-        availability: 'https://schema.org/InStock',
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
       },
       publisher: {
-        '@type': 'Organization',
-        name: 'SubMange',
+        "@type": "Organization",
+        name: "SubMange",
         url: BASE_URL,
       },
     };
 
     const faqStructuredData = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
       mainEntity: faqs.map((faq) => ({
-        '@type': 'Question',
+        "@type": "Question",
         name: faq.question,
         acceptedAnswer: {
-          '@type': 'Answer',
+          "@type": "Answer",
           text: faq.answer,
         },
       })),
     };
 
     return [
-      { id: 'ld-software-application', data: softwareApplication },
+      { id: "ld-software-application", data: softwareApplication },
       { id: `ld-faq-${locale}`, data: faqStructuredData },
     ];
   }, [canonicalUrl, faqs, locale, seoDescription]);
@@ -210,26 +213,11 @@ const Landing = () => {
   const headerRight = (
     <Stack direction="row" spacing={2} alignItems="center">
       <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
-      <Button
-        variant="text"
-        onClick={() => setAuthDialogOpen(true)}
-        sx={{ color: '#fff', fontWeight: 600 }}
-      >
-        {t('landing.nav.signIn')}
+      <Button variant="text" onClick={() => setAuthDialogOpen(true)}>
+        {t("landing.nav.signIn")}
       </Button>
-      <Button
-        variant="contained"
-        onClick={() => setAuthDialogOpen(true)}
-        sx={{
-          backgroundColor: '#fff',
-          color: '#000',
-          borderRadius: '999px',
-          fontWeight: 700,
-          px: 4,
-          '&:hover': { backgroundColor: '#e5e5e5' },
-        }}
-      >
-        {t('landing.nav.join')}
+      <Button variant="contained" onClick={() => setAuthDialogOpen(true)}>
+        {t("landing.nav.join")}
       </Button>
     </Stack>
   );
@@ -237,10 +225,10 @@ const Landing = () => {
   return (
     <Box
       sx={{
-        backgroundColor: '#fff',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
+        backgroundColor: "background.default",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <SiteHeader navLinks={navLinks} rightSlot={headerRight} variant="dark" />
@@ -248,10 +236,11 @@ const Landing = () => {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Box
           sx={{
-            backgroundColor: '#fff',
-            color: '#000',
-            pt: { xs: 10, md: 14 },
+            background:
+              "radial-gradient(circle at 50% 0%, rgba(52, 178, 123, 0.15), transparent 70%)",
+            pt: { xs: 15, md: 20 },
             pb: { xs: 10, md: 14 },
+            overflow: "hidden",
           }}
         >
           <Container maxWidth="lg">
@@ -260,48 +249,49 @@ const Landing = () => {
                 <Typography
                   variant="h1"
                   sx={{
-                    fontSize: { xs: '2.75rem', md: '4rem' },
-                    fontWeight: 700,
+                    fontSize: { xs: "2.75rem", md: "4.5rem" },
+                    fontWeight: 800,
                     mb: 3,
                     lineHeight: 1.05,
-                    letterSpacing: '-0.02em',
-                    color: '#000',
+                    letterSpacing: "-0.02em",
+                    background:
+                      "linear-gradient(to right, #fff 30%, rgba(255, 255, 255, 0.5))",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
                   }}
                 >
-                  {t('landing.hero.title.line1')}
+                  {t("landing.hero.title.line1")}
                   <br />
-                  {t('landing.hero.title.line2')}
+                  {t("landing.hero.title.line2")}
                 </Typography>
                 <Typography
                   variant="h5"
                   sx={{
-                    fontSize: { xs: '1.1rem', md: '1.4rem' },
+                    fontSize: { xs: "1.1rem", md: "1.4rem" },
                     mb: 4,
                     fontWeight: 400,
                     lineHeight: 1.6,
-                    color: '#000',
+                    color: "text.secondary",
                   }}
                 >
-                  {t('landing.hero.subtitle')}
+                  {t("landing.hero.subtitle")}
                 </Typography>
-                <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="center"
+                  flexWrap="wrap"
+                >
                   <Button
                     variant="contained"
+                    size="large"
                     onClick={() => setAuthDialogOpen(true)}
-                    sx={{
-                      backgroundColor: '#000',
-                      color: '#fff',
-                      borderRadius: '999px',
-                      fontWeight: 700,
-                      px: 5,
-                      py: 1.5,
-                      '&:hover': { backgroundColor: '#333' },
-                    }}
+                    sx={{ px: 5, py: 1.5, fontSize: "1.1rem" }}
                   >
-                    {t('landing.hero.cta')}
+                    {t("landing.hero.cta")}
                   </Button>
-                  <Typography variant="body2" sx={{ color: '#000' }}>
-                    {t('landing.hero.helper')}
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {t("landing.hero.helper")}
                   </Typography>
                 </Stack>
               </Grid>
@@ -311,18 +301,26 @@ const Landing = () => {
                   sx={{
                     p: { xs: 4, md: 5 },
                     borderRadius: 4,
-                    backgroundColor: '#fff',
-                    border: '2px solid #000',
-                    color: '#000',
+                    background: "rgba(255, 255, 255, 0.03)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    backdropFilter: "blur(20px)",
                   }}
                 >
                   <Stack spacing={3}>
                     <Stack spacing={1}>
-                      <Typography variant="body2" sx={{ color: '#000' }}>
-                        {t('landing.hero.card.session')}
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "#34b27b",
+                          fontWeight: 600,
+                          letterSpacing: "0.05em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {t("landing.hero.card.session")}
                       </Typography>
-                      <Typography variant="h5" fontWeight={700} sx={{ color: '#000' }}>
-                        {t('landing.hero.card.title')}
+                      <Typography variant="h5" fontWeight={700}>
+                        {t("landing.hero.card.title")}
                       </Typography>
                     </Stack>
                     <Paper
@@ -330,27 +328,30 @@ const Landing = () => {
                       sx={{
                         p: 3,
                         borderRadius: 3,
-                        backgroundColor: '#f5f5f5',
-                        border: '1px solid #e0e0e0',
+                        backgroundColor: "rgba(52, 178, 123, 0.1)",
+                        border: "1px solid rgba(52, 178, 123, 0.2)",
                       }}
                     >
-                      <Typography fontWeight={600} sx={{ color: '#000' }}>
-                        {t('landing.hero.card.focus')}
+                      <Typography fontWeight={600} sx={{ color: "#34b27b" }}>
+                        {t("landing.hero.card.focus")}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: '#000', mt: 1.5 }}>
-                        {t('landing.hero.card.description')}
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary", mt: 1.5 }}
+                      >
+                        {t("landing.hero.card.description")}
                       </Typography>
                     </Paper>
                     <Stack spacing={1.5}>
-                      <Typography fontWeight={600} sx={{ color: '#000' }}>
-                        {t('landing.hero.card.upNext')}
+                      <Typography fontWeight={600}>
+                        {t("landing.hero.card.upNext")}
                       </Typography>
-                      <Stack spacing={0.5} sx={{ color: '#000' }}>
+                      <Stack spacing={0.5} sx={{ color: "text.secondary" }}>
                         <Typography variant="body2">
-                          • {t('landing.hero.card.taskOne')}
+                          • {t("landing.hero.card.taskOne")}
                         </Typography>
                         <Typography variant="body2">
-                          • {t('landing.hero.card.taskTwo')}
+                          • {t("landing.hero.card.taskTwo")}
                         </Typography>
                       </Stack>
                     </Stack>
@@ -360,37 +361,54 @@ const Landing = () => {
             </Grid>
           </Container>
 
-          <Box sx={{ mt: { xs: 8, md: 10 }, overflow: 'hidden' }}>
+          <Box sx={{ mt: { xs: 8, md: 10 }, overflow: "hidden" }}>
             <Container maxWidth="lg">
               <Box
                 sx={{
                   borderRadius: 999,
-                  backgroundColor: '#f5f5f5',
-                  overflow: 'hidden',
-                  border: '2px solid #000',
+                  background: "rgba(255, 255, 255, 0.05)",
+                  overflow: "hidden",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(10px)",
                 }}
               >
                 <Box
                   sx={{
-                    display: 'flex',
+                    display: "flex",
                     gap: 2,
                     py: 1.5,
                     px: 2,
                     animation: `${marqueeAnimation} 30s linear infinite`,
-                    width: 'max-content',
+                    width: "max-content",
                   }}
                 >
                   {marqueeItems.concat(marqueeItems).map((item, index) => (
                     <Chip
-                      key={`${item}-${index}`}
-                      label={item}
+                      key={`${item.name}-${index}`}
+                      label={item.name}
                       sx={{
-                        backgroundColor: '#000',
-                        color: '#fff',
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        color:
+                          typeof item.color === "string" &&
+                          item.color.includes("gradient")
+                            ? "#fff"
+                            : item.color,
+                        background:
+                          typeof item.color === "string" &&
+                          item.color.includes("gradient")
+                            ? item.color
+                            : undefined,
+                        border:
+                          typeof item.color === "string" &&
+                          item.color.includes("gradient")
+                            ? "none"
+                            : `1px solid ${item.color}`,
                         fontWeight: 600,
                         borderRadius: 999,
                         px: 1.5,
-                        border: 'none',
+                        "& .MuiChip-label": {
+                          color: "inherit",
+                        },
                       }}
                     />
                   ))}
@@ -400,44 +418,39 @@ const Landing = () => {
           </Box>
         </Box>
 
-        <Box id="features" sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#fff' }}>
+        <Box
+          id="features"
+          sx={{ py: { xs: 8, md: 12 }, backgroundColor: "#000" }}
+        >
           <Container maxWidth="lg">
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2rem', md: '3rem' },
+                fontSize: { xs: "2rem", md: "3rem" },
                 fontWeight: 700,
                 mb: 6,
-                textAlign: 'center',
-                color: '#000',
+                textAlign: "center",
               }}
             >
-              {t('landing.features.title')}
+              {t("landing.features.title")}
             </Typography>
             <Grid container spacing={4}>
               {features.map((feature, index) => (
                 <Grid item xs={12} sm={6} md={3} key={index}>
                   <Card
                     sx={{
-                      height: '100%',
-                      boxShadow: 'none',
-                      border: '2px solid #000',
-                      borderRadius: '12px',
-                      transition: 'transform 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-6px)',
-                      },
+                      height: "100%",
                     }}
                   >
                     <CardContent sx={{ p: 4 }}>
                       <Box sx={{ mb: 2 }}>{feature.icon}</Box>
-                      <Typography
-                        variant="h6"
-                        sx={{ fontWeight: 700, mb: 2, color: '#000' }}
-                      >
+                      <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
                         {feature.title}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: '#4b5563' }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
                         {feature.description}
                       </Typography>
                     </CardContent>
@@ -448,46 +461,51 @@ const Landing = () => {
           </Container>
         </Box>
 
-        <Box id="faq" sx={{ py: { xs: 8, md: 12 }, backgroundColor: '#f4f4f5' }}>
+        <Box
+          id="faq"
+          sx={{ py: { xs: 8, md: 12 }, backgroundColor: "background.default" }}
+        >
           <Container maxWidth="md">
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2rem', md: '3rem' },
+                fontSize: { xs: "2rem", md: "3rem" },
                 fontWeight: 700,
                 mb: 6,
-                textAlign: 'center',
-                color: '#000',
+                textAlign: "center",
               }}
             >
-              {t('landing.faq.title')}
+              {t("landing.faq.title")}
             </Typography>
             <Stack spacing={2}>
               {faqs.map((faq, index) => (
                 <Accordion
                   key={index}
                   sx={{
-                    boxShadow: 'none',
-                    border: '1px solid #e0e0e0',
-                    borderRadius: '8px !important',
-                    backgroundColor: '#fff',
-                    '&:before': { display: 'none' },
+                    boxShadow: "none",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "16px !important",
+                    background: "rgba(255,255,255,0.03)",
+                    backdropFilter: "blur(10px)",
+                    "&:before": { display: "none" },
                   }}
                 >
                   <AccordionSummary
-                    expandIcon={<ExpandMore sx={{ color: '#000' }} />}
+                    expandIcon={<ExpandMore sx={{ color: "text.secondary" }} />}
                     sx={{
-                      '& .MuiAccordionSummary-content': {
+                      "& .MuiAccordionSummary-content": {
                         my: 2,
                       },
                     }}
                   >
-                    <Typography sx={{ fontWeight: 600, color: '#000' }}>
+                    <Typography sx={{ fontWeight: 600 }}>
                       {faq.question}
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography sx={{ color: '#4b5563' }}>{faq.answer}</Typography>
+                    <Typography sx={{ color: "text.secondary" }}>
+                      {faq.answer}
+                    </Typography>
                   </AccordionDetails>
                 </Accordion>
               ))}
@@ -497,51 +515,58 @@ const Landing = () => {
 
         <Box
           sx={{
-            backgroundColor: '#000',
-            color: '#fff',
             py: { xs: 8, md: 12 },
+            position: "relative",
+            overflow: "hidden",
           }}
         >
-          <Container maxWidth="md">
+          {/* Gradient Orb */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "600px",
+              height: "600px",
+              background:
+                "radial-gradient(circle, rgba(52, 178, 123, 0.2) 0%, transparent 70%)",
+              zIndex: 0,
+              pointerEvents: "none",
+            }}
+          />
+          <Container maxWidth="md" sx={{ position: "relative", zIndex: 1 }}>
             <Stack spacing={4} alignItems="center" textAlign="center">
               <Typography
                 variant="h2"
                 sx={{
-                  fontSize: { xs: '2rem', md: '3rem' },
+                  fontSize: { xs: "2rem", md: "3rem" },
                   fontWeight: 700,
-                  color: '#fff',
                 }}
               >
-                {t('landing.cta.title')}
+                {t("landing.cta.title")}
               </Typography>
               <Typography
                 variant="h6"
                 sx={{
-                  fontSize: { xs: '1rem', md: '1.25rem' },
-                  color: '#fff',
-                  maxWidth: '600px',
+                  fontSize: { xs: "1rem", md: "1.25rem" },
+                  color: "text.secondary",
+                  maxWidth: "600px",
                 }}
               >
-                {t('landing.cta.description')}
+                {t("landing.cta.description")}
               </Typography>
               <Button
                 variant="contained"
                 size="large"
                 onClick={() => setAuthDialogOpen(true)}
                 sx={{
-                  backgroundColor: '#fff',
-                  color: '#000',
                   px: 6,
                   py: 2,
-                  fontSize: '1.05rem',
-                  fontWeight: 700,
-                  borderRadius: '999px',
-                  '&:hover': {
-                    backgroundColor: '#e5e5e5',
-                  },
+                  fontSize: "1.05rem",
                 }}
               >
-                {t('landing.cta.button')}
+                {t("landing.cta.button")}
               </Button>
             </Stack>
           </Container>
