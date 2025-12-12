@@ -39,7 +39,12 @@ import {
   deleteCategory,
 } from "../services/categoryService";
 import { useToast } from "../hooks/use-toast";
-import { Subscription, SubscriptionInput, SubscriptionCategoryInput, SubscriptionCategory } from "../types/subscription";
+import {
+  Subscription,
+  SubscriptionInput,
+  SubscriptionCategoryInput,
+  SubscriptionCategory,
+} from "../types/subscription";
 import { supabase } from "../services/supabaseClient";
 import { getExchangeRate } from "../services/exchangeRateService";
 import { useLocale } from "../i18n/LocaleProvider";
@@ -82,14 +87,21 @@ const convertToTargetCurrency = (
   subscription: Subscription,
   rates: Record<string, number>,
   targetCurrency: string,
-  mode: 'original' | 'monthly'
+  mode: "original" | "monthly"
 ) => {
   const rate = resolveRate(subscription.currency, rates, targetCurrency) ?? 1;
-  
+
   let price = subscription.price;
-  if (mode === 'monthly') {
-    const { billingPeriod, customDuration } = parseBillingCycle(subscription.cycle);
-    price = computeMonthlyCost(subscription.price, billingPeriod, customDuration, subscription.cycle);
+  if (mode === "monthly") {
+    const { billingPeriod, customDuration } = parseBillingCycle(
+      subscription.cycle
+    );
+    price = computeMonthlyCost(
+      subscription.price,
+      billingPeriod,
+      customDuration,
+      subscription.cycle
+    );
   }
 
   return price * rate;
@@ -106,9 +118,16 @@ const computeSubscriptionMonthlyCost = (
   }
 
   const effectiveRate = rate ?? 1;
-  const { billingPeriod, customDuration } = parseBillingCycle(subscription.cycle);
-  const monthlyPrice = computeMonthlyCost(subscription.price, billingPeriod, customDuration, subscription.cycle);
-  
+  const { billingPeriod, customDuration } = parseBillingCycle(
+    subscription.cycle
+  );
+  const monthlyPrice = computeMonthlyCost(
+    subscription.price,
+    billingPeriod,
+    customDuration,
+    subscription.cycle
+  );
+
   return monthlyPrice * effectiveRate;
 };
 
@@ -118,14 +137,21 @@ const computeTotalMonthly = (
   targetCurrency: string
 ) =>
   subscriptions.reduce((sum, subscription) => {
-    const monthly = computeSubscriptionMonthlyCost(subscription, rates, targetCurrency);
+    const monthly = computeSubscriptionMonthlyCost(
+      subscription,
+      rates,
+      targetCurrency
+    );
     return monthly === null ? sum : sum + monthly;
   }, 0);
 
 const countActiveSubscriptions = (subscriptions: Subscription[]) => {
   const today = new Date();
   return subscriptions.reduce((count, subscription) => {
-    const remainingDays = differenceInDays(new Date(subscription.endDate), today);
+    const remainingDays = differenceInDays(
+      new Date(subscription.endDate),
+      today
+    );
     return remainingDays >= 0 ? count + 1 : count;
   }, 0);
 };
@@ -135,7 +161,7 @@ const sortSubscriptionsBy = (
   sortBy: SortOption,
   rates: Record<string, number>,
   targetCurrency: string,
-  priceDisplayMode: 'original' | 'monthly'
+  priceDisplayMode: "original" | "monthly"
 ) => {
   const list = [...subscriptions];
   switch (sortBy) {
@@ -145,8 +171,18 @@ const sortSubscriptionsBy = (
       );
     case "price":
       return list.sort((a, b) => {
-        const priceA = convertToTargetCurrency(a, rates, targetCurrency, priceDisplayMode);
-        const priceB = convertToTargetCurrency(b, rates, targetCurrency, priceDisplayMode);
+        const priceA = convertToTargetCurrency(
+          a,
+          rates,
+          targetCurrency,
+          priceDisplayMode
+        );
+        const priceB = convertToTargetCurrency(
+          b,
+          rates,
+          targetCurrency,
+          priceDisplayMode
+        );
         return priceB - priceA;
       });
     case "name":
@@ -196,7 +232,11 @@ const buildGroupedSubscriptions = (
   orderedCategories.forEach((category) => {
     const items = subscriptions.filter((sub) => sub.categoryId === category.id);
     const categoryTotal = items.reduce((sum, subscription) => {
-      const monthly = computeSubscriptionMonthlyCost(subscription, rates, targetCurrency);
+      const monthly = computeSubscriptionMonthlyCost(
+        subscription,
+        rates,
+        targetCurrency
+      );
       return monthly === null ? sum : sum + monthly;
     }, 0);
 
@@ -212,7 +252,11 @@ const buildGroupedSubscriptions = (
 
   const uncategorizedItems = subscriptions.filter((sub) => !sub.categoryId);
   const uncategorizedTotal = uncategorizedItems.reduce((sum, subscription) => {
-    const monthly = computeSubscriptionMonthlyCost(subscription, rates, targetCurrency);
+    const monthly = computeSubscriptionMonthlyCost(
+      subscription,
+      rates,
+      targetCurrency
+    );
     return monthly === null ? sum : sum + monthly;
   }, 0);
 
@@ -335,13 +379,17 @@ const IndexPage = () => {
     useUserProfileSnapshot();
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("endDate");
-  const [priceDisplayMode, setPriceDisplayMode] = useState<'original' | 'monthly'>('original');
-  const [draggedSubscriptionId, setDraggedSubscriptionId] = useState<number | null>(null);
+  const [priceDisplayMode, setPriceDisplayMode] = useState<
+    "original" | "monthly"
+  >("original");
+  const [draggedSubscriptionId, setDraggedSubscriptionId] = useState<
+    number | null
+  >(null);
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
   const { t, locale, setLocale } = useLocale();
 
   const handleGoToSettings = () => {
-    navigate('/settings');
+    navigate("/settings");
   };
 
   const handleLogout = async () => {
@@ -404,7 +452,9 @@ const IndexPage = () => {
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
       toast({
         title: t("notifications.create.successTitle"),
-        description: t("notifications.create.successDescription", { name: result.name }),
+        description: t("notifications.create.successDescription", {
+          name: result.name,
+        }),
       });
     },
     onError: () => {
@@ -422,7 +472,9 @@ const IndexPage = () => {
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
       toast({
         title: t("notifications.update.successTitle"),
-        description: t("notifications.update.successDescription", { name: result.name }),
+        description: t("notifications.update.successDescription", {
+          name: result.name,
+        }),
       });
     },
     onError: () => {
@@ -458,20 +510,25 @@ const IndexPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast({
-        title: t('category.notifications.createTitle'),
-        description: t('category.notifications.createSuccess'),
+        title: t("category.notifications.createTitle"),
+        description: t("category.notifications.createSuccess"),
       });
     },
   });
 
   const updateCategoryMutation = useMutation({
-    mutationFn: ({ id, updates }: { id: number; updates: Partial<SubscriptionCategoryInput> }) =>
-      updateCategory(id, updates),
+    mutationFn: ({
+      id,
+      updates,
+    }: {
+      id: number;
+      updates: Partial<SubscriptionCategoryInput>;
+    }) => updateCategory(id, updates),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast({
-        title: t('category.notifications.updateTitle'),
-        description: t('category.notifications.updateSuccess'),
+        title: t("category.notifications.updateTitle"),
+        description: t("category.notifications.updateSuccess"),
       });
     },
   });
@@ -482,8 +539,8 @@ const IndexPage = () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
       toast({
-        title: t('category.notifications.deleteTitle'),
-        description: t('category.notifications.deleteSuccess'),
+        title: t("category.notifications.deleteTitle"),
+        description: t("category.notifications.deleteSuccess"),
       });
     },
   });
@@ -516,7 +573,8 @@ const IndexPage = () => {
   };
 
   const totalMonthly = useMemo(
-    () => computeTotalMonthly(subscriptions, exchangeRates, userDefaultCurrency),
+    () =>
+      computeTotalMonthly(subscriptions, exchangeRates, userDefaultCurrency),
     [subscriptions, exchangeRates, userDefaultCurrency]
   );
 
@@ -534,13 +592,16 @@ const IndexPage = () => {
         userDefaultCurrency,
         priceDisplayMode
       ),
-    [subscriptions, sortBy, exchangeRates, userDefaultCurrency, priceDisplayMode]
+    [
+      subscriptions,
+      sortBy,
+      exchangeRates,
+      userDefaultCurrency,
+      priceDisplayMode,
+    ]
   );
 
-  const categoryMap = useMemo(
-    () => buildCategoryMap(categories),
-    [categories]
-  );
+  const categoryMap = useMemo(() => buildCategoryMap(categories), [categories]);
 
   const getCategoryDisplay = useCallback(
     (subscription: Subscription) =>
@@ -621,275 +682,351 @@ const IndexPage = () => {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        backgroundColor: '#ffffff',
-        display: 'flex',
-        flexDirection: 'column',
+        minHeight: "100vh",
+        backgroundColor: "#000000",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <SiteHeader
         navLinks={[]}
-        subtitle={t('header.subtitle')}
+        subtitle={t("header.subtitle")}
         rightSlot={headerRight}
         variant="dark"
       />
 
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Container maxWidth="lg" sx={{ py: 6 }}>
-        {isLoading ? (
-          <Box display="flex" justifyContent="center" py={8}>
-            <CircularProgress />
-          </Box>
-        ) : isError ? (
-          <Box textAlign="center" py={8}>
-            <Typography variant="h6" gutterBottom>
-              {t('error.loadData')}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {t('error.loadDataHint')}
-            </Typography>
-          </Box>
-        ) : (
-          <>
-            <Grid container spacing={2} sx={{ mb: 4 }}>
-              <Grid item xs={12} md={4}>
-                <StatsCard
-                  title={t("dashboard.totalMonthly")}
-                  value={`${userDefaultCurrency} ${Math.round(totalMonthly)}`}
-                  icon={<AttachMoneyIcon color="primary" />}
-                  description={t("dashboard.totalSubscriptions", { count: subscriptions.length })}
-                />
+          {isLoading ? (
+            <Box display="flex" justifyContent="center" py={8}>
+              <CircularProgress />
+            </Box>
+          ) : isError ? (
+            <Box textAlign="center" py={8}>
+              <Typography variant="h6" gutterBottom>
+                {t("error.loadData")}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {t("error.loadDataHint")}
+              </Typography>
+            </Box>
+          ) : (
+            <>
+              <Grid container spacing={2} sx={{ mb: 4 }}>
+                <Grid item xs={12} md={4}>
+                  <StatsCard
+                    title={t("dashboard.totalMonthly")}
+                    value={`${userDefaultCurrency} ${Math.round(totalMonthly)}`}
+                    icon={<AttachMoneyIcon color="primary" />}
+                    description={t("dashboard.totalSubscriptions", {
+                      count: subscriptions.length,
+                    })}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <StatsCard
+                    title={t("dashboard.active")}
+                    value={activeSubscriptions}
+                    icon={<CalendarMonthIcon color="secondary" />}
+                    description={t("dashboard.activeDescription")}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <StatsCard
+                    title={t("dashboard.annualEstimate")}
+                    value={`${userDefaultCurrency} ${Math.round(
+                      totalMonthly * 12
+                    )}`}
+                    icon={<TrendingUpIcon color="secondary" />}
+                    description={t("dashboard.annualEstimateDescription")}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={4}>
-                <StatsCard
-                  title={t("dashboard.active")}
-                  value={activeSubscriptions}
-                  icon={<CalendarMonthIcon color="secondary" />}
-                  description={t("dashboard.activeDescription")}
-                />
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <StatsCard
-                  title={t("dashboard.annualEstimate")}
-                  value={`${userDefaultCurrency} ${Math.round(totalMonthly * 12)}`}
-                  icon={<TrendingUpIcon color="secondary" />}
-                  description={t("dashboard.annualEstimateDescription")}
-                />
-              </Grid>
-            </Grid>
 
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              mb={4}
-              flexWrap="wrap"
-              gap={2}>
-              <Typography variant="h5" fontWeight={700}>{t("dashboard.allSubscriptions")}</Typography>
-              <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
-                <ToggleButtonGroup
-                  value={priceDisplayMode}
-                  exclusive
-                  onChange={(e, newMode) => {
-                    if (newMode) setPriceDisplayMode(newMode);
-                  }}
-                  size="small"
-                  sx={{
-                    height: 40,
-                    '& .MuiToggleButton-root': {
-                      borderColor: '#000',
-                      color: '#000',
-                      fontWeight: 600,
-                      '&.Mui-selected': {
-                        backgroundColor: '#000',
-                        color: '#fff',
-                        '&:hover': {
-                          backgroundColor: '#333',
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                mb={4}
+                flexWrap="wrap"
+                gap={2}
+              >
+                <Typography variant="h5" fontWeight={700}>
+                  {t("dashboard.allSubscriptions")}
+                </Typography>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="center"
+                  flexWrap="wrap"
+                >
+                  <ToggleButtonGroup
+                    value={priceDisplayMode}
+                    exclusive
+                    onChange={(e, newMode) => {
+                      if (newMode) setPriceDisplayMode(newMode);
+                    }}
+                    size="small"
+                    sx={{
+                      height: 40,
+                      "& .MuiToggleButton-root": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                        color: "#fff",
+                        fontWeight: 600,
+                        "&.Mui-selected": {
+                          backgroundColor: "#34b27b",
+                          color: "#fff",
+                          "&:hover": {
+                            backgroundColor: "#2d9969",
+                          },
+                        },
+                        "&:hover": {
+                          backgroundColor: "rgba(255, 255, 255, 0.05)",
                         },
                       },
-                      '&:hover': {
-                        backgroundColor: '#f5f5f5',
-                      },
-                    },
-                  }}
-                >
-                  <ToggleButton value="original">
-                    {t("header.priceMode.original")}
-                  </ToggleButton>
-                  <ToggleButton value="monthly">
-                    {t("header.priceMode.monthly")}
-                  </ToggleButton>
-                </ToggleButtonGroup>
+                    }}
+                  >
+                    <ToggleButton value="original">
+                      {t("header.priceMode.original")}
+                    </ToggleButton>
+                    <ToggleButton value="monthly">
+                      {t("header.priceMode.monthly")}
+                    </ToggleButton>
+                  </ToggleButtonGroup>
 
-                <Button
-                  startIcon={<CategoryIcon />}
-                  variant="outlined"
-                  onClick={() => setCategoryDialogOpen(true)}
-                  sx={{
-                    borderColor: '#000',
-                    color: '#000',
-                    '&:hover': { borderColor: '#333', backgroundColor: '#f5f5f5' },
-                  }}
-                >
-                  {t("header.manageCategories")}
-                </Button>
-                <FormControl size="small" sx={{ minWidth: 150 }}>
-                  <InputLabel>{t("header.sort")}</InputLabel>
-                  <Select
-                    value={sortBy}
-                    label={t("header.sort")}
-                    onChange={(e) => setSortBy(e.target.value as 'endDate' | 'price' | 'name')}
+                  <Button
+                    startIcon={<CategoryIcon />}
+                    variant="outlined"
+                    onClick={() => setCategoryDialogOpen(true)}
                     sx={{
-                      borderColor: '#000',
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#000',
+                      borderColor: "rgba(255, 255, 255, 0.2)",
+                      color: "#fff",
+                      "&:hover": {
+                        borderColor: "#34b27b",
+                        backgroundColor: "rgba(52, 178, 123, 0.1)",
                       },
                     }}
                   >
-                    <MenuItem value="endDate">{t("header.sort.endDate")}</MenuItem>
-                    <MenuItem value="price">{t("header.sort.price")}</MenuItem>
-                    <MenuItem value="name">{t("header.sort.name")}</MenuItem>
-                  </Select>
-                </FormControl>
-                <AddSubscriptionDialog
-                  onAdd={handleAdd}
-                  disabled={createMutation.isPending}
-                  categories={categories}
-                />
-              </Stack>
-            </Stack>
-
-            {subscriptions.length === 0 ? (
-              <Box
-                sx={{
-                  border: "2px dashed #d1d5db",
-                  borderRadius: 2,
-                  textAlign: "center",
-                  py: 8,
-                  backgroundColor: "#fff",
-                }}>
-                <CalendarMonthIcon
-                  sx={{ fontSize: 48, color: "text.secondary" }}
-                />
-                <Typography variant="h6" sx={{ mt: 2 }}>
-                  {t("dashboard.empty.title")}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 1 }}>
-                  {t("dashboard.empty.description")}
-                </Typography>
-              </Box>
-            ) : sortBy === 'name' ? (
-              <Stack spacing={3}>
-                {groupedSubscriptions.map((group) => (
-                  <Box
-                    key={group.key}
-                    sx={{
-                      border: `2px solid ${group.color}`,
-                      borderRadius: 3,
-                      p: 3,
-                      backgroundColor:
-                        activeDropTarget === group.key ? 'rgba(0,0,0,0.04)' : '#fff',
-                      transition: 'background-color 0.2s ease, border-color 0.2s ease',
-                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-                    }}
-                    onDragOver={(event) => {
-                      if (draggedSubscriptionId !== null) {
-                        event.preventDefault();
-                        event.dataTransfer.dropEffect = 'move';
+                    {t("header.manageCategories")}
+                  </Button>
+                  <FormControl size="small" sx={{ minWidth: 150 }}>
+                    <InputLabel>{t("header.sort")}</InputLabel>
+                    <Select
+                      value={sortBy}
+                      label={t("header.sort")}
+                      onChange={(e) =>
+                        setSortBy(
+                          e.target.value as "endDate" | "price" | "name"
+                        )
                       }
-                    }}
-                    onDragEnter={() => handleDragEnter(group.key)}
-                    onDragLeave={() => handleDragLeave(group.key)}
-                    onDrop={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      void handleDropOnCategory(group.categoryId);
-                    }}
-                  >
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-                      <Typography
-                        variant="subtitle1"
-                        fontWeight={700}
-                        sx={{ color: group.color }}
-                      >
-                        {group.title}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        fontWeight={700}
-                        sx={{ color: group.color }}
-                      >
-                        {t("dashboard.totalMonthly")}: {userDefaultCurrency} {Math.round(group.totalMonthly)}
-                      </Typography>
-                    </Stack>
-                    {group.subscriptions.length === 0 ? (
-                      <Box
-                        sx={{
-                          border: '2px dashed rgba(0,0,0,0.2)',
-                          borderRadius: 2,
-                          p: 3,
-                          textAlign: 'center',
-                          color: 'text.secondary',
-                          fontSize: 14,
-                        }}
-                      >
-                        {t("categories.dropHint")}
-                      </Box>
-                    ) : (
-                      <Grid container spacing={3}>
-                        {group.subscriptions.map((subscription) => (
-                    <Grid item xs={12} sm={6} md={6} lg={4} key={subscription.id}>
-                            <SubscriptionCard
-                              subscription={subscription}
-                              onDelete={handleDelete}
-                              onEdit={handleEdit}
-                              categories={categories}
-                              categoryColor={group.color}
-                              categoryName={group.title}
-                              draggable
-                              onDragStart={(subscriptionId) => handleDragStart(subscriptionId)}
-                              onDragEnd={handleDragEnd}
-                              isDragging={draggedSubscriptionId === subscription.id}
-                              priceDisplayMode={priceDisplayMode}
-                              monthlyCost={computeSubscriptionMonthlyCost(subscription, exchangeRates, userDefaultCurrency)}
-                              targetCurrency={userDefaultCurrency}
-                            />
-                          </Grid>
-                        ))}
-                      </Grid>
-                    )}
-                  </Box>
-                ))}
+                      sx={{
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                        color: "#fff",
+                        "& .MuiSelect-icon": { color: "#fff" },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgba(255, 255, 255, 0.2)",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#34b27b",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#34b27b",
+                        },
+                      }}
+                    >
+                      <MenuItem value="endDate">
+                        {t("header.sort.endDate")}
+                      </MenuItem>
+                      <MenuItem value="price">
+                        {t("header.sort.price")}
+                      </MenuItem>
+                      <MenuItem value="name">{t("header.sort.name")}</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <AddSubscriptionDialog
+                    onAdd={handleAdd}
+                    disabled={createMutation.isPending}
+                    categories={categories}
+                  />
+                </Stack>
               </Stack>
-            ) : (
-              <Grid container spacing={3}>
-                {sortedSubscriptions.map((subscription) => {
-                  const categoryDisplay = getCategoryDisplay(subscription);
-                  return (
-                    <Grid item xs={12} sm={6} md={6} lg={4} key={subscription.id}>
-                      <SubscriptionCard
-                        subscription={subscription}
-                        onDelete={handleDelete}
-                        onEdit={handleEdit}
-                        categories={categories}
-                        categoryColor={categoryDisplay.color}
-                        categoryName={categoryDisplay.name}
-                        draggable={false}
-                        isDragging={false}
-                        priceDisplayMode={priceDisplayMode}
-                        monthlyCost={computeSubscriptionMonthlyCost(subscription, exchangeRates, userDefaultCurrency)}
-                        targetCurrency={userDefaultCurrency}
-                      />
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            )}
-          </>
-        )}
+
+              {subscriptions.length === 0 ? (
+                <Box
+                  sx={{
+                    border: "2px dashed rgba(255, 255, 255, 0.1)",
+                    borderRadius: 4,
+                    textAlign: "center",
+                    py: 12,
+                    backgroundColor: "rgba(255, 255, 255, 0.02)",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <CalendarMonthIcon
+                    sx={{
+                      fontSize: 64,
+                      color: "rgba(255, 255, 255, 0.2)",
+                      mb: 2,
+                    }}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{ mt: 2, color: "#fff", fontWeight: 600 }}
+                  >
+                    {t("dashboard.empty.title")}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    sx={{ mt: 1 }}
+                  >
+                    {t("dashboard.empty.description")}
+                  </Typography>
+                </Box>
+              ) : sortBy === "name" ? (
+                <Stack spacing={3}>
+                  {groupedSubscriptions.map((group) => (
+                    <Box
+                      key={group.key}
+                      sx={{
+                        border: `2px solid ${group.color}`,
+                        borderRadius: 3,
+                        p: 3,
+                        backgroundColor:
+                          activeDropTarget === group.key
+                            ? "rgba(52, 178, 123, 0.1)"
+                            : "rgba(255, 255, 255, 0.02)",
+                        transition: "all 0.3s ease",
+                        boxShadow: "none",
+                        backdropFilter: "blur(10px)",
+                      }}
+                      onDragOver={(event) => {
+                        if (draggedSubscriptionId !== null) {
+                          event.preventDefault();
+                          event.dataTransfer.dropEffect = "move";
+                        }
+                      }}
+                      onDragEnter={() => handleDragEnter(group.key)}
+                      onDragLeave={() => handleDragLeave(group.key)}
+                      onDrop={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        void handleDropOnCategory(group.categoryId);
+                      }}
+                    >
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ mb: 2 }}
+                      >
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight={700}
+                          sx={{ color: group.color }}
+                        >
+                          {group.title}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight={700}
+                          sx={{ color: group.color }}
+                        >
+                          {t("dashboard.totalMonthly")}: {userDefaultCurrency}{" "}
+                          {Math.round(group.totalMonthly)}
+                        </Typography>
+                      </Stack>
+                      {group.subscriptions.length === 0 ? (
+                        <Box
+                          sx={{
+                            border: "2px dashed rgba(255, 255, 255, 0.1)",
+                            borderRadius: 2,
+                            p: 4,
+                            textAlign: "center",
+                            color: "rgba(255, 255, 255, 0.3)",
+                            fontSize: 14,
+                          }}
+                        >
+                          {t("categories.dropHint")}
+                        </Box>
+                      ) : (
+                        <Grid container spacing={3}>
+                          {group.subscriptions.map((subscription) => (
+                            <Grid
+                              item
+                              xs={12}
+                              sm={6}
+                              md={6}
+                              lg={4}
+                              key={subscription.id}
+                            >
+                              <SubscriptionCard
+                                subscription={subscription}
+                                onDelete={handleDelete}
+                                onEdit={handleEdit}
+                                categories={categories}
+                                categoryColor={group.color}
+                                categoryName={group.title}
+                                draggable
+                                onDragStart={(subscriptionId) =>
+                                  handleDragStart(subscriptionId)
+                                }
+                                onDragEnd={handleDragEnd}
+                                isDragging={
+                                  draggedSubscriptionId === subscription.id
+                                }
+                                priceDisplayMode={priceDisplayMode}
+                                monthlyCost={computeSubscriptionMonthlyCost(
+                                  subscription,
+                                  exchangeRates,
+                                  userDefaultCurrency
+                                )}
+                                targetCurrency={userDefaultCurrency}
+                              />
+                            </Grid>
+                          ))}
+                        </Grid>
+                      )}
+                    </Box>
+                  ))}
+                </Stack>
+              ) : (
+                <Grid container spacing={3}>
+                  {sortedSubscriptions.map((subscription) => {
+                    const categoryDisplay = getCategoryDisplay(subscription);
+                    return (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={6}
+                        lg={4}
+                        key={subscription.id}
+                      >
+                        <SubscriptionCard
+                          subscription={subscription}
+                          onDelete={handleDelete}
+                          onEdit={handleEdit}
+                          categories={categories}
+                          categoryColor={categoryDisplay.color}
+                          categoryName={categoryDisplay.name}
+                          draggable={false}
+                          isDragging={false}
+                          priceDisplayMode={priceDisplayMode}
+                          monthlyCost={computeSubscriptionMonthlyCost(
+                            subscription,
+                            exchangeRates,
+                            userDefaultCurrency
+                          )}
+                          targetCurrency={userDefaultCurrency}
+                        />
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              )}
+            </>
+          )}
         </Container>
       </Box>
 
@@ -908,4 +1045,3 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
-
