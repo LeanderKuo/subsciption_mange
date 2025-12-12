@@ -13,18 +13,29 @@ import {
   Box,
   Typography,
   Chip,
-} from '@mui/material';
-import { Add, Delete, Edit, Category as CategoryIcon } from '@mui/icons-material';
-import { useState } from 'react';
-import { SubscriptionCategory, SubscriptionCategoryInput } from '../types/subscription';
-import { useLocale } from '../i18n/LocaleProvider';
+} from "@mui/material";
+import {
+  Add,
+  Delete,
+  Edit,
+  Category as CategoryIcon,
+} from "@mui/icons-material";
+import { useState } from "react";
+import {
+  SubscriptionCategory,
+  SubscriptionCategoryInput,
+} from "../types/subscription";
+import { useLocale } from "../i18n/LocaleProvider";
 
 interface CategoryManagementDialogProps {
   open: boolean;
   onClose: () => void;
   categories: SubscriptionCategory[];
   onAddCategory: (category: SubscriptionCategoryInput) => Promise<void>;
-  onUpdateCategory: (id: number, updates: Partial<SubscriptionCategoryInput>) => Promise<void>;
+  onUpdateCategory: (
+    id: number,
+    updates: Partial<SubscriptionCategoryInput>
+  ) => Promise<void>;
   onDeleteCategory: (id: number) => Promise<void>;
 }
 
@@ -39,25 +50,25 @@ export const CategoryManagementDialog = ({
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({
-    name: '',
-    description: '',
-    color: '#000000',
+    name: "",
+    description: "",
+    color: "#000000",
   });
   const { t } = useLocale();
 
   const predefinedColors = [
-    '#000000', // Black
-    '#FF5733', // Red-Orange
-    '#3498DB', // Blue
-    '#2ECC71', // Green
-    '#9B59B6', // Purple
-    '#F39C12', // Orange
-    '#E74C3C', // Red
-    '#1ABC9C', // Turquoise
+    "#000000", // Black
+    "#FF5733", // Red-Orange
+    "#3498DB", // Blue
+    "#2ECC71", // Green
+    "#9B59B6", // Purple
+    "#F39C12", // Orange
+    "#E74C3C", // Red
+    "#1ABC9C", // Turquoise
   ];
 
   const handleStartAdd = () => {
-    setForm({ name: '', description: '', color: '#000000' });
+    setForm({ name: "", description: "", color: "#000000" });
     setEditingId(null);
     setIsAdding(true);
   };
@@ -65,7 +76,7 @@ export const CategoryManagementDialog = ({
   const handleStartEdit = (category: SubscriptionCategory) => {
     setForm({
       name: category.name,
-      description: category.description || '',
+      description: category.description || "",
       color: category.color,
     });
     setEditingId(category.id);
@@ -81,34 +92,37 @@ export const CategoryManagementDialog = ({
       } else {
         await onAddCategory(form);
       }
-      setForm({ name: '', description: '', color: '#000000' });
+      setForm({ name: "", description: "", color: "#000000" });
       setEditingId(null);
       setIsAdding(false);
     } catch (error) {
-      console.error('Failed to save category:', error);
+      console.error("Failed to save category:", error);
     }
   };
 
   const handleCancel = () => {
-    setForm({ name: '', description: '', color: '#000000' });
+    setForm({ name: "", description: "", color: "#000000" });
     setEditingId(null);
     setIsAdding(false);
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm(t('categoryDialog.deleteConfirm'))) {
+    if (window.confirm(t("categoryDialog.deleteConfirm"))) {
       try {
         await onDeleteCategory(id);
       } catch (error) {
-        console.error('Failed to delete category:', error);
+        console.error("Failed to delete category:", error);
       }
     }
   };
 
-  const handleClose = (event: {}, reason: "backdropClick" | "escapeKeyDown") => {
+  const handleClose = (
+    event: {},
+    reason: "backdropClick" | "escapeKeyDown"
+  ) => {
     if (reason === "backdropClick") return;
     // Reset form and state when closing the dialog, similar to handleCancel
-    setForm({ name: '', description: '', color: '#000000' });
+    setForm({ name: "", description: "", color: "#000000" });
     setEditingId(null);
     setIsAdding(false);
     onClose(); // Call the original onClose prop
@@ -122,15 +136,24 @@ export const CategoryManagementDialog = ({
       fullWidth
       PaperProps={{
         sx: {
-          border: '2px solid #000',
-          borderRadius: 2,
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          borderRadius: 4,
+          background: "rgba(25, 25, 25, 0.9)",
+          backdropFilter: "blur(20px)",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
         },
       }}
     >
-      <DialogTitle sx={{ borderBottom: '2px solid #e0e0e0', fontWeight: 700 }}>
+      <DialogTitle
+        sx={{
+          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          fontWeight: 700,
+          color: "#fff",
+        }}
+      >
         <Stack direction="row" alignItems="center" spacing={1}>
           <CategoryIcon />
-          <span>{t('categoryDialog.title')}</span>
+          <span>{t("categoryDialog.title")}</span>
         </Stack>
       </DialogTitle>
 
@@ -141,14 +164,14 @@ export const CategoryManagementDialog = ({
             <Box
               sx={{
                 p: 2,
-                border: '2px dashed #000',
+                border: "1px dashed rgba(255, 255, 255, 0.2)",
                 borderRadius: 2,
-                backgroundColor: '#f9f9f9',
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
               }}
             >
               <Stack spacing={2}>
                 <TextField
-                  label={t('categoryDialog.fields.name')}
+                  label={t("categoryDialog.fields.name")}
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   required
@@ -157,9 +180,11 @@ export const CategoryManagementDialog = ({
                 />
 
                 <TextField
-                  label={t('categoryDialog.fields.description')}
+                  label={t("categoryDialog.fields.description")}
                   value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, description: e.target.value })
+                  }
                   fullWidth
                   multiline
                   rows={2}
@@ -168,7 +193,7 @@ export const CategoryManagementDialog = ({
                 <Stack spacing={1.5}>
                   <Box>
                     <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                      {t('categoryDialog.fields.color')}
+                      {t("categoryDialog.fields.color")}
                     </Typography>
                     <Stack direction="row" spacing={1} flexWrap="wrap">
                       {predefinedColors.map((color) => (
@@ -179,11 +204,14 @@ export const CategoryManagementDialog = ({
                             width: 32,
                             height: 32,
                             backgroundColor: color,
-                            border: form.color === color ? '3px solid #000' : '2px solid #ccc',
+                            border:
+                              form.color === color
+                                ? "2px solid #fff"
+                                : "2px solid rgba(255, 255, 255, 0.1)",
                             borderRadius: 1,
-                            cursor: 'pointer',
-                            '&:hover': {
-                              transform: 'scale(1.1)',
+                            cursor: "pointer",
+                            "&:hover": {
+                              transform: "scale(1.1)",
                             },
                           }}
                         />
@@ -192,33 +220,47 @@ export const CategoryManagementDialog = ({
                   </Box>
                   <Stack direction="row" spacing={2} alignItems="center">
                     <TextField
-                      label={t('categoryDialog.fields.customColor')}
+                      label={t("categoryDialog.fields.customColor")}
                       type="color"
                       value={form.color}
-                      onChange={(event) => setForm({ ...form, color: event.target.value })}
+                      onChange={(event) =>
+                        setForm({ ...form, color: event.target.value })
+                      }
                       sx={{ width: 100 }}
                       InputLabelProps={{ shrink: true }}
                     />
                     <Typography variant="body2" color="text.secondary">
-                      {t('categoryDialog.currentColor', { color: form.color.toUpperCase() })}
+                      {t("categoryDialog.currentColor", {
+                        color: form.color.toUpperCase(),
+                      })}
                     </Typography>
                   </Stack>
                 </Stack>
 
                 <Stack direction="row" spacing={1} justifyContent="flex-end">
-                  <Button onClick={handleCancel} variant="outlined">
-                    {t('categoryDialog.cancel')}
+                  <Button
+                    onClick={handleCancel}
+                    variant="outlined"
+                    sx={{
+                      borderColor: "rgba(255, 255, 255, 0.2)",
+                      color: "#fff",
+                      "&:hover": { borderColor: "#fff" },
+                    }}
+                  >
+                    {t("categoryDialog.cancel")}
                   </Button>
                   <Button
                     onClick={handleSave}
                     variant="contained"
                     disabled={!form.name.trim()}
                     sx={{
-                      backgroundColor: '#000',
-                      '&:hover': { backgroundColor: '#333' },
+                      backgroundColor: "#34b27b",
+                      "&:hover": { backgroundColor: "#2d9969" },
                     }}
                   >
-                    {editingId ? t('categoryDialog.update') : t('categoryDialog.add')}
+                    {editingId
+                      ? t("categoryDialog.update")
+                      : t("categoryDialog.add")}
                   </Button>
                 </Stack>
               </Stack>
@@ -227,9 +269,9 @@ export const CategoryManagementDialog = ({
 
           {/* Category List */}
           {categories.length === 0 ? (
-            <Box sx={{ textAlign: 'center', py: 4 }}>
+            <Box sx={{ textAlign: "center", py: 4 }}>
               <Typography variant="body2" color="text.secondary">
-                {t('categoryDialog.empty')}
+                {t("categoryDialog.empty")}
               </Typography>
             </Box>
           ) : (
@@ -238,10 +280,13 @@ export const CategoryManagementDialog = ({
                 <ListItem
                   key={category.id}
                   sx={{
-                    border: '1px solid #e0e0e0',
-                    borderRadius: 1,
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    borderRadius: 2,
                     mb: 1,
-                    backgroundColor: editingId === category.id ? '#f0f0f0' : '#fff',
+                    backgroundColor:
+                      editingId === category.id
+                        ? "rgba(52, 178, 123, 0.1)"
+                        : "rgba(255, 255, 255, 0.03)",
                   }}
                   secondaryAction={
                     <Stack direction="row" spacing={0.5}>
@@ -250,13 +295,16 @@ export const CategoryManagementDialog = ({
                         onClick={() => handleStartEdit(category)}
                         size="small"
                       >
-                        <Edit fontSize="small" />
+                        <Edit
+                          fontSize="small"
+                          sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                        />
                       </IconButton>
                       <IconButton
                         edge="end"
                         onClick={() => handleDelete(category.id)}
                         size="small"
-                        sx={{ color: '#d32f2f' }}
+                        sx={{ color: "#d32f2f" }}
                       >
                         <Delete fontSize="small" />
                       </IconButton>
@@ -266,7 +314,7 @@ export const CategoryManagementDialog = ({
                   <Chip
                     sx={{
                       backgroundColor: category.color,
-                      color: '#fff',
+                      color: "#fff",
                       fontWeight: 600,
                       mr: 2,
                       minWidth: 16,
@@ -278,7 +326,10 @@ export const CategoryManagementDialog = ({
                   <ListItemText
                     primary={category.name}
                     secondary={category.description}
-                    primaryTypographyProps={{ fontWeight: 600 }}
+                    primaryTypographyProps={{ fontWeight: 600, color: "#fff" }}
+                    secondaryTypographyProps={{
+                      color: "rgba(255, 255, 255, 0.6)",
+                    }}
                   />
                 </ListItem>
               ))}
@@ -287,23 +338,33 @@ export const CategoryManagementDialog = ({
         </Stack>
       </DialogContent>
 
-      <DialogActions sx={{ borderTop: '2px solid #e0e0e0', p: 2 }}>
+      <DialogActions
+        sx={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)", p: 2 }}
+      >
         {!isAdding && !editingId && (
           <Button
             startIcon={<Add />}
             onClick={handleStartAdd}
             variant="contained"
             sx={{
-              backgroundColor: '#000',
-              '&:hover': { backgroundColor: '#333' },
+              backgroundColor: "#34b27b",
+              "&:hover": { backgroundColor: "#2d9969" },
             }}
           >
-            {t('categoryDialog.add')}
+            {t("categoryDialog.add")}
           </Button>
         )}
         <Box sx={{ flex: 1 }} />
-        <Button onClick={onClose} variant="outlined">
-          {t('categoryDialog.cancel')}
+        <Button
+          onClick={onClose}
+          variant="outlined"
+          sx={{
+            borderColor: "rgba(255, 255, 255, 0.2)",
+            color: "#fff",
+            "&:hover": { borderColor: "#fff" },
+          }}
+        >
+          {t("categoryDialog.cancel")}
         </Button>
       </DialogActions>
     </Dialog>

@@ -17,20 +17,20 @@ import {
   Stack,
   TextField,
   Typography,
-} from '@mui/material';
-import type { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
-import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
+} from "@mui/material";
+import type { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
+import { ChangeEvent, SyntheticEvent, useRef, useState } from "react";
+import { SubscriptionInput, SubscriptionCategory } from "../types/subscription";
 import {
-  SubscriptionInput,
-  SubscriptionCategory,
-} from '../types/subscription';
-import { useBrandAutofill, BrandAutofillResult } from '../hooks/useBrandAutofill';
-import { useLocale } from '../i18n/LocaleProvider';
+  useBrandAutofill,
+  BrandAutofillResult,
+} from "../hooks/useBrandAutofill";
+import { useLocale } from "../i18n/LocaleProvider";
 import {
   createBlankSubscriptionFormState,
   type SubscriptionFormStateBase,
-} from '../utils/subscriptionFormState';
-import { BillingPeriod, serializeBillingCycle } from '../utils/billingUtils';
+} from "../utils/subscriptionFormState";
+import { BillingPeriod, serializeBillingCycle } from "../utils/billingUtils";
 
 interface AddSubscriptionDialogProps {
   onAdd: (payload: SubscriptionInput) => Promise<void> | void;
@@ -46,16 +46,21 @@ type FormState = SubscriptionFormStateBase & {
 
 const createExtendedBlankFormState = (): FormState => ({
   ...createBlankSubscriptionFormState(),
-  billingPeriod: 'monthly',
-  customYears: '0',
-  customMonths: '1',
+  billingPeriod: "monthly",
+  customYears: "0",
+  customMonths: "1",
 });
 
-export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddSubscriptionDialogProps) => {
+export const AddSubscriptionDialog = ({
+  onAdd,
+  disabled,
+  categories = [],
+}: AddSubscriptionDialogProps) => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(createExtendedBlankFormState);
   const autoFilledIconRef = useRef<string | null>(null);
-  const [selectedBrand, setSelectedBrand] = useState<BrandAutofillResult | null>(null);
+  const [selectedBrand, setSelectedBrand] =
+    useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
 
@@ -69,7 +74,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
       brand: newInputValue,
     }));
 
-    if (reason === 'input' || reason === 'clear') {
+    if (reason === "input" || reason === "clear") {
       setSelectedBrand(null);
       autoFilledIconRef.current = null;
       brandAutofill.reset();
@@ -80,7 +85,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
     _event: unknown,
     newValue: BrandAutofillResult | string | null
   ) => {
-    if (!newValue || typeof newValue === 'string') {
+    if (!newValue || typeof newValue === "string") {
       setSelectedBrand(null);
       return;
     }
@@ -108,7 +113,7 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = event.target.value;
 
-      if (field === 'startDate') {
+      if (field === "startDate") {
         setForm((prev) => ({
           ...prev,
           startDate: value,
@@ -130,14 +135,17 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
 
   const handleSubmit = async () => {
     const customDuration =
-      form.billingPeriod === 'custom'
+      form.billingPeriod === "custom"
         ? {
             years: Number(form.customYears) || 0,
             months: Number(form.customMonths) || 0,
           }
         : undefined;
 
-    const resolvedCycle = serializeBillingCycle(form.billingPeriod, customDuration);
+    const resolvedCycle = serializeBillingCycle(
+      form.billingPeriod,
+      customDuration
+    );
 
     const payload: SubscriptionInput = {
       name: form.name.trim(),
@@ -174,7 +182,10 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
     setSelectedBrand(null);
     setOpen(true);
   };
-  const handleClose = (event: {}, reason: "backdropClick" | "escapeKeyDown") => {
+  const handleClose = (
+    event: {},
+    reason: "backdropClick" | "escapeKeyDown"
+  ) => {
     if (reason === "backdropClick") return;
     setOpen(false);
     setForm(createExtendedBlankFormState());
@@ -194,16 +205,16 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
   return (
     <>
       <Button variant="contained" onClick={handleOpen} disabled={disabled}>
-        {t('addSubscription.openButton')}
+        {t("addSubscription.openButton")}
       </Button>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{t('addSubscription.title')}</DialogTitle>
+        <DialogTitle>{t("addSubscription.title")}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
-              label={t('addSubscription.fields.name')}
+              label={t("addSubscription.fields.name")}
               value={form.name}
-              onChange={handleChange('name')}
+              onChange={handleChange("name")}
               fullWidth
               required
             />
@@ -218,22 +229,27 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
               loading={brandAutofill.isLoading}
               filterOptions={(options) => options}
               getOptionLabel={(option) =>
-                typeof option === 'string'
+                typeof option === "string"
                   ? option
                   : option.name ?? option.domain ?? option.query
               }
               isOptionEqualToValue={(option, value) => option.id === value.id}
               noOptionsText={
                 form.brand.trim()
-                  ? t('addSubscription.brand.noResults')
-                  : t('addSubscription.brand.placeholder')
+                  ? t("addSubscription.brand.noResults")
+                  : t("addSubscription.brand.placeholder")
               }
               renderOption={(props, option) => {
                 const { key, ...optionProps } = props;
-                const displayName = option.name ?? option.domain ?? option.query;
+                const displayName =
+                  option.name ?? option.domain ?? option.query;
                 const subtitle =
-                  option.domain && option.domain !== option.name ? option.domain : null;
-                const initial = displayName ? displayName.charAt(0).toUpperCase() : '?';
+                  option.domain && option.domain !== option.name
+                    ? option.domain
+                    : null;
+                const initial = displayName
+                  ? displayName.charAt(0).toUpperCase()
+                  : "?";
 
                 return (
                   <li {...optionProps} key={key ?? option.id}>
@@ -260,13 +276,15 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label={t('addSubscription.fields.brand')}
+                  label={t("addSubscription.fields.brand")}
                   required
                   error={Boolean(brandAutofill.error)}
                   helperText={
                     brandAutofill.enabled
                       ? brandAutofill.error ??
-                        (brandAutofill.isLoading ? t('addSubscription.brand.searching') : undefined)
+                        (brandAutofill.isLoading
+                          ? t("addSubscription.brand.searching")
+                          : undefined)
                       : undefined
                   }
                 />
@@ -274,52 +292,52 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
             />
             <Stack direction="row" spacing={2}>
               <TextField
-                label={t('addSubscription.fields.price')}
+                label={t("addSubscription.fields.price")}
                 type="number"
                 value={form.price}
-                onChange={handleChange('price')}
+                onChange={handleChange("price")}
                 fullWidth
                 required
               />
               <TextField
-                label={t('addSubscription.fields.currency')}
+                label={t("addSubscription.fields.currency")}
                 select
                 value={form.currency}
-                onChange={handleChange('currency')}
+                onChange={handleChange("currency")}
                 fullWidth
                 required
               >
-                <MenuItem value="TWD">{t('currency.TWD')}</MenuItem>
-                <MenuItem value="USD">{t('currency.USD')}</MenuItem>
-                <MenuItem value="EUR">{t('currency.EUR')}</MenuItem>
-                <MenuItem value="JPY">{t('currency.JPY')}</MenuItem>
-                <MenuItem value="GBP">{t('currency.GBP')}</MenuItem>
-                <MenuItem value="CNY">{t('currency.CNY')}</MenuItem>
+                <MenuItem value="TWD">{t("currency.TWD")}</MenuItem>
+                <MenuItem value="USD">{t("currency.USD")}</MenuItem>
+                <MenuItem value="EUR">{t("currency.EUR")}</MenuItem>
+                <MenuItem value="JPY">{t("currency.JPY")}</MenuItem>
+                <MenuItem value="GBP">{t("currency.GBP")}</MenuItem>
+                <MenuItem value="CNY">{t("currency.CNY")}</MenuItem>
               </TextField>
             </Stack>
             <Stack direction="row" spacing={2}>
               <TextField
-                label={t('addSubscription.fields.startDate')}
+                label={t("addSubscription.fields.startDate")}
                 type="date"
                 value={form.startDate}
-                onChange={handleChange('startDate')}
+                onChange={handleChange("startDate")}
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 required
               />
               <TextField
-                label={t('addSubscription.fields.endDate')}
+                label={t("addSubscription.fields.endDate")}
                 type="date"
                 value={form.endDate}
-                onChange={handleChange('endDate')}
+                onChange={handleChange("endDate")}
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 required
               />
             </Stack>
-            
+
             <FormControl component="fieldset" fullWidth>
-              <FormLabel>{t('addSubscription.fields.billingCycle')}</FormLabel>
+              <FormLabel>{t("addSubscription.fields.billingCycle")}</FormLabel>
               <RadioGroup
                 row
                 value={form.billingPeriod}
@@ -329,41 +347,41 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
                 <FormControlLabel
                   value="monthly"
                   control={<Radio />}
-                  label={t('billingCycle.monthly')}
+                  label={t("billingCycle.monthly")}
                 />
                 <FormControlLabel
                   value="half-yearly"
                   control={<Radio />}
-                  label={t('billingCycle.halfYearly')}
+                  label={t("billingCycle.halfYearly")}
                 />
                 <FormControlLabel
                   value="yearly"
                   control={<Radio />}
-                  label={t('billingCycle.yearly')}
+                  label={t("billingCycle.yearly")}
                 />
                 <FormControlLabel
                   value="custom"
                   control={<Radio />}
-                  label={t('billingCycle.custom')}
+                  label={t("billingCycle.custom")}
                 />
               </RadioGroup>
             </FormControl>
 
-            {form.billingPeriod === 'custom' && (
+            {form.billingPeriod === "custom" && (
               <Stack direction="row" spacing={2}>
                 <TextField
-                  label={t('addSubscription.cycle.customUnit.years')}
+                  label={t("addSubscription.cycle.customUnit.years")}
                   type="number"
                   value={form.customYears}
-                  onChange={handleChange('customYears')}
+                  onChange={handleChange("customYears")}
                   fullWidth
                   inputProps={{ min: 0 }}
                 />
                 <TextField
-                  label={t('addSubscription.cycle.customUnit.months')}
+                  label={t("addSubscription.cycle.customUnit.months")}
                   type="number"
                   value={form.customMonths}
-                  onChange={handleChange('customMonths')}
+                  onChange={handleChange("customMonths")}
                   fullWidth
                   inputProps={{ min: 0 }}
                 />
@@ -371,33 +389,39 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
             )}
 
             <TextField
-              label={t('addSubscription.fields.iconUrl')}
+              label={t("addSubscription.fields.iconUrl")}
               value={form.iconUrl}
-              onChange={handleChange('iconUrl')}
+              onChange={handleChange("iconUrl")}
               fullWidth
               placeholder="https://"
             />
             <TextField
-              label={t('addSubscription.fields.category')}
+              label={t("addSubscription.fields.category")}
               select
-              value={form.categoryId ?? ''}
-              onChange={(e) => setForm({ ...form, categoryId: e.target.value ? Number(e.target.value) : null })}
+              value={form.categoryId ?? ""}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  categoryId: e.target.value ? Number(e.target.value) : null,
+                })
+              }
               fullWidth
             >
-              <MenuItem value="">{t('addSubscription.fields.category.none')}</MenuItem>
+              <MenuItem value="">
+                {t("addSubscription.fields.category.none")}
+              </MenuItem>
               {categories.map((category) => (
                 <MenuItem key={category.id} value={category.id}>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Chip
                       sx={{
                         backgroundColor: category.color,
-                        color: '#fff',
+                        color: "#fff",
                         width: 16,
                         height: 16,
                       }}
                       label=" "
                       size="small"
-                      
                     />
                     <span>{category.name}</span>
                   </Stack>
@@ -408,18 +432,23 @@ export const AddSubscriptionDialog = ({ onAdd, disabled, categories = [] }: AddS
               control={
                 <Checkbox
                   checked={form.autoRenew}
-                  onChange={(e) => setForm({ ...form, autoRenew: e.target.checked })}
-                  sx={{ color: '#000', '&.Mui-checked': { color: '#000' } }}
+                  onChange={(e) =>
+                    setForm({ ...form, autoRenew: e.target.checked })
+                  }
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    "&.Mui-checked": { color: "#34b27b" },
+                  }}
                 />
               }
-              label={t('addSubscription.fields.autoRenew')}
+              label={t("addSubscription.fields.autoRenew")}
             />
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel}>{t('addSubscription.cancel')}</Button>
+          <Button onClick={handleCancel}>{t("addSubscription.cancel")}</Button>
           <Button variant="contained" onClick={handleSubmit}>
-            {t('addSubscription.submit')}
+            {t("addSubscription.submit")}
           </Button>
         </DialogActions>
       </Dialog>

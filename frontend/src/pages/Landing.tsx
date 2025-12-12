@@ -54,14 +54,14 @@ const Landing = () => {
   const marqueeItems = useMemo(
     () => [
       { name: "Netflix", bg: "#000000", text: "#E50914" },
-      { name: "Spotify", bg: "#000000", text: "#1DB954" },
-      { name: "YouTube Premium", bg: "#FF0000", text: "#FFFFFF" },
       { name: "Claude", bg: "#FFFFFF", text: "#D97757", border: "#D97757" },
+      { name: "YouTube Premium", bg: "#FF0000", text: "#FFFFFF" },
       { name: "ChatGPT", bg: "#FFFFFF", text: "#10A37F", border: "#10A37F" },
+      { name: "Spotify", bg: "#000000", text: "#1DB954" },
       { name: "Gemini", bg: "#FFFFFF", text: "#4285F4", border: "#4285F4" },
-      { name: "GitHub", bg: "#181717", text: "#FFFFFF" },
       { name: "Adobe Creative Cloud", bg: "#FF0000", text: "#FFFFFF" },
       { name: "Notion", bg: "#FFFFFF", text: "#000000", border: "#000000" },
+      { name: "GitHub", bg: "#181717", text: "#FFFFFF" },
       {
         name: "Canva",
         bg: "linear-gradient(135deg, #00C4CC 0%, #7D2AE8 100%)",
@@ -393,7 +393,7 @@ const Landing = () => {
                       key={`${item.name}-${index}`}
                       label={item.name}
                       sx={{
-                        backgroundColor: item.bg,
+                        background: item.bg,
                         color: item.text,
                         border: item.border
                           ? `1px solid ${item.border}`
@@ -406,7 +406,7 @@ const Landing = () => {
                           px: 1,
                         },
                         "&:hover": {
-                          backgroundColor: item.bg,
+                          background: item.bg,
                           opacity: 0.9,
                         },
                       }}
