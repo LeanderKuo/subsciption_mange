@@ -29,6 +29,7 @@ import { useLocale } from "../i18n/LocaleProvider";
 import { useTheme } from "../theme/ThemeProvider";
 import {
   getChipBorderStyle,
+  getChipBoxShadow,
   isDarkColor,
   isLightColor,
 } from "../utils/colorUtils";
@@ -328,6 +329,7 @@ export const CategoryManagementDialog = ({
                       minWidth: 16,
                       height: 24,
                       border: getChipBorderStyle(category.color, theme),
+                      boxShadow: getChipBoxShadow(category.color, theme),
                     }}
                     label=" "
                     size="small"

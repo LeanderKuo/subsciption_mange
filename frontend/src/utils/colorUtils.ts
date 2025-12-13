@@ -61,18 +61,32 @@ export const isLightColor = (hex: string): boolean => {
 /**
  * Check if a color is considered "dark" (dim).
  * @param hex - Hex color string
- * @param threshold - Luminance threshold (default: 0.15 for very dark colors)
+ * @param threshold - Luminance threshold (default: 0.2 for dark colors)
  * @returns true if the color is very dark
  */
-export const isDarkColor = (hex: string, threshold: number = 0.15): boolean => {
+export const isDarkColor = (hex: string, threshold: number = 0.2): boolean => {
   return getLuminance(hex) < threshold;
+};
+
+/**
+ * Check if a color is considered "very light" (close to white).
+ * @param hex - Hex color string
+ * @param threshold - Luminance threshold (default: 0.85 for very light colors)
+ * @returns true if the color is very light
+ */
+export const isVeryLightColor = (
+  hex: string,
+  threshold: number = 0.85
+): boolean => {
+  return getLuminance(hex) > threshold;
 };
 
 /**
  * Get border style for a chip based on the category color and current theme.
  * Very dark colors get a visible border in dark mode.
+ * Very light colors get a visible border in light mode.
  * @param chipColor - The chip's background color
- * @param theme - Current theme ("dark" or "light")
+ * @param theme - Current theme ("dark" | "light")
  * @returns Border CSS string
  */
 export const getChipBorderStyle = (
@@ -80,10 +94,30 @@ export const getChipBorderStyle = (
   theme: "dark" | "light"
 ): string => {
   if (theme === "dark" && isDarkColor(chipColor)) {
-    return "1px solid rgba(255, 255, 255, 0.5)";
+    return "2px solid rgba(255, 255, 255, 0.7)";
   }
-  if (theme === "light" && isLightColor(chipColor)) {
-    return "1px solid rgba(0, 0, 0, 0.2)";
+  if (theme === "light" && isVeryLightColor(chipColor)) {
+    return "2px solid rgba(0, 0, 0, 0.3)";
+  }
+  return "none";
+};
+
+/**
+ * Get box shadow for a chip based on the category color and current theme.
+ * Provides additional visibility for extreme colors.
+ * @param chipColor - The chip's background color
+ * @param theme - Current theme ("dark" | "light")
+ * @returns Box shadow CSS string
+ */
+export const getChipBoxShadow = (
+  chipColor: string,
+  theme: "dark" | "light"
+): string => {
+  if (theme === "dark" && isDarkColor(chipColor)) {
+    return "0 0 6px rgba(255, 255, 255, 0.4)";
+  }
+  if (theme === "light" && isVeryLightColor(chipColor)) {
+    return "0 0 6px rgba(0, 0, 0, 0.2)";
   }
   return "none";
 };

@@ -261,7 +261,9 @@ const Landing = () => {
         <Box
           sx={{
             background:
-              "radial-gradient(circle at 50% 0%, rgba(52, 178, 123, 0.15), transparent 70%)",
+              theme === "dark"
+                ? "radial-gradient(circle at 50% 0%, rgba(52, 178, 123, 0.15), transparent 70%)"
+                : "radial-gradient(circle at 50% 0%, rgba(25, 118, 210, 0.15), transparent 70%)",
             pt: { xs: 15, md: 20 },
             pb: { xs: 10, md: 14 },
             overflow: "hidden",
@@ -554,7 +556,9 @@ const Landing = () => {
               width: "600px",
               height: "600px",
               background:
-                "radial-gradient(circle, rgba(52, 178, 123, 0.2) 0%, transparent 70%)",
+                theme === "dark"
+                  ? "radial-gradient(circle, rgba(52, 178, 123, 0.2) 0%, transparent 70%)"
+                  : "radial-gradient(circle, rgba(25, 118, 210, 0.2) 0%, transparent 70%)",
               zIndex: 0,
               pointerEvents: "none",
             }}

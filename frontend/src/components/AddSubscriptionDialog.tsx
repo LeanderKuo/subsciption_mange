@@ -37,7 +37,7 @@ import {
 } from "../utils/billingUtils";
 import { calculateEndDate } from "../utils/subscriptionDates";
 import { useTheme } from "../theme/ThemeProvider";
-import { getChipBorderStyle } from "../utils/colorUtils";
+import { getChipBorderStyle, getChipBoxShadow } from "../utils/colorUtils";
 
 interface AddSubscriptionDialogProps {
   onAdd: (payload: SubscriptionInput) => Promise<void> | void;
@@ -543,6 +543,7 @@ export const AddSubscriptionDialog = ({
                         width: 16,
                         height: 16,
                         border: getChipBorderStyle(category.color, theme),
+                        boxShadow: getChipBoxShadow(category.color, theme),
                       }}
                       label=" "
                       size="small"

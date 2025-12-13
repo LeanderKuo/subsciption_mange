@@ -22,7 +22,11 @@ import { Subscription, SubscriptionCategory } from "../types/subscription";
 import { EditSubscriptionDialog } from "./EditSubscriptionDialog";
 import { useLocale } from "../i18n/LocaleProvider";
 import { parseBillingCycle } from "../utils/billingUtils";
-import { getContrastTextColor, getChipBorderStyle } from "../utils/colorUtils";
+import {
+  getContrastTextColor,
+  getChipBorderStyle,
+  getChipBoxShadow,
+} from "../utils/colorUtils";
 import { useTheme } from "../theme/ThemeProvider";
 
 interface SubscriptionCardProps {
@@ -78,6 +82,7 @@ export const SubscriptionCard = ({
 
   const chipColor = categoryColor ?? "#6b7280";
   const chipBorder = getChipBorderStyle(chipColor, theme);
+  const chipShadow = getChipBoxShadow(chipColor, theme);
 
   const renderStatusChip = () => {
     const days = differenceInDays(new Date(subscription.endDate), new Date());
@@ -211,6 +216,7 @@ export const SubscriptionCard = ({
                 fontSize: "0.75rem",
                 height: "24px",
                 border: chipBorder,
+                boxShadow: chipShadow,
               }}
             />
           )}
