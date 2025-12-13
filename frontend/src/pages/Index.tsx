@@ -1132,6 +1132,7 @@ const IndexPage = () => {
         categories={categories}
         initialTab={overviewInitialTab}
         targetCurrency={userDefaultCurrency}
+        exchangeRates={exchangeRates}
       />
     </Box>
   );

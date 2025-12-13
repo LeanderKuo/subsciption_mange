@@ -21,12 +21,24 @@ interface AnnualEstimateTabProps {
   subscriptions: Subscription[];
   categories: SubscriptionCategory[];
   targetCurrency: string;
+  exchangeRates: Record<string, number>;
 }
+
+// Helper to get exchange rate
+const getRate = (
+  currency: string,
+  rates: Record<string, number>,
+  targetCurrency: string
+): number => {
+  if (currency === targetCurrency) return 1;
+  return rates[currency] ?? 1;
+};
 
 export const AnnualEstimateTab = ({
   subscriptions,
   categories,
   targetCurrency,
+  exchangeRates,
 }: AnnualEstimateTabProps) => {
   const { t } = useLocale();
   const { colors, theme } = useTheme();
@@ -34,7 +46,7 @@ export const AnnualEstimateTab = ({
   const currentYear = getYear(new Date());
   const lastYear = currentYear - 1;
 
-  // Calculate monthly breakdown for current year
+  // Calculate monthly breakdown for current year with currency conversion
   const monthlyBreakdown = useMemo(() => {
     const today = new Date();
     const months = [];
@@ -58,12 +70,10 @@ export const AnnualEstimateTab = ({
             (subStartYear === currentYear && subStartMonth <= monthNum)) &&
           (sub.autoRenew || endDate >= month)
         ) {
-          thisYearTotal += computeMonthlyCost(
-            sub.price,
-            undefined,
-            undefined,
-            sub.cycle
-          );
+          const rate = getRate(sub.currency, exchangeRates, targetCurrency);
+          thisYearTotal +=
+            computeMonthlyCost(sub.price, undefined, undefined, sub.cycle) *
+            rate;
         }
       });
 
@@ -75,14 +85,17 @@ export const AnnualEstimateTab = ({
     }
 
     return months;
-  }, [subscriptions, currentYear]);
+  }, [subscriptions, currentYear, exchangeRates, targetCurrency]);
 
-  // Calculate annual totals
+  // Calculate annual totals with currency conversion
   const annualTotals = useMemo(() => {
     const thisYearTotal = subscriptions.reduce((sum, sub) => {
+      const rate = getRate(sub.currency, exchangeRates, targetCurrency);
       return (
         sum +
-        computeMonthlyCost(sub.price, undefined, undefined, sub.cycle) * 12
+        computeMonthlyCost(sub.price, undefined, undefined, sub.cycle) *
+          12 *
+          rate
       );
     }, 0);
 
@@ -92,15 +105,18 @@ export const AnnualEstimateTab = ({
       difference: null as number | null,
       percentChange: null as number | null,
     };
-  }, [subscriptions]);
+  }, [subscriptions, exchangeRates, targetCurrency]);
 
-  // Category breakdown for annual spending
+  // Category breakdown for annual spending with currency conversion
   const categoryBreakdown = useMemo(() => {
     const spending = new Map<number | null, number>();
 
     subscriptions.forEach((sub) => {
+      const rate = getRate(sub.currency, exchangeRates, targetCurrency);
       const annual =
-        computeMonthlyCost(sub.price, undefined, undefined, sub.cycle) * 12;
+        computeMonthlyCost(sub.price, undefined, undefined, sub.cycle) *
+        12 *
+        rate;
       const categoryId = sub.categoryId ?? null;
       const existing = spending.get(categoryId) || 0;
       spending.set(categoryId, existing + annual);

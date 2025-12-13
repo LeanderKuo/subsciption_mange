@@ -23,6 +23,7 @@ interface MonthlySpendingTabProps {
   subscriptions: Subscription[];
   categories: SubscriptionCategory[];
   targetCurrency: string;
+  exchangeRates: Record<string, number>;
 }
 
 // Color palette for pie chart
@@ -37,25 +38,33 @@ const COLORS = [
   "#607D8B",
 ];
 
+// Helper to get exchange rate
+const getRate = (
+  currency: string,
+  rates: Record<string, number>,
+  targetCurrency: string
+): number => {
+  if (currency === targetCurrency) return 1;
+  return rates[currency] ?? 1;
+};
+
 export const MonthlySpendingTab = ({
   subscriptions,
   categories,
   targetCurrency,
+  exchangeRates,
 }: MonthlySpendingTabProps) => {
   const { t } = useLocale();
   const { colors, theme } = useTheme();
 
-  // Calculate spending by category
+  // Calculate spending by category with currency conversion
   const categorySpending = useMemo(() => {
     const spending = new Map<number | null, number>();
 
     subscriptions.forEach((sub) => {
-      const monthly = computeMonthlyCost(
-        sub.price,
-        undefined,
-        undefined,
-        sub.cycle
-      );
+      const rate = getRate(sub.currency, exchangeRates, targetCurrency);
+      const monthly =
+        computeMonthlyCost(sub.price, undefined, undefined, sub.cycle) * rate;
       const categoryId = sub.categoryId ?? null;
       const existing = spending.get(categoryId) || 0;
       spending.set(categoryId, existing + monthly);
@@ -71,32 +80,31 @@ export const MonthlySpendingTab = ({
         };
       })
       .sort((a, b) => b.value - a.value);
-  }, [subscriptions, categories, t]);
+  }, [subscriptions, categories, t, exchangeRates, targetCurrency]);
 
-  // Top subscriptions by monthly cost
+  // Top subscriptions by monthly cost with currency conversion
   const topSubscriptions = useMemo(() => {
     return [...subscriptions]
-      .map((sub) => ({
-        ...sub,
-        monthlyCost: computeMonthlyCost(
-          sub.price,
-          undefined,
-          undefined,
-          sub.cycle
-        ),
-      }))
+      .map((sub) => {
+        const rate = getRate(sub.currency, exchangeRates, targetCurrency);
+        return {
+          ...sub,
+          monthlyCost:
+            computeMonthlyCost(sub.price, undefined, undefined, sub.cycle) *
+            rate,
+        };
+      })
       .sort((a, b) => b.monthlyCost - a.monthlyCost)
       .slice(0, 5);
-  }, [subscriptions]);
+  }, [subscriptions, exchangeRates, targetCurrency]);
 
-  // Projected monthly spending (next 12 months)
+  // Projected monthly spending (next 12 months) with currency conversion
   const monthlyTrend = useMemo(() => {
     const today = new Date();
     const trend = [];
 
     for (let i = 0; i < 12; i++) {
       const month = addMonths(today, i);
-      const monthKey = format(month, "yyyy-MM");
       const monthLabel = format(month, "MMM");
 
       // Calculate total for active subscriptions in this month
@@ -104,12 +112,10 @@ export const MonthlySpendingTab = ({
       subscriptions.forEach((sub) => {
         const endDate = new Date(sub.endDate);
         if (endDate >= month || sub.autoRenew) {
-          total += computeMonthlyCost(
-            sub.price,
-            undefined,
-            undefined,
-            sub.cycle
-          );
+          const rate = getRate(sub.currency, exchangeRates, targetCurrency);
+          total +=
+            computeMonthlyCost(sub.price, undefined, undefined, sub.cycle) *
+            rate;
         }
       });
 

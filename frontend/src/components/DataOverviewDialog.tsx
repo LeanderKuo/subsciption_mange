@@ -25,6 +25,7 @@ interface DataOverviewDialogProps {
   categories: SubscriptionCategory[];
   initialTab?: OverviewTab;
   targetCurrency: string;
+  exchangeRates: Record<string, number>;
 }
 
 export const DataOverviewDialog = ({
@@ -34,6 +35,7 @@ export const DataOverviewDialog = ({
   categories,
   initialTab = "calendar",
   targetCurrency,
+  exchangeRates,
 }: DataOverviewDialogProps) => {
   const [activeTab, setActiveTab] = useState<OverviewTab>(initialTab);
   const { t } = useLocale();
@@ -130,6 +132,7 @@ export const DataOverviewDialog = ({
             subscriptions={subscriptions}
             categories={categories}
             targetCurrency={targetCurrency}
+            exchangeRates={exchangeRates}
           />
         )}
         {activeTab === "annual" && (
@@ -137,6 +140,7 @@ export const DataOverviewDialog = ({
             subscriptions={subscriptions}
             categories={categories}
             targetCurrency={targetCurrency}
+            exchangeRates={exchangeRates}
           />
         )}
       </DialogContent>
