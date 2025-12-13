@@ -28,7 +28,9 @@ import type { Locale } from "../i18n/translations";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import ThemeSwitcher from "../components/ThemeSwitcher";
 import { useSeo, useStructuredData } from "../hooks/useSeo";
+import { useTheme } from "../theme/ThemeProvider";
 
 const marqueeAnimation = keyframes`
   0% { transform: translateX(0); }
@@ -50,6 +52,7 @@ const HREF_LANG_MAP: Record<Locale, string> = {
 const Landing = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const { t, locale, setLocale } = useLocale();
+  const { theme, colors } = useTheme();
 
   const marqueeItems = useMemo(
     () => [
@@ -227,8 +230,13 @@ const Landing = () => {
 
   const headerRight = (
     <Stack direction="row" spacing={2} alignItems="center">
-      <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
-      <Button variant="text" onClick={() => setAuthDialogOpen(true)}>
+      <ThemeSwitcher />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
+      <Button
+        variant="text"
+        onClick={() => setAuthDialogOpen(true)}
+        sx={{ color: colors.text }}
+      >
         {t("landing.nav.signIn")}
       </Button>
       <Button variant="contained" onClick={() => setAuthDialogOpen(true)}>
@@ -240,13 +248,14 @@ const Landing = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "background.default",
+        backgroundColor: colors.background,
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
+        transition: "background-color 0.3s ease",
       }}
     >
-      <SiteHeader navLinks={navLinks} rightSlot={headerRight} variant="dark" />
+      <SiteHeader navLinks={navLinks} rightSlot={headerRight} variant={theme} />
 
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Box
@@ -270,11 +279,14 @@ const Landing = () => {
                     lineHeight: 1.05,
                     letterSpacing: "-0.02em",
                     background:
-                      "linear-gradient(to right, #fff 30%, rgba(255, 255, 255, 0.5))",
+                      theme === "dark"
+                        ? "linear-gradient(to right, #fff 30%, rgba(255, 255, 255, 0.5))"
+                        : "linear-gradient(to right, #212121 30%, rgba(33, 33, 33, 0.6))",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
                 >
+                  {" "}
                   {t("landing.hero.title.line1")}
                   <br />
                   {t("landing.hero.title.line2")}
@@ -316,8 +328,8 @@ const Landing = () => {
                   sx={{
                     p: { xs: 4, md: 5 },
                     borderRadius: 4,
-                    background: "rgba(255, 255, 255, 0.03)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    background: colors.surface,
+                    border: `1px solid ${colors.border}`,
                     backdropFilter: "blur(20px)",
                   }}
                 >
@@ -429,7 +441,7 @@ const Landing = () => {
 
         <Box
           id="features"
-          sx={{ py: { xs: 8, md: 12 }, backgroundColor: "#000" }}
+          sx={{ py: { xs: 8, md: 12 }, backgroundColor: colors.background }}
         >
           <Container maxWidth="lg">
             <Typography
@@ -472,7 +484,7 @@ const Landing = () => {
 
         <Box
           id="faq"
-          sx={{ py: { xs: 8, md: 12 }, backgroundColor: "background.default" }}
+          sx={{ py: { xs: 8, md: 12 }, backgroundColor: colors.background }}
         >
           <Container maxWidth="md">
             <Typography
@@ -492,9 +504,9 @@ const Landing = () => {
                   key={index}
                   sx={{
                     boxShadow: "none",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    border: `1px solid ${colors.border}`,
                     borderRadius: "16px !important",
-                    background: "rgba(255,255,255,0.03)",
+                    background: colors.surface,
                     backdropFilter: "blur(10px)",
                     "&:before": { display: "none" },
                   }}

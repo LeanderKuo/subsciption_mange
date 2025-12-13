@@ -25,12 +25,15 @@ import { useLocale } from "../i18n/LocaleProvider";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import ThemeSwitcher from "../components/ThemeSwitcher";
 import { useToast } from "../hooks/use-toast";
+import { useTheme } from "../theme/ThemeProvider";
 
 export const UserSettings = () => {
   const navigate = useNavigate();
   const { t, locale, setLocale } = useLocale();
   const { toast } = useToast();
+  const { theme, colors } = useTheme();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,11 +57,12 @@ export const UserSettings = () => {
 
   const headerRight = (
     <>
-      <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
+      <ThemeSwitcher />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
       <Button
         startIcon={<ArrowBack />}
         onClick={() => navigate("/dashboard")}
-        sx={{ color: "#fff" }}
+        sx={{ color: colors.text }}
       >
         {t("settings.back")}
       </Button>
@@ -348,10 +352,10 @@ export const UserSettings = () => {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
-          backgroundColor: "#fff",
+          backgroundColor: colors.background,
         }}
       >
-        <CircularProgress size={60} sx={{ color: "#000" }} />
+        <CircularProgress size={60} sx={{ color: colors.primary }} />
       </Box>
     );
   }
@@ -360,16 +364,17 @@ export const UserSettings = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundColor: "#000000",
+        backgroundColor: colors.background,
         display: "flex",
         flexDirection: "column",
+        transition: "background-color 0.3s ease",
       }}
     >
       <SiteHeader
         navLinks={[]}
         subtitle={t("settings.title")}
         rightSlot={headerRight}
-        variant="dark"
+        variant={theme}
       />
 
       <Box component="main" sx={{ flexGrow: 1 }}>
@@ -378,8 +383,8 @@ export const UserSettings = () => {
             elevation={0}
             sx={{
               borderRadius: 4,
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              backgroundColor: "rgba(25, 25, 25, 0.6)",
+              border: `1px solid ${colors.border}`,
+              backgroundColor: colors.surface,
               backdropFilter: "blur(20px)",
             }}
           >
@@ -388,7 +393,7 @@ export const UserSettings = () => {
                 <Typography
                   variant="h6"
                   fontWeight={700}
-                  sx={{ color: "#fff" }}
+                  sx={{ color: colors.text }}
                 >
                   {t("settings.section.basic")}
                 </Typography>
@@ -447,11 +452,11 @@ export const UserSettings = () => {
                     variant="outlined"
                     onClick={() => navigate("/dashboard")}
                     sx={{
-                      color: "#fff",
-                      borderColor: "rgba(255, 255, 255, 0.2)",
+                      color: colors.text,
+                      borderColor: colors.border,
                       "&:hover": {
-                        borderColor: "#fff",
-                        backgroundColor: "rgba(255, 255, 255, 0.05)",
+                        borderColor: colors.primary,
+                        backgroundColor: colors.primaryLight,
                       },
                     }}
                   >
@@ -462,10 +467,10 @@ export const UserSettings = () => {
                     onClick={handleSave}
                     disabled={saving}
                     sx={{
-                      backgroundColor: "#34b27b",
-                      color: "#000",
+                      backgroundColor: colors.primary,
+                      color: theme === "dark" ? "#000" : "#fff",
                       "&:hover": {
-                        backgroundColor: "#2d9969",
+                        backgroundColor: colors.primaryHover,
                       },
                     }}
                   >
@@ -473,20 +478,22 @@ export const UserSettings = () => {
                   </Button>
                 </Stack>
 
-                <Divider
-                  sx={{ my: 2, borderColor: "rgba(255, 255, 255, 0.1)" }}
-                />
+                <Divider sx={{ my: 2, borderColor: colors.border }} />
 
                 <Typography
                   variant="h6"
                   fontWeight={700}
-                  sx={{ color: "#fff" }}
+                  sx={{ color: colors.text }}
                 >
                   {t("settings.section.security")}
                 </Typography>
 
                 <Stack spacing={2}>
-                  <Typography variant="subtitle1" fontWeight={600} color="#fff">
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    sx={{ color: colors.text }}
+                  >
                     {t("settings.password.title")}
                   </Typography>
                   <TextField
@@ -543,12 +550,12 @@ export const UserSettings = () => {
                       disabled={passwordSaving}
                       sx={{
                         minWidth: 180,
-                        color: "#fff",
-                        borderColor: "rgba(255, 255, 255, 0.2)",
+                        color: colors.text,
+                        borderColor: colors.border,
                         "&:hover": {
-                          borderColor: "#34b27b",
-                          color: "#34b27b",
-                          backgroundColor: "rgba(52, 178, 123, 0.1)",
+                          borderColor: colors.primary,
+                          color: colors.primary,
+                          backgroundColor: colors.primaryLight,
                         },
                       }}
                     >
@@ -567,8 +574,8 @@ export const UserSettings = () => {
             elevation={0}
             sx={{
               borderRadius: 4,
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              backgroundColor: "rgba(25, 25, 25, 0.6)",
+              border: `1px solid ${colors.border}`,
+              backgroundColor: colors.surface,
               backdropFilter: "blur(20px)",
               mt: 3,
             }}
@@ -578,7 +585,7 @@ export const UserSettings = () => {
                 <Typography
                   variant="h6"
                   fontWeight={700}
-                  sx={{ color: "#fff" }}
+                  sx={{ color: colors.text }}
                 >
                   {t("settings.section.account")}
                 </Typography>
@@ -589,11 +596,14 @@ export const UserSettings = () => {
                     color="error"
                     onClick={handleSignOut}
                     sx={{
-                      borderColor: "#d32f2f",
-                      color: "#d32f2f",
+                      borderColor: colors.error,
+                      color: colors.error,
                       "&:hover": {
-                        borderColor: "#b71c1c",
-                        backgroundColor: "#ffebee",
+                        borderColor: colors.error,
+                        backgroundColor:
+                          theme === "dark"
+                            ? "rgba(211, 47, 47, 0.1)"
+                            : "#ffebee",
                       },
                     }}
                   >
@@ -601,21 +611,19 @@ export const UserSettings = () => {
                   </Button>
                 </Box>
 
-                <Divider
-                  sx={{ my: 1, borderColor: "rgba(255, 255, 255, 0.1)" }}
-                />
+                <Divider sx={{ my: 1, borderColor: colors.border }} />
 
                 <Box>
                   <Typography
                     variant="subtitle1"
                     fontWeight={600}
-                    sx={{ mb: 1, color: "#fff" }}
+                    sx={{ mb: 1, color: colors.text }}
                   >
                     {t("settings.delete.title")}
                   </Typography>
                   <Typography
                     variant="body2"
-                    sx={{ mb: 2, color: "rgba(255, 255, 255, 0.6)" }}
+                    sx={{ mb: 2, color: colors.textSecondary }}
                   >
                     {t("settings.delete.description")}
                   </Typography>
