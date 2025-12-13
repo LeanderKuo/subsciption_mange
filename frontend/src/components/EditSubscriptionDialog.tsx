@@ -43,6 +43,8 @@ import {
   computeMonthlyCost,
 } from "../utils/billingUtils";
 import { calculateEndDate } from "../utils/subscriptionDates";
+import { useTheme } from "../theme/ThemeProvider";
+import { getChipBorderStyle } from "../utils/colorUtils";
 
 interface EditSubscriptionDialogProps {
   subscription: Subscription;
@@ -91,6 +93,7 @@ export const EditSubscriptionDialog = ({
     useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
+  const { theme } = useTheme();
 
   // Get dynamic price label based on billing period
   const getPriceLabel = () => {
@@ -565,6 +568,7 @@ export const EditSubscriptionDialog = ({
                         color: "#fff",
                         width: 16,
                         height: 16,
+                        border: getChipBorderStyle(category.color, theme),
                       }}
                       label=" "
                       size="small"

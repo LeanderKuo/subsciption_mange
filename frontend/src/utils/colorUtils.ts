@@ -57,3 +57,33 @@ export const getContrastTextColor = (
 export const isLightColor = (hex: string): boolean => {
   return getLuminance(hex) > 0.5;
 };
+
+/**
+ * Check if a color is considered "dark" (dim).
+ * @param hex - Hex color string
+ * @param threshold - Luminance threshold (default: 0.15 for very dark colors)
+ * @returns true if the color is very dark
+ */
+export const isDarkColor = (hex: string, threshold: number = 0.15): boolean => {
+  return getLuminance(hex) < threshold;
+};
+
+/**
+ * Get border style for a chip based on the category color and current theme.
+ * Very dark colors get a visible border in dark mode.
+ * @param chipColor - The chip's background color
+ * @param theme - Current theme ("dark" or "light")
+ * @returns Border CSS string
+ */
+export const getChipBorderStyle = (
+  chipColor: string,
+  theme: "dark" | "light"
+): string => {
+  if (theme === "dark" && isDarkColor(chipColor)) {
+    return "1px solid rgba(255, 255, 255, 0.5)";
+  }
+  if (theme === "light" && isLightColor(chipColor)) {
+    return "1px solid rgba(0, 0, 0, 0.2)";
+  }
+  return "none";
+};

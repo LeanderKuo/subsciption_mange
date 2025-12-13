@@ -27,6 +27,11 @@ import {
 } from "../types/subscription";
 import { useLocale } from "../i18n/LocaleProvider";
 import { useTheme } from "../theme/ThemeProvider";
+import {
+  getChipBorderStyle,
+  isDarkColor,
+  isLightColor,
+} from "../utils/colorUtils";
 
 interface CategoryManagementDialogProps {
   open: boolean;
@@ -322,6 +327,7 @@ export const CategoryManagementDialog = ({
                       mr: 2,
                       minWidth: 16,
                       height: 24,
+                      border: getChipBorderStyle(category.color, theme),
                     }}
                     label=" "
                     size="small"

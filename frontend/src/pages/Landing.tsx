@@ -86,27 +86,27 @@ const Landing = () => {
   const features = useMemo(
     () => [
       {
-        icon: <AttachMoney sx={{ fontSize: 48, color: "#34b27b" }} />,
+        icon: <AttachMoney sx={{ fontSize: 48, color: colors.primary }} />,
         title: t("landing.features.track.title"),
         description: t("landing.features.track.description"),
       },
       {
-        icon: <Category sx={{ fontSize: 48, color: "#34b27b" }} />,
+        icon: <Category sx={{ fontSize: 48, color: colors.primary }} />,
         title: t("landing.features.category.title"),
         description: t("landing.features.category.description"),
       },
       {
-        icon: <Loop sx={{ fontSize: 48, color: "#34b27b" }} />,
+        icon: <Loop sx={{ fontSize: 48, color: colors.primary }} />,
         title: t("landing.features.cycle.title"),
         description: t("landing.features.cycle.description"),
       },
       {
-        icon: <Security sx={{ fontSize: 48, color: "#34b27b" }} />,
+        icon: <Security sx={{ fontSize: 48, color: colors.primary }} />,
         title: t("landing.features.security.title"),
         description: t("landing.features.security.description"),
       },
     ],
-    [t]
+    [t, colors.primary]
   );
 
   const faqs = useMemo(
@@ -338,7 +338,7 @@ const Landing = () => {
                       <Typography
                         variant="body2"
                         sx={{
-                          color: "#34b27b",
+                          color: colors.primary,
                           fontWeight: 600,
                           letterSpacing: "0.05em",
                           textTransform: "uppercase",
@@ -355,11 +355,14 @@ const Landing = () => {
                       sx={{
                         p: 3,
                         borderRadius: 3,
-                        backgroundColor: "rgba(52, 178, 123, 0.1)",
-                        border: "1px solid rgba(52, 178, 123, 0.2)",
+                        backgroundColor: colors.primaryLight,
+                        border: `1px solid ${colors.primary}30`,
                       }}
                     >
-                      <Typography fontWeight={600} sx={{ color: "#34b27b" }}>
+                      <Typography
+                        fontWeight={600}
+                        sx={{ color: colors.primary }}
+                      >
                         {t("landing.hero.card.focus")}
                       </Typography>
                       <Typography

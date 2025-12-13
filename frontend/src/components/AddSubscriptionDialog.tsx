@@ -36,6 +36,8 @@ import {
   computeMonthlyCost,
 } from "../utils/billingUtils";
 import { calculateEndDate } from "../utils/subscriptionDates";
+import { useTheme } from "../theme/ThemeProvider";
+import { getChipBorderStyle } from "../utils/colorUtils";
 
 interface AddSubscriptionDialogProps {
   onAdd: (payload: SubscriptionInput) => Promise<void> | void;
@@ -68,6 +70,7 @@ export const AddSubscriptionDialog = ({
     useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
+  const { theme } = useTheme();
 
   // Get dynamic price label based on billing period
   const getPriceLabel = () => {
@@ -539,6 +542,7 @@ export const AddSubscriptionDialog = ({
                         color: "#fff",
                         width: 16,
                         height: 16,
+                        border: getChipBorderStyle(category.color, theme),
                       }}
                       label=" "
                       size="small"
