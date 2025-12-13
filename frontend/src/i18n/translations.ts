@@ -51,8 +51,30 @@ export const translations: TranslationMap = {
     "calendar.title": "Subscription Calendar",
     "calendar.today": "Today",
     "calendar.hasExpiry": "Has expiring subscriptions",
+    "calendar.hasExpiring": "Has expiring subscriptions",
     "calendar.expiringOn": "Expiring on",
     "calendar.viewCalendar": "View Calendar",
+
+    /**
+     * Data Overview Dialog
+     */
+    "dataOverview.title": "Data Overview",
+    "dataOverview.tabs.calendar": "Calendar",
+    "dataOverview.tabs.monthly": "Monthly Spending",
+    "dataOverview.tabs.annual": "Annual Estimate",
+    "dataOverview.monthly.byCategory": "Spending by Category",
+    "dataOverview.monthly.topSubscriptions": "Top Subscriptions",
+    "dataOverview.monthly.trend": "Monthly Trend (Projected)",
+    "dataOverview.monthly.projected": "Projected",
+    "dataOverview.monthly.projectedNote": "Based on current subscriptions",
+    "dataOverview.annual.summary": "Annual Summary",
+    "dataOverview.annual.thisYear": "This Year",
+    "dataOverview.annual.lastYear": "Last Year",
+    "dataOverview.annual.difference": "Difference",
+    "dataOverview.annual.monthlyBreakdown": "Monthly Breakdown",
+    "dataOverview.annual.byCategory": "Spending by Category",
+    "dataOverview.annual.noHistoricalData": "Historical data not available",
+
     "landing.nav.features": "Features",
     "landing.nav.faq": "FAQ",
     "landing.nav.signIn": "Sign in",
@@ -442,8 +464,30 @@ export const translations: TranslationMap = {
     "calendar.title": "Calendario de Suscripciones",
     "calendar.today": "Hoy",
     "calendar.hasExpiry": "Tiene suscripciones por vencer",
+    "calendar.hasExpiring": "Tiene suscripciones por vencer",
     "calendar.expiringOn": "Vence el",
     "calendar.viewCalendar": "Ver Calendario",
+
+    /**
+     * Data Overview Dialog
+     */
+    "dataOverview.title": "Resumen de Datos",
+    "dataOverview.tabs.calendar": "Calendario",
+    "dataOverview.tabs.monthly": "Gasto Mensual",
+    "dataOverview.tabs.annual": "Estimación Anual",
+    "dataOverview.monthly.byCategory": "Gasto por Categoría",
+    "dataOverview.monthly.topSubscriptions": "Principales Suscripciones",
+    "dataOverview.monthly.trend": "Tendencia Mensual (Proyectada)",
+    "dataOverview.monthly.projected": "Proyectado",
+    "dataOverview.monthly.projectedNote": "Basado en suscripciones actuales",
+    "dataOverview.annual.summary": "Resumen Anual",
+    "dataOverview.annual.thisYear": "Este Año",
+    "dataOverview.annual.lastYear": "Año Pasado",
+    "dataOverview.annual.difference": "Diferencia",
+    "dataOverview.annual.monthlyBreakdown": "Desglose Mensual",
+    "dataOverview.annual.byCategory": "Gasto por Categoría",
+    "dataOverview.annual.noHistoricalData": "Datos históricos no disponibles",
+
     "landing.nav.features": "Funciones",
     "landing.nav.faq": "Preguntas frecuentes",
     "landing.nav.signIn": "Iniciar sesión",
@@ -840,8 +884,30 @@ export const translations: TranslationMap = {
     "calendar.title": "訂閱月曆",
     "calendar.today": "今天",
     "calendar.hasExpiry": "有到期訂閱",
+    "calendar.hasExpiring": "有到期訂閱",
     "calendar.expiringOn": "到期日",
     "calendar.viewCalendar": "查看月曆",
+
+    /**
+     * Data Overview Dialog
+     */
+    "dataOverview.title": "數據總覽",
+    "dataOverview.tabs.calendar": "月曆",
+    "dataOverview.tabs.monthly": "月費分析",
+    "dataOverview.tabs.annual": "年度預估",
+    "dataOverview.monthly.byCategory": "分類花費",
+    "dataOverview.monthly.topSubscriptions": "花費排行",
+    "dataOverview.monthly.trend": "月費趨勢（預估）",
+    "dataOverview.monthly.projected": "預估",
+    "dataOverview.monthly.projectedNote": "根據目前訂閱計算",
+    "dataOverview.annual.summary": "年度總覽",
+    "dataOverview.annual.thisYear": "今年",
+    "dataOverview.annual.lastYear": "去年",
+    "dataOverview.annual.difference": "差異",
+    "dataOverview.annual.monthlyBreakdown": "月度明細",
+    "dataOverview.annual.byCategory": "分類花費",
+    "dataOverview.annual.noHistoricalData": "尚無歷史資料",
+
     "landing.nav.features": "功能特色",
     "landing.nav.faq": "常見問題",
     "landing.nav.signIn": "登入",

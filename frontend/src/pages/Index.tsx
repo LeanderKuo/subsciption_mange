@@ -56,6 +56,10 @@ import AccountMenu from "../components/AccountMenu";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { useTheme } from "../theme/ThemeProvider";
 import SubscriptionCalendarDialog from "../components/SubscriptionCalendarDialog";
+import {
+  DataOverviewDialog,
+  type OverviewTab,
+} from "../components/DataOverviewDialog";
 
 type SortOption = "endDate" | "price" | "name";
 type StatusFilter = "active" | "all" | "expired";
@@ -392,8 +396,16 @@ const IndexPage = () => {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
   const [calendarDialogOpen, setCalendarDialogOpen] = useState(false);
+  const [overviewDialogOpen, setOverviewDialogOpen] = useState(false);
+  const [overviewInitialTab, setOverviewInitialTab] =
+    useState<OverviewTab>("calendar");
   const { t, locale, setLocale } = useLocale();
   const { theme, colors } = useTheme();
+
+  const handleOpenOverview = (tab: OverviewTab) => {
+    setOverviewInitialTab(tab);
+    setOverviewDialogOpen(true);
+  };
 
   const handleGoToSettings = () => {
     navigate("/settings");
@@ -746,6 +758,7 @@ const IndexPage = () => {
                     description={t("dashboard.totalSubscriptions", {
                       count: subscriptions.length,
                     })}
+                    onClick={() => handleOpenOverview("monthly")}
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
@@ -754,8 +767,7 @@ const IndexPage = () => {
                     value={activeSubscriptions}
                     icon={<CalendarMonthIcon />}
                     description={t("dashboard.activeDescription")}
-                    onIconClick={() => setCalendarDialogOpen(true)}
-                    iconTooltip={t("calendar.viewCalendar")}
+                    onClick={() => handleOpenOverview("calendar")}
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
@@ -766,6 +778,7 @@ const IndexPage = () => {
                     )}`}
                     icon={<TrendingUpIcon color="secondary" />}
                     description={t("dashboard.annualEstimateDescription")}
+                    onClick={() => handleOpenOverview("annual")}
                   />
                 </Grid>
               </Grid>
@@ -1110,6 +1123,15 @@ const IndexPage = () => {
         open={calendarDialogOpen}
         onClose={() => setCalendarDialogOpen(false)}
         subscriptions={subscriptions}
+      />
+
+      <DataOverviewDialog
+        open={overviewDialogOpen}
+        onClose={() => setOverviewDialogOpen(false)}
+        subscriptions={subscriptions}
+        categories={categories}
+        initialTab={overviewInitialTab}
+        targetCurrency={userDefaultCurrency}
       />
     </Box>
   );

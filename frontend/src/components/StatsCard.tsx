@@ -16,6 +16,7 @@ interface StatsCardProps {
   description?: string;
   onIconClick?: () => void;
   iconTooltip?: string;
+  onClick?: () => void;
 }
 
 export const StatsCard = ({
@@ -25,13 +26,17 @@ export const StatsCard = ({
   description,
   onIconClick,
   iconTooltip,
+  onClick,
 }: StatsCardProps) => {
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
 
   const iconElement = onIconClick ? (
     <Tooltip title={iconTooltip || ""} arrow>
       <IconButton
-        onClick={onIconClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          onIconClick();
+        }}
         size="small"
         sx={{
           color: colors.primary,
@@ -50,13 +55,25 @@ export const StatsCard = ({
   return (
     <Card
       elevation={0}
+      onClick={onClick}
       sx={{
         borderRadius: 4,
         background: colors.surface,
         border: `1px solid ${colors.border}`,
         backdropFilter: "blur(20px)",
         height: "100%",
-        transition: "background-color 0.3s ease, border-color 0.3s ease",
+        transition: "all 0.2s ease",
+        cursor: onClick ? "pointer" : "default",
+        "&:hover": onClick
+          ? {
+              borderColor: colors.primary,
+              transform: "translateY(-2px)",
+              boxShadow:
+                theme === "dark"
+                  ? "0 8px 24px rgba(52, 178, 123, 0.15)"
+                  : "0 8px 24px rgba(25, 118, 210, 0.15)",
+            }
+          : {},
       }}
     >
       <CardContent>
