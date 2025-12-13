@@ -30,7 +30,12 @@ import {
   createBlankSubscriptionFormState,
   type SubscriptionFormStateBase,
 } from "../utils/subscriptionFormState";
-import { BillingPeriod, serializeBillingCycle } from "../utils/billingUtils";
+import {
+  BillingPeriod,
+  serializeBillingCycle,
+  computeMonthlyCost,
+} from "../utils/billingUtils";
+import { calculateEndDate } from "../utils/subscriptionDates";
 
 interface AddSubscriptionDialogProps {
   onAdd: (payload: SubscriptionInput) => Promise<void> | void;
@@ -63,6 +68,36 @@ export const AddSubscriptionDialog = ({
     useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
+
+  // Get dynamic price label based on billing period
+  const getPriceLabel = () => {
+    switch (form.billingPeriod) {
+      case "monthly":
+        return t("addSubscription.fields.price.monthly");
+      case "half-yearly":
+        return t("addSubscription.fields.price.halfYearly");
+      case "yearly":
+        return t("addSubscription.fields.price.yearly");
+      case "custom":
+        return t("addSubscription.fields.price.custom");
+      default:
+        return t("addSubscription.fields.price");
+    }
+  };
+
+  // Compute average monthly cost
+  const computedMonthlyCost = (() => {
+    const price = Number(form.price) || 0;
+    if (price <= 0) return null;
+    const customDuration =
+      form.billingPeriod === "custom"
+        ? {
+            years: Number(form.customYears) || 0,
+            months: Number(form.customMonths) || 0,
+          }
+        : undefined;
+    return computeMonthlyCost(price, form.billingPeriod, customDuration);
+  })();
 
   const handleBrandInputChange = (
     _event: SyntheticEvent<Element, Event>,
@@ -108,16 +143,62 @@ export const AddSubscriptionDialog = ({
     });
   };
 
+  // Helper to compute end date from current form state
+  const computeEndDate = (
+    startDate: string,
+    billingPeriod: BillingPeriod,
+    customYears: string,
+    customMonths: string
+  ): string => {
+    const customDuration =
+      billingPeriod === "custom"
+        ? { years: Number(customYears) || 0, months: Number(customMonths) || 0 }
+        : undefined;
+    const cycle = serializeBillingCycle(billingPeriod, customDuration);
+    return calculateEndDate(startDate, cycle);
+  };
+
   const handleChange =
     (field: keyof FormState) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = event.target.value;
 
       if (field === "startDate") {
-        setForm((prev) => ({
-          ...prev,
-          startDate: value,
-        }));
+        setForm((prev) => {
+          const newEndDate = computeEndDate(
+            value,
+            prev.billingPeriod,
+            prev.customYears,
+            prev.customMonths
+          );
+          return {
+            ...prev,
+            startDate: value,
+            endDate: newEndDate || prev.endDate,
+          };
+        });
+        return;
+      }
+
+      // Handle custom duration changes
+      if (field === "customYears" || field === "customMonths") {
+        setForm((prev) => {
+          const newCustomYears =
+            field === "customYears" ? value : prev.customYears;
+          const newCustomMonths =
+            field === "customMonths" ? value : prev.customMonths;
+          const newEndDate = computeEndDate(
+            prev.startDate,
+            prev.billingPeriod,
+            newCustomYears,
+            newCustomMonths
+          );
+          return {
+            ...prev,
+            [field]: value,
+            endDate: newEndDate || prev.endDate,
+          };
+        });
         return;
       }
 
@@ -126,11 +207,22 @@ export const AddSubscriptionDialog = ({
         [field]: value,
       }));
     };
+
   const handleBillingPeriodChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({
-      ...prev,
-      billingPeriod: event.target.value as BillingPeriod,
-    }));
+    const newPeriod = event.target.value as BillingPeriod;
+    setForm((prev) => {
+      const newEndDate = computeEndDate(
+        prev.startDate,
+        newPeriod,
+        prev.customYears,
+        prev.customMonths
+      );
+      return {
+        ...prev,
+        billingPeriod: newPeriod,
+        endDate: newEndDate || prev.endDate,
+      };
+    });
   };
 
   const handleSubmit = async () => {
@@ -292,7 +384,7 @@ export const AddSubscriptionDialog = ({
             />
             <Stack direction="row" spacing={2}>
               <TextField
-                label={t("addSubscription.fields.price")}
+                label={getPriceLabel()}
                 type="number"
                 value={form.price}
                 onChange={handleChange("price")}
@@ -315,6 +407,34 @@ export const AddSubscriptionDialog = ({
                 <MenuItem value="CNY">{t("currency.CNY")}</MenuItem>
               </TextField>
             </Stack>
+
+            {/* Average Monthly Cost Display */}
+            {computedMonthlyCost !== null &&
+              form.billingPeriod !== "monthly" && (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={1}
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 1,
+                    backgroundColor: "rgba(52, 178, 123, 0.1)",
+                    border: "1px solid rgba(52, 178, 123, 0.3)",
+                  }}
+                >
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {t("addSubscription.fields.avgMonthlyCost")}:
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="primary"
+                    sx={{ fontWeight: 700 }}
+                  >
+                    {form.currency}{" "}
+                    {Math.round(computedMonthlyCost * 100) / 100}
+                  </Typography>
+                </Stack>
+              )}
             <Stack direction="row" spacing={2}>
               <TextField
                 label={t("addSubscription.fields.startDate")}

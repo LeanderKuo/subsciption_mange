@@ -22,6 +22,7 @@ import { Subscription, SubscriptionCategory } from "../types/subscription";
 import { EditSubscriptionDialog } from "./EditSubscriptionDialog";
 import { useLocale } from "../i18n/LocaleProvider";
 import { parseBillingCycle } from "../utils/billingUtils";
+import { getContrastTextColor } from "../utils/colorUtils";
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -201,7 +202,7 @@ export const SubscriptionCard = ({
               size="small"
               sx={{
                 backgroundColor: chipColor,
-                color: "#fff",
+                color: getContrastTextColor(chipColor),
                 fontWeight: 600,
                 mb: 1.5,
                 fontSize: "0.75rem",

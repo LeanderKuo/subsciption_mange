@@ -53,8 +53,11 @@ import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import AccountMenu from "../components/AccountMenu";
+import ThemeSwitcher from "../components/ThemeSwitcher";
+import { useTheme } from "../theme/ThemeProvider";
 
 type SortOption = "endDate" | "price" | "name";
+type StatusFilter = "active" | "all" | "expired";
 
 type CategoryDisplay = {
   name: string;
@@ -385,8 +388,10 @@ const IndexPage = () => {
   const [draggedSubscriptionId, setDraggedSubscriptionId] = useState<
     number | null
   >(null);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
   const { t, locale, setLocale } = useLocale();
+  const { theme, colors } = useTheme();
 
   const handleGoToSettings = () => {
     navigate("/settings");
@@ -413,7 +418,8 @@ const IndexPage = () => {
 
   const headerRight = (
     <>
-      <LanguageSwitcher value={locale} onChange={setLocale} variant="dark" />
+      <ThemeSwitcher />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
       <AccountMenu
         email={userEmail}
         onSettings={handleGoToSettings}
@@ -603,6 +609,22 @@ const IndexPage = () => {
 
   const categoryMap = useMemo(() => buildCategoryMap(categories), [categories]);
 
+  // Filter subscriptions by status
+  const filteredByStatus = useMemo(() => {
+    const today = new Date();
+    if (statusFilter === "all") {
+      return sortedSubscriptions;
+    }
+    return sortedSubscriptions.filter((sub) => {
+      const remainingDays = differenceInDays(new Date(sub.endDate), today);
+      if (statusFilter === "active") {
+        return remainingDays >= 0;
+      }
+      // expired
+      return remainingDays < 0;
+    });
+  }, [sortedSubscriptions, statusFilter]);
+
   const getCategoryDisplay = useCallback(
     (subscription: Subscription) =>
       resolveCategoryDisplay(subscription, categoryMap, uncategorizedDisplay),
@@ -615,7 +637,7 @@ const IndexPage = () => {
     }
 
     return buildGroupedSubscriptions(
-      sortedSubscriptions,
+      filteredByStatus,
       categories,
       exchangeRates,
       userDefaultCurrency,
@@ -623,7 +645,7 @@ const IndexPage = () => {
     );
   }, [
     sortBy,
-    sortedSubscriptions,
+    filteredByStatus,
     categories,
     exchangeRates,
     userDefaultCurrency,
@@ -683,16 +705,17 @@ const IndexPage = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundColor: "#000000",
+        backgroundColor: colors.background,
         display: "flex",
         flexDirection: "column",
+        transition: "background-color 0.3s ease",
       }}
     >
       <SiteHeader
         navLinks={[]}
         subtitle={t("header.subtitle")}
         rightSlot={headerRight}
-        variant="dark"
+        variant={theme}
       />
 
       <Box component="main" sx={{ flexGrow: 1 }}>
@@ -760,6 +783,43 @@ const IndexPage = () => {
                   alignItems="center"
                   flexWrap="wrap"
                 >
+                  <ToggleButtonGroup
+                    value={statusFilter}
+                    exclusive
+                    onChange={(e, newFilter) => {
+                      if (newFilter) setStatusFilter(newFilter);
+                    }}
+                    size="small"
+                    sx={{
+                      height: 40,
+                      "& .MuiToggleButton-root": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                        color: "#fff",
+                        fontWeight: 600,
+                        "&.Mui-selected": {
+                          backgroundColor: "#34b27b",
+                          color: "#fff",
+                          "&:hover": {
+                            backgroundColor: "#2d9969",
+                          },
+                        },
+                        "&:hover": {
+                          backgroundColor: "rgba(255, 255, 255, 0.05)",
+                        },
+                      },
+                    }}
+                  >
+                    <ToggleButton value="active">
+                      {t("header.statusFilter.active")}
+                    </ToggleButton>
+                    <ToggleButton value="all">
+                      {t("header.statusFilter.all")}
+                    </ToggleButton>
+                    <ToggleButton value="expired">
+                      {t("header.statusFilter.expired")}
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+
                   <ToggleButtonGroup
                     value={priceDisplayMode}
                     exclusive
@@ -992,7 +1052,7 @@ const IndexPage = () => {
                 </Stack>
               ) : (
                 <Grid container spacing={3}>
-                  {sortedSubscriptions.map((subscription) => {
+                  {filteredByStatus.map((subscription) => {
                     const categoryDisplay = getCategoryDisplay(subscription);
                     return (
                       <Grid
