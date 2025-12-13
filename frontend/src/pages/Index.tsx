@@ -55,6 +55,7 @@ import LanguageSwitcher from "../components/LanguageSwitcher";
 import AccountMenu from "../components/AccountMenu";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { useTheme } from "../theme/ThemeProvider";
+import SubscriptionCalendarDialog from "../components/SubscriptionCalendarDialog";
 
 type SortOption = "endDate" | "price" | "name";
 type StatusFilter = "active" | "all" | "expired";
@@ -390,6 +391,7 @@ const IndexPage = () => {
   >(null);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [activeDropTarget, setActiveDropTarget] = useState<string | null>(null);
+  const [calendarDialogOpen, setCalendarDialogOpen] = useState(false);
   const { t, locale, setLocale } = useLocale();
   const { theme, colors } = useTheme();
 
@@ -750,8 +752,10 @@ const IndexPage = () => {
                   <StatsCard
                     title={t("dashboard.active")}
                     value={activeSubscriptions}
-                    icon={<CalendarMonthIcon color="secondary" />}
+                    icon={<CalendarMonthIcon />}
                     description={t("dashboard.activeDescription")}
+                    onIconClick={() => setCalendarDialogOpen(true)}
+                    iconTooltip={t("calendar.viewCalendar")}
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
@@ -793,18 +797,18 @@ const IndexPage = () => {
                     sx={{
                       height: 40,
                       "& .MuiToggleButton-root": {
-                        borderColor: "rgba(255, 255, 255, 0.2)",
-                        color: "#fff",
+                        borderColor: colors.border,
+                        color: colors.text,
                         fontWeight: 600,
                         "&.Mui-selected": {
-                          backgroundColor: "#34b27b",
-                          color: "#fff",
+                          backgroundColor: colors.primary,
+                          color: theme === "dark" ? "#000" : "#fff",
                           "&:hover": {
-                            backgroundColor: "#2d9969",
+                            backgroundColor: colors.primaryHover,
                           },
                         },
                         "&:hover": {
-                          backgroundColor: "rgba(255, 255, 255, 0.05)",
+                          backgroundColor: colors.primaryLight,
                         },
                       },
                     }}
@@ -830,18 +834,18 @@ const IndexPage = () => {
                     sx={{
                       height: 40,
                       "& .MuiToggleButton-root": {
-                        borderColor: "rgba(255, 255, 255, 0.2)",
-                        color: "#fff",
+                        borderColor: colors.border,
+                        color: colors.text,
                         fontWeight: 600,
                         "&.Mui-selected": {
-                          backgroundColor: "#34b27b",
-                          color: "#fff",
+                          backgroundColor: colors.primary,
+                          color: theme === "dark" ? "#000" : "#fff",
                           "&:hover": {
-                            backgroundColor: "#2d9969",
+                            backgroundColor: colors.primaryHover,
                           },
                         },
                         "&:hover": {
-                          backgroundColor: "rgba(255, 255, 255, 0.05)",
+                          backgroundColor: colors.primaryLight,
                         },
                       },
                     }}
@@ -859,18 +863,20 @@ const IndexPage = () => {
                     variant="outlined"
                     onClick={() => setCategoryDialogOpen(true)}
                     sx={{
-                      borderColor: "rgba(255, 255, 255, 0.2)",
-                      color: "#fff",
+                      borderColor: colors.border,
+                      color: colors.text,
                       "&:hover": {
-                        borderColor: "#34b27b",
-                        backgroundColor: "rgba(52, 178, 123, 0.1)",
+                        borderColor: colors.primary,
+                        backgroundColor: colors.primaryLight,
                       },
                     }}
                   >
                     {t("header.manageCategories")}
                   </Button>
                   <FormControl size="small" sx={{ minWidth: 150 }}>
-                    <InputLabel>{t("header.sort")}</InputLabel>
+                    <InputLabel sx={{ color: colors.textSecondary }}>
+                      {t("header.sort")}
+                    </InputLabel>
                     <Select
                       value={sortBy}
                       label={t("header.sort")}
@@ -880,17 +886,17 @@ const IndexPage = () => {
                         )
                       }
                       sx={{
-                        borderColor: "rgba(255, 255, 255, 0.2)",
-                        color: "#fff",
-                        "& .MuiSelect-icon": { color: "#fff" },
+                        borderColor: colors.border,
+                        color: colors.text,
+                        "& .MuiSelect-icon": { color: colors.text },
                         "& .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "rgba(255, 255, 255, 0.2)",
+                          borderColor: colors.border,
                         },
                         "&:hover .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#34b27b",
+                          borderColor: colors.primary,
                         },
                         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#34b27b",
+                          borderColor: colors.primary,
                         },
                       }}
                     >
@@ -1099,6 +1105,12 @@ const IndexPage = () => {
         onAddCategory={handleAddCategory}
         onUpdateCategory={handleUpdateCategory}
         onDeleteCategory={handleDeleteCategory}
+      />
+
+      <SubscriptionCalendarDialog
+        open={calendarDialogOpen}
+        onClose={() => setCalendarDialogOpen(false)}
+        subscriptions={subscriptions}
       />
     </Box>
   );

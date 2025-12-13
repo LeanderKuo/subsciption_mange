@@ -44,6 +44,15 @@ export const translations: TranslationMap = {
     "header.statusFilter.expired": "Expired",
     "header.theme.dark": "Switch to light mode",
     "header.theme.light": "Switch to dark mode",
+
+    /**
+     * Calendar
+     */
+    "calendar.title": "Subscription Calendar",
+    "calendar.today": "Today",
+    "calendar.hasExpiry": "Has expiring subscriptions",
+    "calendar.expiringOn": "Expiring on",
+    "calendar.viewCalendar": "View Calendar",
     "landing.nav.features": "Features",
     "landing.nav.faq": "FAQ",
     "landing.nav.signIn": "Sign in",
@@ -426,6 +435,15 @@ export const translations: TranslationMap = {
     "header.statusFilter.expired": "Vencidas",
     "header.theme.dark": "Cambiar a modo claro",
     "header.theme.light": "Cambiar a modo oscuro",
+
+    /**
+     * Calendar
+     */
+    "calendar.title": "Calendario de Suscripciones",
+    "calendar.today": "Hoy",
+    "calendar.hasExpiry": "Tiene suscripciones por vencer",
+    "calendar.expiringOn": "Vence el",
+    "calendar.viewCalendar": "Ver Calendario",
     "landing.nav.features": "Funciones",
     "landing.nav.faq": "Preguntas frecuentes",
     "landing.nav.signIn": "Iniciar sesión",
@@ -815,6 +833,15 @@ export const translations: TranslationMap = {
     "header.statusFilter.expired": "已過期",
     "header.theme.dark": "切換至淺色模式",
     "header.theme.light": "切換至深色模式",
+
+    /**
+     * Calendar
+     */
+    "calendar.title": "訂閱月曆",
+    "calendar.today": "今天",
+    "calendar.hasExpiry": "有到期訂閱",
+    "calendar.expiringOn": "到期日",
+    "calendar.viewCalendar": "查看月曆",
     "landing.nav.features": "功能特色",
     "landing.nav.faq": "常見問題",
     "landing.nav.signIn": "登入",
