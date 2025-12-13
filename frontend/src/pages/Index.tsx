@@ -931,20 +931,19 @@ const IndexPage = () => {
                   <CalendarMonthIcon
                     sx={{
                       fontSize: 64,
-                      color: "rgba(255, 255, 255, 0.2)",
+                      color: colors.textSecondary,
                       mb: 2,
                     }}
                   />
                   <Typography
                     variant="h6"
-                    sx={{ mt: 2, color: "#fff", fontWeight: 600 }}
+                    sx={{ mt: 2, color: colors.text, fontWeight: 600 }}
                   >
                     {t("dashboard.empty.title")}
                   </Typography>
                   <Typography
                     variant="body1"
-                    color="text.secondary"
-                    sx={{ mt: 1 }}
+                    sx={{ mt: 1, color: colors.textSecondary }}
                   >
                     {t("dashboard.empty.description")}
                   </Typography>

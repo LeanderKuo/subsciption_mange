@@ -26,6 +26,7 @@ import {
   SubscriptionCategoryInput,
 } from "../types/subscription";
 import { useLocale } from "../i18n/LocaleProvider";
+import { useTheme } from "../theme/ThemeProvider";
 
 interface CategoryManagementDialogProps {
   open: boolean;
@@ -55,6 +56,7 @@ export const CategoryManagementDialog = ({
     color: "#000000",
   });
   const { t } = useLocale();
+  const { theme, colors } = useTheme();
 
   const predefinedColors = [
     "#000000", // Black
@@ -136,9 +138,9 @@ export const CategoryManagementDialog = ({
       fullWidth
       PaperProps={{
         sx: {
-          border: "1px solid rgba(255, 255, 255, 0.1)",
+          border: `1px solid ${colors.border}`,
           borderRadius: 4,
-          background: "rgba(25, 25, 25, 0.9)",
+          background: colors.surface,
           backdropFilter: "blur(20px)",
           boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
         },
@@ -146,9 +148,9 @@ export const CategoryManagementDialog = ({
     >
       <DialogTitle
         sx={{
-          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          borderBottom: `1px solid ${colors.border}`,
           fontWeight: 700,
-          color: "#fff",
+          color: colors.text,
         }}
       >
         <Stack direction="row" alignItems="center" spacing={1}>
@@ -164,9 +166,9 @@ export const CategoryManagementDialog = ({
             <Box
               sx={{
                 p: 2,
-                border: "1px dashed rgba(255, 255, 255, 0.2)",
+                border: `1px dashed ${colors.border}`,
                 borderRadius: 2,
-                backgroundColor: "rgba(255, 255, 255, 0.05)",
+                backgroundColor: colors.surfaceHover,
               }}
             >
               <Stack spacing={2}>
@@ -242,9 +244,9 @@ export const CategoryManagementDialog = ({
                     onClick={handleCancel}
                     variant="outlined"
                     sx={{
-                      borderColor: "rgba(255, 255, 255, 0.2)",
-                      color: "#fff",
-                      "&:hover": { borderColor: "#fff" },
+                      borderColor: colors.border,
+                      color: colors.text,
+                      "&:hover": { borderColor: colors.primary },
                     }}
                   >
                     {t("categoryDialog.cancel")}
@@ -254,8 +256,9 @@ export const CategoryManagementDialog = ({
                     variant="contained"
                     disabled={!form.name.trim()}
                     sx={{
-                      backgroundColor: "#34b27b",
-                      "&:hover": { backgroundColor: "#2d9969" },
+                      backgroundColor: colors.primary,
+                      color: theme === "dark" ? "#000" : "#fff",
+                      "&:hover": { backgroundColor: colors.primaryHover },
                     }}
                   >
                     {editingId
@@ -297,14 +300,14 @@ export const CategoryManagementDialog = ({
                       >
                         <Edit
                           fontSize="small"
-                          sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                          sx={{ color: colors.textSecondary }}
                         />
                       </IconButton>
                       <IconButton
                         edge="end"
                         onClick={() => handleDelete(category.id)}
                         size="small"
-                        sx={{ color: "#d32f2f" }}
+                        sx={{ color: colors.error }}
                       >
                         <Delete fontSize="small" />
                       </IconButton>
@@ -326,9 +329,12 @@ export const CategoryManagementDialog = ({
                   <ListItemText
                     primary={category.name}
                     secondary={category.description}
-                    primaryTypographyProps={{ fontWeight: 600, color: "#fff" }}
+                    primaryTypographyProps={{
+                      fontWeight: 600,
+                      color: colors.text,
+                    }}
                     secondaryTypographyProps={{
-                      color: "rgba(255, 255, 255, 0.6)",
+                      color: colors.textSecondary,
                     }}
                   />
                 </ListItem>
@@ -338,17 +344,16 @@ export const CategoryManagementDialog = ({
         </Stack>
       </DialogContent>
 
-      <DialogActions
-        sx={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)", p: 2 }}
-      >
+      <DialogActions sx={{ borderTop: `1px solid ${colors.border}`, p: 2 }}>
         {!isAdding && !editingId && (
           <Button
             startIcon={<Add />}
             onClick={handleStartAdd}
             variant="contained"
             sx={{
-              backgroundColor: "#34b27b",
-              "&:hover": { backgroundColor: "#2d9969" },
+              backgroundColor: colors.primary,
+              color: theme === "dark" ? "#000" : "#fff",
+              "&:hover": { backgroundColor: colors.primaryHover },
             }}
           >
             {t("categoryDialog.add")}
@@ -359,9 +364,9 @@ export const CategoryManagementDialog = ({
           onClick={onClose}
           variant="outlined"
           sx={{
-            borderColor: "rgba(255, 255, 255, 0.2)",
-            color: "#fff",
-            "&:hover": { borderColor: "#fff" },
+            borderColor: colors.border,
+            color: colors.text,
+            "&:hover": { borderColor: colors.primary },
           }}
         >
           {t("categoryDialog.cancel")}
