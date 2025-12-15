@@ -10,6 +10,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ListItemIcon,
   Divider,
   useMediaQuery,
   useTheme as useMuiTheme,
@@ -25,11 +26,22 @@ type NavLink = {
   onClick?: () => void;
 };
 
+/** Drawer 內的選單項目 */
+type DrawerMenuItem = {
+  icon: ReactNode;
+  label: string;
+  onClick?: () => void;
+  /** 自訂元件（用於語言選擇等複雜元件） */
+  customContent?: ReactNode;
+};
+
 type SiteHeaderProps = {
   navLinks?: NavLink[];
   rightSlot?: ReactNode;
   /** 行動版快捷按鈕區（語言切換、主題切換等，顯示在 Logo 旁邊） */
   mobileQuickActions?: ReactNode;
+  /** Drawer 內的條列式選單項目 */
+  drawerMenuItems?: DrawerMenuItem[];
   subtitle?: string;
   variant?: "dark" | "light";
   /** 是否顯示返回主頁按鈕（用於Settings等子頁面） */
@@ -41,6 +53,7 @@ export const SiteHeader = ({
   navLinks = [],
   rightSlot,
   mobileQuickActions,
+  drawerMenuItems = [],
   subtitle,
   variant = "dark",
   showHomeButton = false,
@@ -62,6 +75,13 @@ export const SiteHeader = ({
   const handleNavLinkClick = (link: NavLink) => {
     if (link.onClick) {
       link.onClick();
+    }
+    setDrawerOpen(false);
+  };
+
+  const handleMenuItemClick = (item: DrawerMenuItem) => {
+    if (item.onClick) {
+      item.onClick();
     }
     setDrawerOpen(false);
   };
@@ -116,7 +136,7 @@ export const SiteHeader = ({
     </Stack>
   );
 
-  // 行動版 Drawer 內容（只放導覽連結，不放快捷操作）
+  // 行動版 Drawer 內容
   const mobileDrawerContent = (
     <Box
       sx={{
@@ -127,6 +147,7 @@ export const SiteHeader = ({
       }}
       role="presentation"
     >
+      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -188,13 +209,49 @@ export const SiteHeader = ({
         </>
       )}
 
-      {/* 右側功能區（帳號選單等，不是快捷操作） */}
-      {rightSlot && (
-        <Box sx={{ p: 2 }}>
-          <Stack spacing={2} alignItems="stretch">
-            {rightSlot}
-          </Stack>
-        </Box>
+      {/* Drawer 選單項目（條列式） */}
+      {drawerMenuItems.length > 0 && (
+        <List sx={{ py: 1 }}>
+          {drawerMenuItems.map((item, index) => (
+            <ListItem key={index} disablePadding>
+              {item.customContent ? (
+                // 自訂內容（如語言選擇器）
+                <Box sx={{ width: "100%", px: 2, py: 1 }}>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <ListItemIcon sx={{ color: textColor, minWidth: 40 }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <Box sx={{ flex: 1 }}>{item.customContent}</Box>
+                  </Stack>
+                </Box>
+              ) : (
+                // 一般點擊項目
+                <ListItemButton
+                  onClick={() => handleMenuItemClick(item)}
+                  sx={{
+                    minHeight: 48,
+                    px: 2,
+                    "&:hover": {
+                      backgroundColor: isDark
+                        ? "rgba(255,255,255,0.08)"
+                        : "#f3f4f6",
+                    },
+                  }}
+                >
+                  <ListItemIcon sx={{ color: textColor, minWidth: 40 }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.label}
+                    primaryTypographyProps={{
+                      fontWeight: 500,
+                    }}
+                  />
+                </ListItemButton>
+              )}
+            </ListItem>
+          ))}
+        </List>
       )}
     </Box>
   );

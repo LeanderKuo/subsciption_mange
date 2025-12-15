@@ -44,6 +44,8 @@ export const translations: TranslationMap = {
     "header.statusFilter.expired": "Expired",
     "header.theme.dark": "Switch to light mode",
     "header.theme.light": "Switch to dark mode",
+    "header.theme.toggle": "Toggle theme",
+    "header.language": "Language",
 
     /**
      * Calendar
@@ -463,6 +465,8 @@ export const translations: TranslationMap = {
     "header.statusFilter.expired": "Vencidas",
     "header.theme.dark": "Cambiar a modo claro",
     "header.theme.light": "Cambiar a modo oscuro",
+    "header.theme.toggle": "Cambiar tema",
+    "header.language": "Idioma",
 
     /**
      * Calendar
@@ -889,6 +893,8 @@ export const translations: TranslationMap = {
     "header.statusFilter.expired": "已過期",
     "header.theme.dark": "切換至淺色模式",
     "header.theme.light": "切換至深色模式",
+    "header.theme.toggle": "切換主題",
+    "header.language": "語言",
 
     /**
      * Calendar

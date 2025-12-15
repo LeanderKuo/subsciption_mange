@@ -18,6 +18,9 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import SettingsIcon from "@mui/icons-material/Settings";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LanguageIcon from "@mui/icons-material/Language";
 import { Category as CategoryIcon } from "@mui/icons-material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { differenceInDays } from "date-fns";
@@ -402,7 +405,7 @@ const IndexPage = () => {
   const [overviewInitialTab, setOverviewInitialTab] =
     useState<OverviewTab>("calendar");
   const { t, locale, setLocale } = useLocale();
-  const { theme, colors } = useTheme();
+  const { theme, colors, toggleTheme } = useTheme();
 
   const handleOpenOverview = (tab: OverviewTab) => {
     setOverviewInitialTab(tab);
@@ -444,20 +447,34 @@ const IndexPage = () => {
     </>
   );
 
-  // 行動版快捷操作（直接顯示在 Logo 旁邊）
+  // 行動版快捷操作（直接顯示在 Header）
   const mobileQuickActions = (
     <>
       <ThemeSwitcher />
       <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
-      <IconButton
-        onClick={handleGoToSettings}
-        sx={{ color: colors.text }}
-        aria-label="Settings"
-      >
-        <SettingsIcon />
-      </IconButton>
     </>
   );
+
+  // Drawer 內的條列式選單
+  const drawerMenuItems = [
+    {
+      icon: theme === "dark" ? <LightModeIcon /> : <DarkModeIcon />,
+      label: t("header.theme.toggle"),
+      onClick: toggleTheme,
+    },
+    {
+      icon: <LanguageIcon />,
+      label: t("header.language"),
+      customContent: (
+        <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
+      ),
+    },
+    {
+      icon: <SettingsIcon />,
+      label: t("header.menu.settings"),
+      onClick: handleGoToSettings,
+    },
+  ];
 
   const {
     data: subscriptions = [],
@@ -747,6 +764,7 @@ const IndexPage = () => {
         subtitle={t("header.subtitle")}
         rightSlot={headerRight}
         mobileQuickActions={mobileQuickActions}
+        drawerMenuItems={drawerMenuItems}
         variant={theme}
       />
 
