@@ -247,6 +247,7 @@ export const translations: TranslationMap = {
      */
     "settings.title": "Profile settings",
     "settings.back": "Back",
+    "settings.backToHome": "Back to Dashboard",
     "settings.section.basic": "Basic information",
     "settings.section.account": "Account management",
     "settings.section.security": "Security",
@@ -669,6 +670,7 @@ export const translations: TranslationMap = {
      */
     "settings.title": "Configuración del perfil",
     "settings.back": "Regresar",
+    "settings.backToHome": "Volver al Panel",
     "settings.section.basic": "Información básica",
     "settings.section.account": "Administración de la cuenta",
     "settings.section.security": "Seguridad",
@@ -1101,6 +1103,7 @@ export const translations: TranslationMap = {
      */
     "settings.title": "個人資料設定",
     "settings.back": "返回",
+    "settings.backToHome": "返回主頁",
     "settings.section.basic": "基本資訊",
     "settings.section.account": "帳戶管理",
     "settings.section.security": "安全性設定",

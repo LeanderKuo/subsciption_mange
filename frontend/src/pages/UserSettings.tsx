@@ -20,6 +20,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../services/supabaseClient";
 import { UserProfile, UserProfileInput } from "../types/subscription";
+import HomeIcon from "@mui/icons-material/Home";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LanguageIcon from "@mui/icons-material/Language";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { ArrowBack } from "@mui/icons-material";
 import { useLocale } from "../i18n/LocaleProvider";
 import SiteHeader from "../components/SiteHeader";
@@ -33,8 +38,14 @@ export const UserSettings = () => {
   const navigate = useNavigate();
   const { t, locale, setLocale } = useLocale();
   const { toast } = useToast();
-  const { theme, colors, accentColors, setAccentColors, resetAccentColors } =
-    useTheme();
+  const {
+    theme,
+    colors,
+    accentColors,
+    setAccentColors,
+    resetAccentColors,
+    toggleTheme,
+  } = useTheme();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,13 +83,34 @@ export const UserSettings = () => {
     </>
   );
 
-  // 行動版快捷操作（直接顯示在 Logo 旁邊）
+  // 行動版快捷操作（直接顯示在 Header）
   const mobileQuickActions = (
     <>
       <ThemeSwitcher />
       <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
     </>
   );
+
+  // Drawer 內的條列式選單（返回主頁放在最上面）
+  const drawerMenuItems = [
+    {
+      icon: <HomeIcon />,
+      label: t("settings.backToHome"),
+      onClick: () => navigate("/dashboard"),
+    },
+    {
+      icon: theme === "dark" ? <LightModeIcon /> : <DarkModeIcon />,
+      label: t("header.theme.toggle"),
+      onClick: toggleTheme,
+    },
+    {
+      icon: <LanguageIcon />,
+      label: t("header.language"),
+      customContent: (
+        <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
+      ),
+    },
+  ];
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -420,8 +452,7 @@ export const UserSettings = () => {
         subtitle={t("settings.title")}
         rightSlot={headerRight}
         mobileQuickActions={mobileQuickActions}
-        showHomeButton={true}
-        onHomeClick={() => navigate("/dashboard")}
+        drawerMenuItems={drawerMenuItems}
         variant={theme}
       />
 
