@@ -784,21 +784,41 @@ const IndexPage = () => {
               </Grid>
 
               <Stack
-                direction="row"
-                alignItems="center"
+                direction={{ xs: "column", sm: "row" }}
+                alignItems={{ xs: "stretch", sm: "center" }}
                 justifyContent="space-between"
                 mb={4}
-                flexWrap="wrap"
                 gap={2}
               >
-                <Typography variant="h5" fontWeight={700}>
+                <Typography
+                  variant="h5"
+                  fontWeight={700}
+                  sx={{ mb: { xs: 1, sm: 0 } }}
+                >
                   {t("dashboard.allSubscriptions")}
                 </Typography>
                 <Stack
                   direction="row"
-                  spacing={2}
+                  spacing={1}
                   alignItems="center"
                   flexWrap="wrap"
+                  gap={1}
+                  sx={{
+                    "& > *": {
+                      flexShrink: 0,
+                    },
+                    // 行動端控制項調整
+                    "@media (max-width: 599px)": {
+                      "& .MuiToggleButtonGroup-root": {
+                        flexGrow: 1,
+                      },
+                      "& .MuiToggleButton-root": {
+                        flex: 1,
+                        fontSize: "0.75rem",
+                        px: 1,
+                      },
+                    },
+                  }}
                 >
                   <ToggleButtonGroup
                     value={statusFilter}

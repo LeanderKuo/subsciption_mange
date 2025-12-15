@@ -303,20 +303,34 @@ const Landing = () => {
                   {t("landing.hero.subtitle")}
                 </Typography>
                 <Stack
-                  direction="row"
+                  direction={{ xs: "column", sm: "row" }}
                   spacing={2}
-                  alignItems="center"
-                  flexWrap="wrap"
+                  alignItems={{ xs: "stretch", sm: "center" }}
+                  sx={{
+                    width: { xs: "100%", sm: "auto" },
+                    gap: { xs: 1.5, sm: 2 },
+                  }}
                 >
                   <Button
                     variant="contained"
                     size="large"
                     onClick={() => setAuthDialogOpen(true)}
-                    sx={{ px: 5, py: 1.5, fontSize: "1.1rem" }}
+                    sx={{
+                      px: { xs: 3, sm: 5 },
+                      py: 1.5,
+                      fontSize: { xs: "1rem", sm: "1.1rem" },
+                      width: { xs: "100%", sm: "auto" },
+                    }}
                   >
                     {t("landing.hero.cta")}
                   </Button>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary",
+                      textAlign: { xs: "center", sm: "left" },
+                    }}
+                  >
                     {t("landing.hero.helper")}
                   </Typography>
                 </Stack>
@@ -409,6 +423,14 @@ const Landing = () => {
                     px: 2,
                     animation: `${marqueeAnimation} 30s linear infinite`,
                     width: "max-content",
+                    // 行動端減速
+                    "@media (max-width: 599px)": {
+                      animationDuration: "60s",
+                    },
+                    // prefers-reduced-motion 停用動畫
+                    "@media (prefers-reduced-motion: reduce)": {
+                      animation: "none",
+                    },
                   }}
                 >
                   {marqueeItems.concat(marqueeItems).map((item, index) => (

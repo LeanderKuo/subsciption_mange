@@ -11,13 +11,17 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  IconButton,
   MenuItem,
   Radio,
   RadioGroup,
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import type { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import { ChangeEvent, SyntheticEvent, useRef, useState } from "react";
 import { SubscriptionInput, SubscriptionCategory } from "../types/subscription";
@@ -71,6 +75,8 @@ export const AddSubscriptionDialog = ({
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
   const { theme, colors } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
   // Get dynamic price label based on billing period
   const getPriceLabel = () => {
@@ -302,9 +308,41 @@ export const AddSubscriptionDialog = ({
       <Button variant="contained" onClick={handleOpen} disabled={disabled}>
         {t("addSubscription.openButton")}
       </Button>
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{t("addSubscription.title")}</DialogTitle>
-        <DialogContent>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="sm"
+        fullWidth
+        fullScreen={isMobile}
+        PaperProps={{
+          sx: isMobile
+            ? {
+                borderRadius: 0,
+                m: 0,
+              }
+            : {},
+        }}
+      >
+        <DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            position: isMobile ? "sticky" : "static",
+            top: 0,
+            backgroundColor: colors.background,
+            zIndex: 1,
+            borderBottom: isMobile ? `1px solid ${colors.border}` : "none",
+          }}
+        >
+          {t("addSubscription.title")}
+          {isMobile && (
+            <IconButton onClick={handleCancel} edge="end">
+              <CloseIcon />
+            </IconButton>
+          )}
+        </DialogTitle>
+        <DialogContent sx={{ pt: isMobile ? 2 : 1 }}>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
               label={t("addSubscription.fields.name")}

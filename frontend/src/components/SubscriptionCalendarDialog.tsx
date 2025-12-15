@@ -8,6 +8,8 @@ import {
   Stack,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from "@mui/material";
 import {
   ChevronLeft,
@@ -57,6 +59,8 @@ export const SubscriptionCalendarDialog = ({
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const { t, locale } = useLocale();
   const { theme, colors } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const dateLocale = getLocale(locale);
 
   // Get subscriptions grouped by end date
@@ -111,11 +115,12 @@ export const SubscriptionCalendarDialog = ({
       onClose={onClose}
       maxWidth="md"
       fullWidth
+      fullScreen={isMobile}
       PaperProps={{
         sx: {
-          borderRadius: 3,
+          borderRadius: isMobile ? 0 : 3,
           backgroundColor: colors.background,
-          border: `1px solid ${colors.border}`,
+          border: isMobile ? "none" : `1px solid ${colors.border}`,
         },
       }}
     >

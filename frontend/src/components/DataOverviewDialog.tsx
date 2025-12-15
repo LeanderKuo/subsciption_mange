@@ -7,6 +7,8 @@ import {
   Box,
   Tab,
   Tabs,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { Subscription, SubscriptionCategory } from "../types/subscription";
@@ -40,6 +42,8 @@ export const DataOverviewDialog = ({
   const [activeTab, setActiveTab] = useState<OverviewTab>(initialTab);
   const { t } = useLocale();
   const { colors, theme } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
   // Sync with initialTab when it changes
   useEffect(() => {
@@ -58,12 +62,13 @@ export const DataOverviewDialog = ({
       onClose={onClose}
       maxWidth="md"
       fullWidth
+      fullScreen={isMobile}
       PaperProps={{
         sx: {
-          borderRadius: 4,
+          borderRadius: isMobile ? 0 : 4,
           backgroundColor: colors.surface,
-          border: `1px solid ${colors.border}`,
-          maxHeight: "90vh",
+          border: isMobile ? "none" : `1px solid ${colors.border}`,
+          maxHeight: isMobile ? "100%" : "90vh",
         },
       }}
     >

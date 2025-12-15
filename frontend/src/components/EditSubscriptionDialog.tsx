@@ -19,7 +19,10 @@ import {
   Typography,
   IconButton,
   Box,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import type { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
@@ -94,6 +97,8 @@ export const EditSubscriptionDialog = ({
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
   const { theme, colors } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
   // Get dynamic price label based on billing period
   const getPriceLabel = () => {
@@ -328,9 +333,41 @@ export const EditSubscriptionDialog = ({
           <EditIcon fontSize="small" />
         </IconButton>
       </Box>
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{t("editSubscription.title")}</DialogTitle>
-        <DialogContent>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="sm"
+        fullWidth
+        fullScreen={isMobile}
+        PaperProps={{
+          sx: isMobile
+            ? {
+                borderRadius: 0,
+                m: 0,
+              }
+            : {},
+        }}
+      >
+        <DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            position: isMobile ? "sticky" : "static",
+            top: 0,
+            backgroundColor: colors.background,
+            zIndex: 1,
+            borderBottom: isMobile ? `1px solid ${colors.border}` : "none",
+          }}
+        >
+          {t("editSubscription.title")}
+          {isMobile && (
+            <IconButton onClick={handleCancel} edge="end">
+              <CloseIcon />
+            </IconButton>
+          )}
+        </DialogTitle>
+        <DialogContent sx={{ pt: isMobile ? 2 : 1 }}>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
               label={t("editSubscription.fields.name")}

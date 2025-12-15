@@ -19,7 +19,21 @@ export const SiteFooter = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Stack spacing={1} alignItems="center" textAlign="center">
+        <Stack
+          spacing={{ xs: 1.5, md: 1 }}
+          alignItems="center"
+          textAlign="center"
+          sx={{
+            py: { xs: 1, md: 0 },
+            "& a": {
+              minHeight: 44,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              px: 2,
+            },
+          }}
+        >
           <Typography variant="body2">{t("footer.copyright")}</Typography>
           <Typography variant="body2">{t("footer.developer")}</Typography>
           <Typography variant="body2">
