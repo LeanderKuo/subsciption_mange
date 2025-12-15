@@ -17,29 +17,34 @@ import UserSettings from "./pages/UserSettings";
 import { ToastProvider } from "./components/ToastProvider";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { LocaleProvider } from "./i18n/LocaleProvider";
-import { ThemeProvider, useTheme } from "./theme/ThemeProvider";
+import {
+  ThemeProvider,
+  useTheme,
+  Theme,
+  ThemeColors,
+} from "./theme/ThemeProvider";
 
 const queryClient = new QueryClient();
 
-// Create MUI theme based on our custom theme
-const createAppTheme = (mode: "dark" | "light") =>
+// Create MUI theme based on our custom theme colors
+const createAppTheme = (mode: Theme, colors: ThemeColors) =>
   createTheme({
     palette: {
       mode,
       primary: {
-        main: mode === "dark" ? "#34b27b" : "#1976d2",
+        main: colors.primary,
         contrastText: mode === "dark" ? "#000000" : "#ffffff",
       },
       secondary: {
         main: mode === "dark" ? "#ffffff" : "#666666",
       },
       background: {
-        default: mode === "dark" ? "#000000" : "#f5f5f5",
+        default: colors.background,
         paper: mode === "dark" ? "#0a0a0a" : "#ffffff",
       },
       text: {
-        primary: mode === "dark" ? "#ffffff" : "#212121",
-        secondary: mode === "dark" ? "rgba(255, 255, 255, 0.7)" : "#666666",
+        primary: colors.text,
+        secondary: colors.textSecondary,
       },
     },
     typography: {
@@ -61,42 +66,26 @@ const createAppTheme = (mode: "dark" | "light") =>
             padding: "10px 24px",
           },
           contained: {
-            backgroundImage:
-              mode === "dark"
-                ? "linear-gradient(45deg, #34b27b 30%, #2dd4bf 90%)"
-                : "linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)",
+            backgroundColor: colors.primary,
             color: mode === "dark" ? "#000000" : "#ffffff",
-            boxShadow:
-              mode === "dark"
-                ? "0 3px 5px 2px rgba(52, 178, 123, .3)"
-                : "0 3px 5px 2px rgba(25, 118, 210, .3)",
+            boxShadow: `0 3px 5px 2px ${colors.primary}30`,
             "&:hover": {
-              backgroundImage:
-                mode === "dark"
-                  ? "linear-gradient(45deg, #2ea16f 30%, #25b3a1 90%)"
-                  : "linear-gradient(45deg, #1565c0 30%, #1e88e5 90%)",
-              boxShadow:
-                mode === "dark"
-                  ? "0 3px 5px 2px rgba(52, 178, 123, .5)"
-                  : "0 3px 5px 2px rgba(25, 118, 210, .5)",
+              backgroundColor: colors.primaryHover,
+              boxShadow: `0 3px 5px 2px ${colors.primary}50`,
             },
           },
           outlined: {
-            borderColor:
-              mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#bdbdbd",
-            color: mode === "dark" ? "#ffffff" : "#212121",
+            borderColor: colors.border,
+            color: colors.text,
             "&:hover": {
-              borderColor: mode === "dark" ? "#34b27b" : "#1976d2",
-              backgroundColor:
-                mode === "dark"
-                  ? "rgba(52, 178, 123, 0.1)"
-                  : "rgba(25, 118, 210, 0.1)",
+              borderColor: colors.primary,
+              backgroundColor: colors.primaryLight,
             },
           },
           text: {
-            color: mode === "dark" ? "#ffffff" : "#212121",
+            color: colors.text,
             "&:hover": {
-              color: mode === "dark" ? "#34b27b" : "#1976d2",
+              color: colors.primary,
               backgroundColor: "transparent",
             },
           },
@@ -106,26 +95,16 @@ const createAppTheme = (mode: "dark" | "light") =>
         styleOverrides: {
           root: {
             borderRadius: "16px",
-            background:
-              mode === "dark" ? "rgba(255, 255, 255, 0.03)" : "#ffffff",
+            background: colors.cardBackground,
             backdropFilter: "blur(10px)",
-            border:
-              mode === "dark"
-                ? "1px solid rgba(255, 255, 255, 0.1)"
-                : "1px solid #e0e0e0",
+            border: `1px solid ${colors.cardBorder}`,
             boxShadow:
               mode === "dark" ? "none" : "0 2px 8px rgba(0, 0, 0, 0.08)",
             transition:
               "transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
             "&:hover": {
-              borderColor:
-                mode === "dark"
-                  ? "rgba(52, 178, 123, 0.5)"
-                  : "rgba(25, 118, 210, 0.5)",
-              boxShadow:
-                mode === "dark"
-                  ? "0 10px 40px -10px rgba(52, 178, 123, 0.2)"
-                  : "0 10px 40px -10px rgba(25, 118, 210, 0.2)",
+              borderColor: `${colors.primary}80`,
+              boxShadow: `0 10px 40px -10px ${colors.primary}30`,
             },
           },
         },
@@ -145,10 +124,7 @@ const createAppTheme = (mode: "dark" | "light") =>
                 ? "rgba(0, 0, 0, 0.8)"
                 : "rgba(255, 255, 255, 0.9)",
             backdropFilter: "blur(12px)",
-            borderBottom:
-              mode === "dark"
-                ? "1px solid rgba(255, 255, 255, 0.1)"
-                : "1px solid #e0e0e0",
+            borderBottom: `1px solid ${colors.border}`,
             boxShadow: "none",
           },
         },
@@ -157,10 +133,7 @@ const createAppTheme = (mode: "dark" | "light") =>
         styleOverrides: {
           paper: {
             borderRadius: "16px",
-            border:
-              mode === "dark"
-                ? "1px solid rgba(255, 255, 255, 0.1)"
-                : "1px solid #e0e0e0",
+            border: `1px solid ${colors.border}`,
             background: mode === "dark" ? "#0a0a0a" : "#ffffff",
           },
         },
@@ -170,8 +143,11 @@ const createAppTheme = (mode: "dark" | "light") =>
 
 // Inner app component that uses theme context
 const ThemedApp = ({ user }: { user: User | null }) => {
-  const { theme } = useTheme();
-  const muiTheme = useMemo(() => createAppTheme(theme), [theme]);
+  const { theme, colors } = useTheme();
+  const muiTheme = useMemo(
+    () => createAppTheme(theme, colors),
+    [theme, colors]
+  );
 
   if (user === null) {
     return (

@@ -211,10 +211,17 @@ export const MonthlySpendingTab = ({
                       `${targetCurrency} ${value.toLocaleString()}`
                     }
                     contentStyle={{
-                      backgroundColor: colors.surface,
+                      backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
                       border: `1px solid ${colors.border}`,
                       borderRadius: 8,
                       color: colors.text,
+                    }}
+                    itemStyle={{
+                      color: colors.text,
+                    }}
+                    labelStyle={{
+                      color: colors.text,
+                      fontWeight: 600,
                     }}
                   />
                 </PieChart>
