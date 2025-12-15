@@ -294,7 +294,7 @@ export const CategoryManagementDialog = ({
                     mb: 1,
                     backgroundColor:
                       editingId === category.id
-                        ? "rgba(52, 178, 123, 0.1)"
+                        ? colors.primaryLight
                         : "rgba(255, 255, 255, 0.03)",
                   }}
                   secondaryAction={

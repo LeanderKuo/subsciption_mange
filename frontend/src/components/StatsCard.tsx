@@ -68,10 +68,7 @@ export const StatsCard = ({
           ? {
               borderColor: colors.primary,
               transform: "translateY(-2px)",
-              boxShadow:
-                theme === "dark"
-                  ? "0 8px 24px rgba(52, 178, 123, 0.15)"
-                  : "0 8px 24px rgba(25, 118, 210, 0.15)",
+              boxShadow: `0 8px 24px ${colors.primary}25`,
             }
           : {},
       }}

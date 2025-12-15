@@ -93,7 +93,7 @@ export const EditSubscriptionDialog = ({
     useState<BrandAutofillResult | null>(null);
   const brandAutofill = useBrandAutofill(form.brand);
   const { t } = useLocale();
-  const { theme } = useTheme();
+  const { theme, colors } = useTheme();
 
   // Get dynamic price label based on billing period
   const getPriceLabel = () => {
@@ -447,8 +447,8 @@ export const EditSubscriptionDialog = ({
                   sx={{
                     p: 1.5,
                     borderRadius: 1,
-                    backgroundColor: "rgba(52, 178, 123, 0.1)",
-                    border: "1px solid rgba(52, 178, 123, 0.3)",
+                    backgroundColor: colors.primaryLight,
+                    border: `1px solid ${colors.primary}30`,
                   }}
                 >
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
@@ -587,8 +587,8 @@ export const EditSubscriptionDialog = ({
                     setForm({ ...form, autoRenew: e.target.checked })
                   }
                   sx={{
-                    color: "rgba(255, 255, 255, 0.7)",
-                    "&.Mui-checked": { color: "#34b27b" },
+                    color: colors.textSecondary,
+                    "&.Mui-checked": { color: colors.primary },
                   }}
                 />
               }

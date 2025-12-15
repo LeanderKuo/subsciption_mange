@@ -153,10 +153,7 @@ export const AnnualEstimateTab = ({
                 flex: 1,
                 p: 3,
                 borderRadius: 3,
-                backgroundColor:
-                  theme === "dark"
-                    ? "rgba(52, 178, 123, 0.15)"
-                    : "rgba(25, 118, 210, 0.1)",
+                backgroundColor: colors.primaryLight,
                 border: `1px solid ${colors.primary}40`,
               }}
             >

@@ -186,8 +186,8 @@ export const SubscriptionCard = ({
           cursor: draggable ? "grab" : "default",
           transition: "all 0.3s ease-in-out",
           "&:hover": {
-            borderColor: "primary.main",
-            boxShadow: "0 10px 30px -10px rgba(52, 178, 123, 0.3)",
+            borderColor: colors.primary,
+            boxShadow: `0 10px 30px -10px ${colors.primary}50`,
             transform: "translateY(-4px)",
           },
         }}

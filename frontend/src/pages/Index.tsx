@@ -972,7 +972,7 @@ const IndexPage = () => {
                         p: 3,
                         backgroundColor:
                           activeDropTarget === group.key
-                            ? "rgba(52, 178, 123, 0.1)"
+                            ? colors.primaryLight
                             : "rgba(255, 255, 255, 0.02)",
                         transition: "all 0.3s ease",
                         boxShadow: "none",
