@@ -260,7 +260,7 @@ const Landing = () => {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Box
           sx={{
-            background: `radial-gradient(circle at 50% 0%, ${colors.primaryLight}, transparent 70%)`,
+            background: `radial-gradient(circle at 50% 0%, ${colors.primaryGlow}, transparent 70%)`,
             pt: { xs: 15, md: 20 },
             pb: { xs: 10, md: 14 },
             overflow: "hidden",
@@ -552,7 +552,7 @@ const Landing = () => {
               transform: "translate(-50%, -50%)",
               width: "600px",
               height: "600px",
-              background: `radial-gradient(circle, ${colors.primaryLight} 0%, transparent 70%)`,
+              background: `radial-gradient(circle, ${colors.primaryGlow} 0%, transparent 70%)`,
               zIndex: 0,
               pointerEvents: "none",
             }}

@@ -22,6 +22,7 @@ export interface ThemeColors {
   primary: string;
   primaryHover: string;
   primaryLight: string;
+  primaryGlow: string;
 
   // Status colors
   error: string;
@@ -54,8 +55,9 @@ export const themeColors: Record<Theme, ThemeColors> = {
 
     // Primary accent - Green
     primary: "#34b27b",
-    primaryHover: "#2d9969",
+    primaryHover: "#2ea16f",
     primaryLight: "rgba(52, 178, 123, 0.1)",
+    primaryGlow: "rgba(52, 178, 123, 0.2)",
 
     // Status colors
     error: "#d32f2f",
@@ -89,6 +91,7 @@ export const themeColors: Record<Theme, ThemeColors> = {
     primary: "#1976d2",
     primaryHover: "#1565c0",
     primaryLight: "rgba(25, 118, 210, 0.1)",
+    primaryGlow: "rgba(25, 118, 210, 0.2)",
 
     // Status colors
     error: "#d32f2f",
@@ -152,19 +155,26 @@ const darkenColor = (hex: string, percent: number): string => {
  */
 export const generateDerivedColors = (
   accentHex: string
-): { primary: string; primaryHover: string; primaryLight: string } => {
+): {
+  primary: string;
+  primaryHover: string;
+  primaryLight: string;
+  primaryGlow: string;
+} => {
   const rgb = hexToRgb(accentHex);
   if (!rgb) {
     return {
       primary: accentHex,
       primaryHover: accentHex,
       primaryLight: accentHex,
+      primaryGlow: accentHex,
     };
   }
   return {
     primary: accentHex,
     primaryHover: darkenColor(accentHex, 15),
     primaryLight: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`,
+    primaryGlow: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)`,
   };
 };
 
@@ -185,6 +195,7 @@ export const getThemeWithAccent = (
     primary: derived.primary,
     primaryHover: derived.primaryHover,
     primaryLight: derived.primaryLight,
+    primaryGlow: derived.primaryGlow,
   };
 };
 
