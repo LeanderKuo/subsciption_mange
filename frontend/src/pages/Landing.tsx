@@ -245,6 +245,22 @@ const Landing = () => {
     </Stack>
   );
 
+  // 行動版快捷操作（直接顯示在 Logo 旁邊）
+  const mobileQuickActions = (
+    <>
+      <ThemeSwitcher />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
+      <Button
+        variant="text"
+        size="small"
+        onClick={() => setAuthDialogOpen(true)}
+        sx={{ color: colors.text, minWidth: "auto", px: 1 }}
+      >
+        {t("landing.nav.signIn")}
+      </Button>
+    </>
+  );
+
   return (
     <Box
       sx={{
@@ -255,7 +271,12 @@ const Landing = () => {
         transition: "background-color 0.3s ease",
       }}
     >
-      <SiteHeader navLinks={navLinks} rightSlot={headerRight} variant={theme} />
+      <SiteHeader
+        navLinks={navLinks}
+        rightSlot={headerRight}
+        mobileQuickActions={mobileQuickActions}
+        variant={theme}
+      />
 
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Box

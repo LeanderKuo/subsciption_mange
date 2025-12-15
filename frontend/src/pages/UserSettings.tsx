@@ -72,6 +72,14 @@ export const UserSettings = () => {
     </>
   );
 
+  // 行動版快捷操作（直接顯示在 Logo 旁邊）
+  const mobileQuickActions = (
+    <>
+      <ThemeSwitcher />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
+    </>
+  );
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -411,6 +419,9 @@ export const UserSettings = () => {
         navLinks={[]}
         subtitle={t("settings.title")}
         rightSlot={headerRight}
+        mobileQuickActions={mobileQuickActions}
+        showHomeButton={true}
+        onHomeClick={() => navigate("/dashboard")}
         variant={theme}
       />
 

@@ -2,10 +2,12 @@ import {
   Avatar,
   Box,
   IconButton,
+  ListItemIcon,
   Menu,
   MenuItem,
   Typography,
 } from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { useState } from "react";
 import { useLocale } from "../i18n/LocaleProvider";
 import { useTheme } from "../theme/ThemeProvider";
@@ -106,6 +108,9 @@ export const AccountMenu = ({
           </Typography>
         </Box>
         <MenuItem onClick={handleSettings} sx={{ color: colors.text }}>
+          <ListItemIcon sx={{ color: colors.text, minWidth: 36 }}>
+            <SettingsIcon fontSize="small" />
+          </ListItemIcon>
           {t("header.menu.settings")}
         </MenuItem>
         <MenuItem onClick={handleSignOut} sx={{ color: colors.error }}>

@@ -442,6 +442,14 @@ const IndexPage = () => {
     </>
   );
 
+  // 行動版快捷操作（直接顯示在 Logo 旁邊）
+  const mobileQuickActions = (
+    <>
+      <ThemeSwitcher />
+      <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
+    </>
+  );
+
   const {
     data: subscriptions = [],
     isLoading,
@@ -729,6 +737,7 @@ const IndexPage = () => {
         navLinks={[]}
         subtitle={t("header.subtitle")}
         rightSlot={headerRight}
+        mobileQuickActions={mobileQuickActions}
         variant={theme}
       />
 

@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import HomeIcon from "@mui/icons-material/Home";
 import { ReactNode, useState } from "react";
 
 type NavLink = {
@@ -27,15 +28,23 @@ type NavLink = {
 type SiteHeaderProps = {
   navLinks?: NavLink[];
   rightSlot?: ReactNode;
+  /** 行動版快捷按鈕區（語言切換、主題切換等，顯示在 Logo 旁邊） */
+  mobileQuickActions?: ReactNode;
   subtitle?: string;
   variant?: "dark" | "light";
+  /** 是否顯示返回主頁按鈕（用於Settings等子頁面） */
+  showHomeButton?: boolean;
+  onHomeClick?: () => void;
 };
 
 export const SiteHeader = ({
   navLinks = [],
   rightSlot,
+  mobileQuickActions,
   subtitle,
   variant = "dark",
+  showHomeButton = false,
+  onHomeClick,
 }: SiteHeaderProps) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const muiTheme = useMuiTheme();
@@ -107,7 +116,7 @@ export const SiteHeader = ({
     </Stack>
   );
 
-  // 行動版 Drawer 內容
+  // 行動版 Drawer 內容（只放導覽連結，不放快捷操作）
   const mobileDrawerContent = (
     <Box
       sx={{
@@ -179,12 +188,14 @@ export const SiteHeader = ({
         </>
       )}
 
-      {/* 右側功能區 (語言切換、主題切換、帳號等) */}
-      <Box sx={{ p: 2 }}>
-        <Stack spacing={2} alignItems="stretch">
-          {rightSlot}
-        </Stack>
-      </Box>
+      {/* 右側功能區（帳號選單等，不是快捷操作） */}
+      {rightSlot && (
+        <Box sx={{ p: 2 }}>
+          <Stack spacing={2} alignItems="stretch">
+            {rightSlot}
+          </Stack>
+        </Box>
+      )}
     </Box>
   );
 
@@ -206,34 +217,58 @@ export const SiteHeader = ({
           justifyContent="space-between"
           spacing={{ xs: 1, md: 3 }}
         >
-          {/* Logo 與副標題 */}
-          <Stack spacing={0.5} sx={{ flexShrink: 0 }}>
-            <Typography
-              component="a"
-              href="/"
-              variant="h6"
-              sx={{
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                color: textColor,
-                textDecoration: "none",
-                fontSize: { xs: "1rem", md: "1.25rem" },
-              }}
-            >
-              SubMange
-            </Typography>
-            {subtitle ? (
-              <Typography
-                variant="body2"
+          {/* 左側：返回主頁按鈕（可選） + Logo + 副標題 */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            sx={{ flexShrink: 0 }}
+          >
+            {showHomeButton && (
+              <IconButton
+                onClick={onHomeClick}
                 sx={{
-                  color: isDark ? "#fff" : "#4b5563",
-                  fontSize: { xs: "0.75rem", md: "0.875rem" },
-                  display: { xs: "none", sm: "block" },
+                  color: textColor,
+                  display: { xs: "flex", md: "flex" },
+                  "&:hover": {
+                    backgroundColor: isDark
+                      ? "rgba(255,255,255,0.08)"
+                      : "#f3f4f6",
+                  },
+                }}
+                aria-label="返回主頁"
+              >
+                <HomeIcon />
+              </IconButton>
+            )}
+            <Stack spacing={0.5}>
+              <Typography
+                component="a"
+                href="/"
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  color: textColor,
+                  textDecoration: "none",
+                  fontSize: { xs: "1rem", md: "1.25rem" },
                 }}
               >
-                {subtitle}
+                SubMange
               </Typography>
-            ) : null}
+              {subtitle ? (
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: isDark ? "#fff" : "#4b5563",
+                    fontSize: { xs: "0.75rem", md: "0.875rem" },
+                    display: { xs: "none", sm: "block" },
+                  }}
+                >
+                  {subtitle}
+                </Typography>
+              ) : null}
+            </Stack>
           </Stack>
 
           {/* 桌機版導覽 */}
@@ -252,18 +287,30 @@ export const SiteHeader = ({
             {rightSlot}
           </Stack>
 
-          {/* 行動版漢堡選單按鈕 */}
-          <IconButton
-            aria-label="open menu"
-            onClick={handleDrawerToggle}
+          {/* 行動版：快捷操作區 + 漢堡選單 */}
+          <Stack
+            direction="row"
+            spacing={0.5}
+            alignItems="center"
             sx={{
               display: { xs: "flex", md: "none" },
-              color: textColor,
               ml: "auto",
             }}
           >
-            <MenuIcon />
-          </IconButton>
+            {/* 行動版快捷操作（語言切換、主題切換）直接顯示 */}
+            {mobileQuickActions}
+
+            {/* 漢堡選單按鈕 */}
+            <IconButton
+              aria-label="open menu"
+              onClick={handleDrawerToggle}
+              sx={{
+                color: textColor,
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Stack>
         </Stack>
       </Container>
 
