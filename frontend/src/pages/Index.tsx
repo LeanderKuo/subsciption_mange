@@ -3,6 +3,7 @@ import {
   CircularProgress,
   Container,
   Grid,
+  IconButton,
   Stack,
   Typography,
   MenuItem,
@@ -16,6 +17,7 @@ import {
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { Category as CategoryIcon } from "@mui/icons-material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { differenceInDays } from "date-fns";
@@ -447,6 +449,13 @@ const IndexPage = () => {
     <>
       <ThemeSwitcher />
       <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
+      <IconButton
+        onClick={handleGoToSettings}
+        sx={{ color: colors.text }}
+        aria-label="Settings"
+      >
+        <SettingsIcon />
+      </IconButton>
     </>
   );
 
