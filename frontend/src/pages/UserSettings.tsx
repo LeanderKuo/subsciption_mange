@@ -91,13 +91,8 @@ export const UserSettings = () => {
     </>
   );
 
-  // Drawer 內的條列式選單（返回主頁放在最上面）
+  // Drawer 內的條列式選單（順序：切換主題 → 語言 → 返回主頁）
   const drawerMenuItems = [
-    {
-      icon: <HomeIcon />,
-      label: t("settings.backToHome"),
-      onClick: () => navigate("/dashboard"),
-    },
     {
       icon: theme === "dark" ? <LightModeIcon /> : <DarkModeIcon />,
       label: t("header.theme.toggle"),
@@ -109,6 +104,11 @@ export const UserSettings = () => {
       customContent: (
         <LanguageSwitcher value={locale} onChange={setLocale} variant={theme} />
       ),
+    },
+    {
+      icon: <HomeIcon />,
+      label: t("settings.backToHome"),
+      onClick: () => navigate("/dashboard"),
     },
   ];
 
