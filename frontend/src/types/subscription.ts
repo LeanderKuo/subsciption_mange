@@ -38,13 +38,22 @@ export interface UserProfile {
   email: string | null;
   nickname: string | null;
   defaultCurrency: string;
+  darkAccentColor: string;
+  lightAccentColor: string;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string | null;
 }
 
 export type UserProfileInput = Partial<
-  Pick<UserProfile, "email" | "nickname" | "defaultCurrency">
+  Pick<
+    UserProfile,
+    | "email"
+    | "nickname"
+    | "defaultCurrency"
+    | "darkAccentColor"
+    | "lightAccentColor"
+  >
 >;
 
 export interface SubscriptionCategory {

@@ -117,3 +117,81 @@ export const getTextColorForBackground = (
     bgColor.match(/^#[f|e|d|c|b|a|9]/i) || bgColor.includes("255");
   return isLightBg ? themeColors[theme].text : "#ffffff";
 };
+
+/**
+ * Convert hex color to RGB components
+ */
+const hexToRgb = (hex: string): { r: number; g: number; b: number } | null => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+};
+
+/**
+ * Darken a hex color by a percentage
+ */
+const darkenColor = (hex: string, percent: number): string => {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  const factor = 1 - percent / 100;
+  const r = Math.round(rgb.r * factor);
+  const g = Math.round(rgb.g * factor);
+  const b = Math.round(rgb.b * factor);
+  return `#${r.toString(16).padStart(2, "0")}${g
+    .toString(16)
+    .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+};
+
+/**
+ * Generate derived colors from an accent color
+ */
+export const generateDerivedColors = (
+  accentHex: string
+): { primary: string; primaryHover: string; primaryLight: string } => {
+  const rgb = hexToRgb(accentHex);
+  if (!rgb) {
+    return {
+      primary: accentHex,
+      primaryHover: accentHex,
+      primaryLight: accentHex,
+    };
+  }
+  return {
+    primary: accentHex,
+    primaryHover: darkenColor(accentHex, 15),
+    primaryLight: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`,
+  };
+};
+
+/**
+ * Get theme colors with a custom accent color
+ */
+export const getThemeWithAccent = (
+  theme: Theme,
+  accentColor?: string
+): ThemeColors => {
+  const baseColors = themeColors[theme];
+  if (!accentColor) {
+    return baseColors;
+  }
+  const derived = generateDerivedColors(accentColor);
+  return {
+    ...baseColors,
+    primary: derived.primary,
+    primaryHover: derived.primaryHover,
+    primaryLight: derived.primaryLight,
+  };
+};
+
+/**
+ * Default accent colors for each theme
+ */
+export const DEFAULT_ACCENT_COLORS = {
+  dark: "#34b27b",
+  light: "#1976d2",
+} as const;

@@ -161,12 +161,43 @@ export const MonthlySpendingTab = ({
                     paddingAngle={2}
                     dataKey="value"
                     label={({
+                      cx,
+                      cy,
+                      midAngle,
+                      outerRadius,
                       name,
                       percent,
                     }: {
+                      cx?: number;
+                      cy?: number;
+                      midAngle?: number;
+                      outerRadius?: number;
                       name?: string;
                       percent?: number;
-                    }) => `${name ?? ""} ${((percent ?? 0) * 100).toFixed(0)}%`}
+                    }) => {
+                      const RADIAN = Math.PI / 180;
+                      const cxVal = cx ?? 0;
+                      const cyVal = cy ?? 0;
+                      const angle = midAngle ?? 0;
+                      const radiusVal = (outerRadius ?? 100) + 25;
+                      const x = cxVal + radiusVal * Math.cos(-angle * RADIAN);
+                      const y = cyVal + radiusVal * Math.sin(-angle * RADIAN);
+                      return (
+                        <text
+                          x={x}
+                          y={y}
+                          fill={colors.text}
+                          textAnchor={x > cxVal ? "start" : "end"}
+                          dominantBaseline="central"
+                          fontSize={12}
+                        >
+                          {`${name ?? ""} ${((percent ?? 0) * 100).toFixed(
+                            0
+                          )}%`}
+                        </text>
+                      );
+                    }}
+                    labelLine={{ stroke: colors.textSecondary }}
                   >
                     {categorySpending.map((entry, index) => (
                       <Cell

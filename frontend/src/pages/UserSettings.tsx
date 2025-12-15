@@ -27,13 +27,14 @@ import SiteFooter from "../components/SiteFooter";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { useToast } from "../hooks/use-toast";
-import { useTheme } from "../theme/ThemeProvider";
+import { useTheme, DEFAULT_ACCENT_COLORS } from "../theme/ThemeProvider";
 
 export const UserSettings = () => {
   const navigate = useNavigate();
   const { t, locale, setLocale } = useLocale();
   const { toast } = useToast();
-  const { theme, colors } = useTheme();
+  const { theme, colors, accentColors, setAccentColors, resetAccentColors } =
+    useTheme();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +43,8 @@ export const UserSettings = () => {
     email: "",
     nickname: "",
     defaultCurrency: "TWD",
+    darkAccentColor: DEFAULT_ACCENT_COLORS.dark as string,
+    lightAccentColor: DEFAULT_ACCENT_COLORS.light as string,
   });
   const [passwordForm, setPasswordForm] = useState({
     current: "",
@@ -111,6 +114,10 @@ export const UserSettings = () => {
             email: newProfile.email,
             nickname: newProfile.nickname,
             defaultCurrency: newProfile.default_currency,
+            darkAccentColor:
+              newProfile.dark_accent_color || DEFAULT_ACCENT_COLORS.dark,
+            lightAccentColor:
+              newProfile.light_accent_color || DEFAULT_ACCENT_COLORS.light,
             createdAt: newProfile.created_at,
             updatedAt: newProfile.updated_at,
             deletedAt: newProfile.deleted_at,
@@ -120,6 +127,14 @@ export const UserSettings = () => {
             email: profileData.email || "",
             nickname: profileData.nickname || "",
             defaultCurrency: profileData.defaultCurrency,
+            darkAccentColor: profileData.darkAccentColor,
+            lightAccentColor: profileData.lightAccentColor,
+          });
+
+          // Apply accent colors from profile
+          setAccentColors({
+            dark: profileData.darkAccentColor,
+            light: profileData.lightAccentColor,
           });
         } else {
           const profileData: UserProfile = {
@@ -127,6 +142,10 @@ export const UserSettings = () => {
             email: data.email,
             nickname: data.nickname,
             defaultCurrency: data.default_currency,
+            darkAccentColor:
+              data.dark_accent_color || DEFAULT_ACCENT_COLORS.dark,
+            lightAccentColor:
+              data.light_accent_color || DEFAULT_ACCENT_COLORS.light,
             createdAt: data.created_at,
             updatedAt: data.updated_at,
             deletedAt: data.deleted_at,
@@ -146,6 +165,14 @@ export const UserSettings = () => {
             email: profileData.email || "",
             nickname: profileData.nickname || "",
             defaultCurrency: profileData.defaultCurrency,
+            darkAccentColor: profileData.darkAccentColor,
+            lightAccentColor: profileData.lightAccentColor,
+          });
+
+          // Apply accent colors from profile
+          setAccentColors({
+            dark: profileData.darkAccentColor,
+            light: profileData.lightAccentColor,
           });
         }
       } catch (err) {
@@ -178,6 +205,8 @@ export const UserSettings = () => {
         email: form.email.trim() || null,
         nickname: form.nickname.trim() || null,
         defaultCurrency: form.defaultCurrency,
+        darkAccentColor: form.darkAccentColor,
+        lightAccentColor: form.lightAccentColor,
       };
 
       const { error: updateError } = await supabase
@@ -186,6 +215,8 @@ export const UserSettings = () => {
           email: updateData.email,
           nickname: updateData.nickname,
           default_currency: updateData.defaultCurrency,
+          dark_accent_color: updateData.darkAccentColor,
+          light_accent_color: updateData.lightAccentColor,
           updated_at: new Date().toISOString(),
         })
         .eq("id", user.id);
@@ -193,6 +224,12 @@ export const UserSettings = () => {
       if (updateError) {
         throw updateError;
       }
+
+      // Apply the accent colors immediately
+      setAccentColors({
+        dark: form.darkAccentColor,
+        light: form.lightAccentColor,
+      });
 
       setSuccess(t("settings.updateSuccess"));
     } catch (err) {
@@ -446,6 +483,142 @@ export const UserSettings = () => {
                   <MenuItem value="JPY">{t("currency.JPY")}</MenuItem>
                   <MenuItem value="GBP">{t("currency.GBP")}</MenuItem>
                 </TextField>
+
+                <Divider sx={{ my: 2, borderColor: colors.border }} />
+
+                {/* Theme Colors Section */}
+                <Typography
+                  variant="h6"
+                  fontWeight={700}
+                  sx={{ color: colors.text }}
+                >
+                  {t("settings.section.themeColors")}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  sx={{ color: colors.textSecondary, mb: 2 }}
+                >
+                  {t("settings.themeColors.description")}
+                </Typography>
+
+                <Stack spacing={2}>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 1,
+                        backgroundColor: form.darkAccentColor,
+                        border: `2px solid ${colors.border}`,
+                        cursor: "pointer",
+                        position: "relative",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <input
+                        type="color"
+                        value={form.darkAccentColor}
+                        onChange={(e) =>
+                          setForm({ ...form, darkAccentColor: e.target.value })
+                        }
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          opacity: 0,
+                          cursor: "pointer",
+                        }}
+                      />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        variant="body1"
+                        fontWeight={500}
+                        sx={{ color: colors.text }}
+                      >
+                        {t("settings.themeColors.darkAccent")}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: colors.textSecondary }}
+                      >
+                        {form.darkAccentColor}
+                      </Typography>
+                    </Box>
+                  </Stack>
+
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 1,
+                        backgroundColor: form.lightAccentColor,
+                        border: `2px solid ${colors.border}`,
+                        cursor: "pointer",
+                        position: "relative",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <input
+                        type="color"
+                        value={form.lightAccentColor}
+                        onChange={(e) =>
+                          setForm({ ...form, lightAccentColor: e.target.value })
+                        }
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          opacity: 0,
+                          cursor: "pointer",
+                        }}
+                      />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        variant="body1"
+                        fontWeight={500}
+                        sx={{ color: colors.text }}
+                      >
+                        {t("settings.themeColors.lightAccent")}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: colors.textSecondary }}
+                      >
+                        {form.lightAccentColor}
+                      </Typography>
+                    </Box>
+                  </Stack>
+
+                  <Button
+                    variant="text"
+                    size="small"
+                    onClick={() => {
+                      setForm({
+                        ...form,
+                        darkAccentColor: DEFAULT_ACCENT_COLORS.dark,
+                        lightAccentColor: DEFAULT_ACCENT_COLORS.light,
+                      });
+                    }}
+                    sx={{
+                      alignSelf: "flex-start",
+                      color: colors.textSecondary,
+                      "&:hover": {
+                        color: colors.text,
+                        backgroundColor: colors.surfaceHover,
+                      },
+                    }}
+                  >
+                    {t("settings.themeColors.reset")}
+                  </Button>
+                </Stack>
 
                 <Stack direction="row" spacing={2} justifyContent="flex-end">
                   <Button
